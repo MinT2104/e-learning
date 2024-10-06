@@ -1,0 +1,58 @@
+/* Reset cơ bản */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Loại bỏ đường viền và padding mặc định của các phần tử */
+ol,
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit; /* Kế thừa màu chữ từ phần tử cha */
+}
+
+/* Thiết lập lại kích thước phông chữ và đường viền cho các phần tử tiêu đề */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* Loại bỏ kiểu dáng của các phần tử form */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+/* Đặt lại kiểu dáng mặc định cho các phần tử hình ảnh */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Thiết lập lại mặc định cho các phần tử table */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Đặt lại kiểu dáng cho phần tử thân trang */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
