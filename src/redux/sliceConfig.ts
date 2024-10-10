@@ -4,6 +4,7 @@
 // import FruitService from "@/services/fruit.service";
 // import CartService from "@/services/cart.service";
 // import CheckoutService from "@/services/checkout.service";
+import CourseService from '../services/course.service';
 
 export const serviceMapping: any = {
     // product: new ProductService(undefined),
@@ -11,6 +12,7 @@ export const serviceMapping: any = {
     // fruit: new FruitService(undefined),
     // cart: new CartService(undefined),
     // checkout: new CheckoutService(undefined)
+    course: new CourseService(undefined)
 }
 
 interface ActionConfig {
@@ -30,11 +32,11 @@ export const sliceConfig: SliceConfig[] = [
     {
         name: 'fruit',
         initialState: {
-            fruits: [],
-            fruit: {},
-            isLoading: false,
-            error: {},
-            total: 0
+            fruits: [],         //loadallwithpaging
+            fruit: {},          //getbyid
+            isLoading: false,   //load xong false
+            error: {},          //bao loi
+            total: 0            //tong mang fruit
         },
         thunk: [
             {
@@ -55,34 +57,28 @@ export const sliceConfig: SliceConfig[] = [
         ],
     },
     {
-        name: 'cart',
+        name: 'course',
         initialState: {
-            carts: [],
-            cart: {},
-            isLoading: false,
-            error: {},
+            courses: [],         //loadallwithpaging
+            course: {},          //getbyid
+            isLoading: false,   //load xong false
+            error: {},          //bao loi
+            total: 0            //tong mang fruit
         },
         thunk: [
             {
-                type: 'addToCart',
-                endpoint: 'addToCart',
-            },
-        ],
-    },
-    {
-        name: 'checkout',
-        initialState: {
-            checkouts: [],
-            checkout: {},
-            isLoading: false,
-            error: {},
-        },
-        thunk: [
-            {
-                type: 'getUserCheckout',
-                endpoint: 'getUserCheckout',
+                type: 'loadCourses',
+                endpoint: 'loadAllWithPaging',
                 customAction: (state, action) => {
-                    state.checkouts = action.payload;
+                    state.courses = action.payload.records.rows;
+                    state.total = action.payload.total
+                },
+            },
+            {
+                type: 'getCourse',
+                endpoint: 'getById',
+                customAction: (state, action) => {
+                    state.course = action.payload;
                 },
             },
         ],
