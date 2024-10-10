@@ -1,53 +1,44 @@
-// CourseCard.tsx
 import React from 'react';
 
-// Define an interface for the props
 interface CourseCardProps {
     title: string;
-    subtitle: string;
-    oldPrice: string;
-    newPrice: string;
-    instructor: string;
-    views: string;
+    description: string;
+    price: string;
+    participants: number;
+    lessons: number;
     duration: string;
     gradient: string;
+    category: string;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
     title,
-    subtitle,
-    oldPrice,
-    newPrice,
-    instructor,
-    views,
+    description,
+    price,
+    participants,
+    lessons,
     duration,
-    gradient
+    gradient,
+    category,
 }) => {
     return (
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className={`bg-gradient-to-r ${gradient} p-6 text-white`}>
-                <div className="flex items-center justify-between">
-                    <div className="text-lg font-bold">{title}</div>
-                    <div className="text-sm">{subtitle}</div>
-                </div>
+        <div className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden">
+            <div className={`bg-gradient-to-r ${gradient} flex flex-col items-center justify-center px-6 py-16`}>
+                <h2 className="text-white text-2xl font-bold text-center">{category}</h2>
+                <p className="text-yellow-300 text-center">{description}</p>
             </div>
-            <div className="p-4">
-                <div className="text-lg font-bold">{title}</div>
-                <div className="text-gray-500 line-through">{oldPrice}</div>
-                <div className="text-red-500 text-lg font-bold">{newPrice}</div>
-                <div className="flex items-center mt-4">
-                    <img
-                        alt="Instructor's avatar"
-                        className="w-6 h-6 rounded-full mr-2"
-                        src="https://storage.googleapis.com/a1aa/image/7vpM9WoY9X4nAZwy4G7ctfSP72d8T4epbP6i80MK4RbnlDlTA.jpg"
-                    />
-                    <span className="text-gray-700">{instructor}</span>
-                    <span className="ml-auto text-gray-500">
-                        <i className="fas fa-eye"></i> {views}
-                    </span>
-                    <span className="ml-4 text-gray-500">
-                        <i className="fas fa-clock"></i> {duration}
-                    </span>
+            <div className="p-6 bg-gray-100">
+                <h3 className="text-lg font-semibold">{title}</h3>
+                <p className="text-red-500 font-semibold">{price}</p>
+                <div className="flex items-center text-gray-500 mt-4">
+                    <i className="fas fa-users mr-2"></i>
+                    <span>{participants}</span>
+                    <i className="fas fa-circle mx-2 text-xs"></i>
+                    <i className="fas fa-layer-group mr-2"></i>
+                    <span>{lessons}</span>
+                    <i className="fas fa-circle mx-2 text-xs"></i>
+                    <i className="fas fa-clock mr-2"></i>
+                    <span>{duration}</span>
                 </div>
             </div>
         </div>

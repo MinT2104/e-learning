@@ -2,57 +2,56 @@
 import React from 'react';
 import CourseCard from './CourseCard';
 
-const mockData = [
+const courses = [
     {
-        title: "HTML, CSS Pro",
-        subtitle: "Cho người mới bắt đầu",
-        oldPrice: "2.500.000đ",
-        newPrice: "1.299.000đ",
-        instructor: "Sơn Đặng",
-        views: "590",
-        duration: "116h44p",
-        gradient: "from-blue-500 to-purple-500",
+        title: "Kiến Thức Nhập Môn IT",
+        description: "Kiến thức nhập môn",
+        price: "Miễn phí",
+        participants: 130550,
+        lessons: 9,
+        duration: "3h12p",
+        gradient: "from-red-500 to-purple-500",
+        category: "Kiến Thức Nền Tảng",
     },
     {
-        title: "Ngôn ngữ Sass",
-        subtitle: "Cho Frontend Developer",
-        oldPrice: "400.000đ",
-        newPrice: "299.000đ",
-        instructor: "Sơn Đặng",
-        views: "27",
-        duration: "6h18p",
-        gradient: "from-pink-500 to-pink-400",
+        title: "Lập trình C++ cơ bản, nâng cao",
+        description: "C++",
+        price: "Miễn phí",
+        participants: 29844,
+        lessons: 55,
+        duration: "10h18p",
+        gradient: "from-teal-400 to-blue-500",
+        category: "Từ cơ bản đến nâng cao",
     },
     {
-        title: "JavaScript Pro",
-        subtitle: "Cho người mới bắt đầu",
-        oldPrice: "3.299.000đ",
-        newPrice: "1.399.000đ",
-        instructor: "Sơn Đặng",
-        views: "121",
-        duration: "21h14p",
-        gradient: "from-yellow-500 to-orange-500",
+        title: "HTML CSS từ Zero đến Hero",
+        description: "từ zero đến hero",
+        price: "Miễn phí",
+        participants: 201285,
+        lessons: 117,
+        duration: "29h5p",
+        gradient: "from-blue-500 to-indigo-500",
+        category: "HTML, CSS",
     },
+
 ];
 
 const CourseView: React.FC = () => {
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-4">
-                Khóa học Pro
-            </h1>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {mockData.map((course, index) => (
+        <div className="container mx-auto px-4 py-8">
+            <h1 className="text-3xl font-bold mb-6">Khóa học miễn phí</h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {courses.map((course, index) => (
                     <CourseCard
                         key={index}
                         title={course.title}
-                        subtitle={course.subtitle}
-                        oldPrice={course.oldPrice}
-                        newPrice={course.newPrice}
-                        instructor={course.instructor}
-                        views={course.views}
+                        description={course.description}
+                        price={course.price}
+                        participants={course.participants}
+                        lessons={course.lessons}
                         duration={course.duration}
                         gradient={course.gradient}
+                        category={course.category}
                     />
                 ))}
             </div>
