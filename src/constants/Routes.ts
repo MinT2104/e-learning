@@ -1,18 +1,42 @@
+import ActivityView from "@/pages/Activity/ActivityView";
+import CourseView from "@/pages/Course/CourseView";
 import HomeView from "@/pages/Home/HomeView";
+import InstructorsView from "@/pages/Instructors/InstructorsView";
 import LoginView from "@/pages/Login/LoginView";
-import UserView from "@/pages/User/UserView";
+import ProfileView from "@/pages/Profile/ProfileView";
+import TasksView from "@/pages/Tasks/TasksView";
 
 export const routes = [
+    // {
+    //     path: "/",
+    //     element: HomeView,
+    //     allowedRoles: ["guest", "USER", "admin"],
+    // },
     {
         path: "/",
-        element: HomeView,
-      allowedRoles: ["guest", "USER", "admin"],
-    },
-    {
-        path: "/user",
-        element: UserView,
+        element: CourseView,
         allowedRoles: ["guest", "USER", "admin"],
     },
+    {
+        path: "/tasks",
+        element: TasksView,
+        allowedRoles: ["guest", "USER", "admin"],
+    },
+    {
+        path: "/instructors",
+        element: InstructorsView,
+        allowedRoles: ["guest", "USER", "admin"],
+    },
+//     {
+//         path: "/profile",
+//         element: ProfileView,
+//         allowedRoles: ["guest", "USER", "admin"],
+//     },
+//     {
+//         path: "/activity",
+//         element: ActivityView,
+//         allowedRoles: ["guest", "USER", "admin"],
+//     },
 ];
 
 

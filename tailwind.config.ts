@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin');
+
+
 export default {
     darkMode: ["class"],
     content: [
@@ -56,6 +59,26 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"),
+	 plugin(({ addBase, theme }: any) => {
+      addBase({
+        '.scrollbar': {
+          overflowY: 'auto',
+          scrollbarColor: `${theme('colors.slate.600')} ${theme('colors.slate.200')}`,
+          scrollbarWidth: 'none',
+        },
+        '.scrollbar::-webkit-scrollbar': {
+          height: '0px',
+          width: '0px',
+        },
+        '.scrollbar::-webkit-scrollbar-thumb': {
+          backgroundColor: theme('colors.slate.600'),
+        },
+        '.scrollbar::-webkit-scrollbar-track-piece': {
+          backgroundColor: theme('colors.white'),
+        },
+      });
+    }),
+  ],
 }
 

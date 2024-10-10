@@ -1,16 +1,20 @@
+import { Header } from '@/components/common/Header';
+import Heading from '../components/common/Heading';
+import Sidebar from '../components/common/SideBar';
+import React from 'react';
+
 const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
-
     return (
-        <section >
-            <div
-                className="h-fit px-4 max-w-[1200px] mx-auto"
-            >
-                <div className="w-full h-20 bg-red-500">
-
-                </div>
-                {children}
+        <div className="flex h-screen relative">
+            <Sidebar />
+            <div className="flex-grow pl-64 h-screen relative pt-20 scrollbar">
+                <Header />
+                <main className="p-4 max-w-[1200px] mx-auto pt-10 ">
+                    <Heading />
+                    {children}
+                </main>
             </div>
-        </section>
+        </div>
     );
 };
 
