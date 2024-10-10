@@ -1,9 +1,6 @@
-import ActivityView from "@/pages/Activity/ActivityView";
 import CourseView from "@/pages/Course/CourseView";
-import HomeView from "@/pages/Home/HomeView";
 import InstructorsView from "@/pages/Instructors/InstructorsView";
 import LoginView from "@/pages/Login/LoginView";
-import ProfileView from "@/pages/Profile/ProfileView";
 import TasksView from "@/pages/Tasks/TasksView";
 
 export const routes = [
