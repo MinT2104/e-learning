@@ -2,6 +2,15 @@
 import React from 'react';
 import CourseCard from './CourseCard';
 
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
+import { Card, CardContent } from '@/components/ui/card';
+
 const courses = [
     {
         title: "Kiến Thức Nhập Môn IT",
@@ -38,8 +47,47 @@ const courses = [
 
 const CourseView: React.FC = () => {
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-6">Khóa học miễn phí</h1>
+        <div className="container mx-auto pb-8 h-fit">
+
+
+            <Carousel className='mb-20'>
+                <CarouselContent className='w-full'>
+                    {Array.from({ length: 5 }).map((_, index) => (
+                        <CarouselItem key={index}>
+                            <div className="p-1">
+                                <Card>
+                                    <CardContent className="flex h-60 items-center justify-center p-6">
+                                        <span className="text-4xl font-semibold">{index + 1}</span>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+            </Carousel>
+
+
+            <h1 className="text-[24px] font-bold mb-6">Các khóa học nổi bật</h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+                {courses.map((course, index) => (
+                    <CourseCard
+                        key={index}
+                        title={course.title}
+                        description={course.description}
+                        price={course.price}
+                        participants={course.participants}
+                        lessons={course.lessons}
+                        duration={course.duration}
+                        gradient={course.gradient}
+                        category={course.category}
+                    />
+                ))}
+            </div>
+
+
+            <h1 className="text-[24px] font-bold mb-6">Khóa học miễn phí</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {courses.map((course, index) => (
                     <CourseCard
