@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import CourseCard from './CourseCard';
 import { CourseType } from '@/redux/StoreType';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const CourseView: React.FC = () => {
     const dispatch = useDispatch();
@@ -26,7 +27,36 @@ const CourseView: React.FC = () => {
     }, []);
 
     if (isLoading) {
-        return <div className='flex items-center justify-center mt-20'>...loading</div>;
+        return (
+            <div className="flex flex-col container mx-auto pb-8 h-fit">
+                <h1 className="text-[24px] font-bold mb-6">Các khóa học nổi bật</h1>
+                <div className='flex flex-col'>
+                    <Skeleton className="h-[250px] w-[1150px] rounded-lg animate-pulse" />
+                </div>
+                <h1 className="text-[24px] font-bold mt-20 mb-6">Khóa học miễn phí</h1>
+                <div className="grid grid-cols-1mb-16 md:grid-cols-3 gap-6">
+                    {courses && courses.length > 0 ? (
+                        courses.map((_, index) => (
+                            <div key={index} className="flex flex-col space-y-3">
+                                <Skeleton className="h-[176px] w-full rounded-lg animate-pulse" />
+                                <div className="space-y-2">
+                                    <Skeleton className="h-4 w-[250px]" />
+                                    <div className='flex
+                                    justify-between items-center'>
+                                        <Skeleton className="h-4 w-[100px] animate-pulse" />
+                                        <Skeleton className="h-4 w-[100px] animate-pulse" />
+                                        <Skeleton className="h-4 w-[100px] animate-pulse" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        null
+                    )}
+                </div>
+            </div>
+        );
     } else return (
         <div className="container mx-auto pb-8 h-fit">
             <h1 className="text-[24px] font-bold mb-6">Các khóa học nổi bật</h1>
@@ -38,7 +68,7 @@ const CourseView: React.FC = () => {
                             <div className="p-1">
                                 <Card>
                                     <CardContent className="flex flex-col h-60 items-center justify-center p-6">
-                                        <span className="text-4xl font-semibold">{course._id + 1}</span>
+                                        <span className="text-4xl font-semibold">{course.title + 1}</span>
                                     </CardContent>
                                 </Card>
                             </div>

@@ -14,7 +14,7 @@ const CourseCard = ({
                 >{props.title}</h3>
                 <p className="text-red-500 font-semibold">{props.mainPrice}</p>
                 <div className="flex items-center text-gray-500 mt-4">
-                    <i className="fas fa-users mr-2"></i>
+                    <i className="fas fa-users mr-0"></i>
                     <span>{props.instructor.name}</span>
                     <i className="fas fa-circle mx-2 text-xs"></i>
                     <i className="fas fa-layer-group mr-2"></i>
