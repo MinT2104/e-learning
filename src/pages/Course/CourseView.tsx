@@ -9,6 +9,8 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import CourseCard from './CourseCard';
+import { CourseType } from '@/redux/StoreType';
 
 const CourseView: React.FC = () => {
     const dispatch = useDispatch();
@@ -49,17 +51,8 @@ const CourseView: React.FC = () => {
 
             <h1 className="text-[24px] font-bold mb-6">Khóa học miễn phí</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {courses.map((course) => (
-                    <Card key={course._id} className='transform transition-transform duration-300 hover:scale-105 hover:shadow-lg'>
-                        <CardContent className="flex flex-col h-60 items-center justify-center p-6">
-                            <img src={course.image} alt={course.title} className="w-full h-32 object-cover mb-4" />
-                            <h2 className="text-lg font-bold">{course.title}</h2>
-                            {/* <p>{course.description}</p> */}
-                            <p className="font-semibold text-red-600">Price: {course.mainPrice}</p>
-                            <p className="text-sm">Instructor: {course.instructor.name}</p>
-                            <p className="text-sm">Rating: {course.rating.value}/{course.rating.max}</p>
-                        </CardContent>
-                    </Card>
+                {courses.map((course: CourseType) => (
+                    <CourseCard {...course} key={course._id} />
                 ))}
             </div>
         </div>
