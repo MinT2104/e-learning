@@ -1,4 +1,3 @@
-
 export interface StoreType {
     product: {
         products: any[];
@@ -20,9 +19,16 @@ export interface StoreType {
         userName: string;
         isLoading: boolean
     };
-    fruit: {
-        fruits: ProductType[];
-        fruit: ProductType;
+    course: {
+        courses: CourseType[];
+        course: CourseType;
+        isLoading: boolean;
+        error: string | null;
+        total: number
+    };
+    assginment: {
+        assginments: AssignmentType[],
+        assginment: AssignmentType;
         isLoading: boolean;
         error: string | null;
         total: number
@@ -52,25 +58,28 @@ export type CartItemType = {
     totalPrice: number
 }
 
-export type ProductType = {
-    id: string;
-    skuCode: string;
-    name: string;
-    price: number;
-    currency: number;
-    amount: string;
-    description: string;
-    status: string;
-    left: number;
-    count: number;
-    image: string[]
-    brand: string;
-    createdAt: string;
-    updatedAt: string;
-    discountPrice: number;
-    sold: number;
-    category: string[]
-    sale: boolean
+export type CourseType = {
+    _id: string,
+    title: string,
+    link: string,
+    image: string,
+    oldPrice: string,
+    mainPrice: string,
+    instructor: {
+        name: string,
+        avatar: string,
+        _id: string
+    },
+    rating: {
+        value: number,
+        max: number,
+        _id: string
+    },
+    videos: number,
+    duration: number,
+    description: string,
+    totalVideos: number,
+    level: string
 }
 
 export type checkoutItem = {
@@ -86,4 +95,31 @@ export type checkoutItem = {
     createdAt: string,
     updatedAt: string,
     status: string
+}
+
+// Assignment
+interface File {
+    name: string;
+    url?: string; // URL không bắt buộc
+}
+
+interface Section {
+    name: string;
+    files?: File[]; // Mảng file, không bắt buộc
+}
+
+interface Author {
+    name: string;
+    image: string;
+    authorId: string;
+}
+
+export interface AssignmentType {
+    _id: string,
+    courseId: string;
+    author: Author;
+    title: string;
+    description: string;
+    image: string;
+    sections?: Section[]; // Mảng sections, không bắt buộc
 }
