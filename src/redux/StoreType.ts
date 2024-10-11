@@ -26,6 +26,13 @@ export interface StoreType {
         error: string | null;
         total: number
     };
+    assginment: {
+        assginments: AssignmentType[],
+        assginment: AssignmentType;
+        isLoading: boolean;
+        error: string | null;
+        total: number
+    };
     cart: {
         carts: any[];
         cart: any;
@@ -88,4 +95,31 @@ export type checkoutItem = {
     createdAt: string,
     updatedAt: string,
     status: string
+}
+
+// Assignment
+interface File {
+    name: string;
+    url?: string; // URL không bắt buộc
+}
+
+interface Section {
+    name: string;
+    files?: File[]; // Mảng file, không bắt buộc
+}
+
+interface Author {
+    name: string;
+    image: string;
+    authorId: string;
+}
+
+export interface AssignmentType {
+    _id: string,
+    courseId: string;
+    author: Author;
+    title: string;
+    description: string;
+    image: string;
+    sections?: Section[]; // Mảng sections, không bắt buộc
 }

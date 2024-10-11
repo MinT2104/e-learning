@@ -4,6 +4,7 @@
 // import FruitService from "@/services/fruit.service";
 // import CartService from "@/services/cart.service";
 // import CheckoutService from "@/services/checkout.service";
+import AssignmentService from '@/services/assginment.service';
 import CourseService from '../services/course.service';
 
 export const serviceMapping: any = {
@@ -12,7 +13,8 @@ export const serviceMapping: any = {
     // fruit: new FruitService(undefined),
     // cart: new CartService(undefined),
     // checkout: new CheckoutService(undefined)
-    course: new CourseService(undefined)
+    course: new CourseService(undefined),
+    assginment: new AssignmentService(undefined)
 }
 
 interface ActionConfig {
@@ -79,6 +81,32 @@ export const sliceConfig: SliceConfig[] = [
                 endpoint: 'getById',
                 customAction: (state, action) => {
                     state.course = action.payload;
+                },
+            },
+        ],
+    }, {
+        name: 'assginment',
+        initialState: {
+            assginments: [],        //loadallwithpaging
+            assginment: {},         //getbyid
+            isLoading: false,       //load xong false
+            error: {},              //bao loi
+            total: 0                //tong mang fruit
+        },
+        thunk: [
+            {
+                type: 'loadAssginments',
+                endpoint: 'loadAllWithPaging',
+                customAction: (state, action) => {
+                    state.assginments = action.payload.records.rows;
+                    state.total = action.payload.total
+                },
+            },
+            {
+                type: 'getAssginment',
+                endpoint: 'getById',
+                customAction: (state, action) => {
+                    state.assginment = action.payload;
                 },
             },
         ],
