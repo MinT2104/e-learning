@@ -99,11 +99,13 @@ export type checkoutItem = {
 
 // Assignment
 interface File {
+    _id: string,
     name: string;
     url?: string; // URL không bắt buộc
 }
 
 interface Section {
+    _id: string,
     name: string;
     files?: File[]; // Mảng file, không bắt buộc
 }
