@@ -52,7 +52,7 @@ export const Header = () => {
                                     Khóa học của bạn
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-64 bg-white shadow-lg rounded-md p-4 z-50">
+                            <PopoverContent className="w-64 bg-white shadow-lg rounded-md mr-36 p-4 z-50">
                                 <h4 className="text-lg font-semibold mb-2">Khóa học của tôi</h4>
                                 <ul>
                                     <li className="mb-2">Khóa học 1</li>
@@ -70,10 +70,10 @@ export const Header = () => {
                                     <Bell className="text-slate-500" />
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-80">
-                                <div className="grid gap-4 p-4">
+                            <PopoverContent className="w-80 mr-32">
+                                <div className="grid gap-4 p-2">
                                     <h4 className="font-medium leading-none">Thông báo</h4>
-                                    <ul className="text-sm text-muted-foreground">
+                                    <ul className="text-sm text-muted-foreground mr-2">
                                         <li className="mb-2">Thông báo 1: Bạn đã đăng ký khóa học ABC</li>
                                         <li className="mb-2">Thông báo 2: Khoá học XYZ sắp bắt đầu</li>
                                         <li className="mb-2">Thông báo 3: Cập nhật tài liệu khóa học DEF</li>
