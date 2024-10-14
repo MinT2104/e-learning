@@ -118,6 +118,22 @@ const Carousel = React.forwardRef<
       }
     }, [api, onSelect])
 
+    // Auto-slide effect
+    React.useEffect(() => {
+      if (!api) return
+
+      const autoSlideInterval = setInterval(() => {
+        if (api.canScrollNext()) {
+          api.scrollNext()
+        } else {
+          api.scrollTo(0)
+        }
+      }, 5000) // Adjust the time interval
+      return () => {
+        clearInterval(autoSlideInterval)
+      }
+    }, [api])
+
     return (
       <CarouselContext.Provider
         value={{

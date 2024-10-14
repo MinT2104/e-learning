@@ -51,9 +51,21 @@ const CourseView: React.FC = () => {
                                 </div>
                             </div>
                         ))
-                    ) : (
-                        null
-                    )}
+                    ) :
+                        Array(3).fill(0).map((_, index) => ((<div key={index} className="flex flex-col space-y-3">
+                            <Skeleton className="h-[176px] w-full rounded-lg animate-pulse" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <div className='flex
+                                    justify-between items-center'>
+                                    <Skeleton className="h-4 w-[100px] animate-pulse" />
+                                    <Skeleton className="h-4 w-[100px] animate-pulse" />
+                                    <Skeleton className="h-4 w-[100px] animate-pulse" />
+
+                                </div>
+                            </div>
+                        </div>)))
+                    }
                 </div>
             </div>
         );

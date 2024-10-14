@@ -36,7 +36,9 @@ const TaskDetailView = () => {
                         ? assginment.sections.map((_, index) => (
                             <Skeleton key={index} className="h-[79px] w-[761px] rounded-lg" />
                         ))
-                        : null
+                        : Array(2).fill(0).map((_, index) => (
+                            <Skeleton key={index} className="h-[79px] w-[761px] rounded-lg" />
+                        ))
                     }
                 </div>
             </div>
