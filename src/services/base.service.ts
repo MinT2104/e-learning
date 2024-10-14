@@ -11,16 +11,16 @@ class BaseService {
 
     loadAllWithPaging(reqObj: any) {
         const {
-            page = 0, size = 10,
-        } = reqObj.query;
-        delete reqObj.query.page
-        delete reqObj.query.size
+            page = 1, limit = 5,
+        } = reqObj;
+        // delete reqObj.query.page
+        // delete reqObj.query.limit
 
-        let url = `/${this.name}?page=${page}&size=${size}`;
+        let url = `/${this.name}?page=${page}&limit=${limit}`;
         const request = parsedQuery(url, reqObj);
 
         return new Promise((resolve, reject) => {
-            ApiClient.get(request.url + "&query=" + JSON.stringify(request.params.query)).then((response: any) => {
+            ApiClient.get(request.url).then((response: any) => {
                 const res = response || {};
                 let data = {
                     records: [],
