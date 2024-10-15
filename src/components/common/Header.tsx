@@ -15,6 +15,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useState } from "react";
+import { Separator } from "@radix-ui/react-separator";
 
 export const Header = () => {
 
@@ -55,9 +56,12 @@ export const Header = () => {
                             <PopoverContent className="w-64 bg-white shadow-lg rounded-md mr-36 p-4 z-50">
                                 <h4 className="text-lg font-semibold mb-2">Khóa học của tôi</h4>
                                 <ul>
-                                    <li className="mb-2">Khóa học 1</li>
-                                    <li className="mb-2">Khóa học 2</li>
-                                    <li className="mb-2">Khóa học 3</li>
+                                    <li className="text-slate-500 py-3 cursor-pointer">Khóa học 1</li>
+                                    <Separator className="bg-gray-200 h-[1px] my-2" />
+                                    <li className="text-slate-500 py-3 cursor-pointer">Khóa học 2</li>
+                                    <Separator className="bg-gray-200 h-[1px] my-2" />
+                                    <li className="text-slate-500 py-3 cursor-pointer">Khóa học 3</li>
+                                    <Separator className="bg-gray-200 h-[1px] my-2" />
                                 </ul>
                             </PopoverContent>
                         </Popover>
@@ -74,9 +78,12 @@ export const Header = () => {
                                 <div className="grid gap-4 p-2">
                                     <h4 className="font-medium leading-none">Thông báo</h4>
                                     <ul className="text-sm text-muted-foreground mr-2">
-                                        <li className="mb-2">Thông báo 1: Bạn đã đăng ký khóa học ABC</li>
-                                        <li className="mb-2">Thông báo 2: Khoá học XYZ sắp bắt đầu</li>
-                                        <li className="mb-2">Thông báo 3: Cập nhật tài liệu khóa học DEF</li>
+                                        <li className="text-slate-500 py-3 cursor-pointer">Thông báo 1: Bạn đã đăng ký khóa học ABC</li>
+                                        <Separator className="bg-gray-200 h-[1px] my-2" />
+                                        <li className="text-slate-500 py-3 cursor-pointer">Thông báo 2: Khoá học XYZ sắp bắt đầu</li>
+                                        <Separator className="bg-gray-200 h-[1px] my-2" />
+                                        <li className="text-slate-500 py-3 cursor-pointer">Thông báo 3: Cập nhật tài liệu khóa học DEF</li>
+                                        <Separator className="bg-gray-200 h-[1px] my-2" />
                                     </ul>
                                 </div>
                             </PopoverContent>
