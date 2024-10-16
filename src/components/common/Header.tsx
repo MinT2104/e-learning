@@ -14,21 +14,24 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useState } from "react";
+// import { useState } from "react";
 import { Separator } from "@radix-ui/react-separator";
+import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
 
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+    const navigate = useNavigate()
 
-    function handleCourse(): void {
-        setIsPopupOpen(!isPopupOpen); // Bật hoặc tắt pop-up
-    }
+    // const [isPopupOpen, setIsPopupOpen] = useState(false);
+    // const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
-    function handleNotification(): void {
-        setIsNotificationOpen(!isNotificationOpen); // Bật hoặc tắt thông báo
-    }
+    // function handleCourse(): void {
+    //     setIsPopupOpen(!isPopupOpen); // Bật hoặc tắt pop-up
+    // }
+
+    // function handleNotification(): void {
+    //     setIsNotificationOpen(!isNotificationOpen); // Bật hoặc tắt thông báo
+    // }
 
     return (
         <header
@@ -104,7 +107,9 @@ export const Header = () => {
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-slate-500 py-3 cursor-pointer">Trang cá nhân</DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => navigate('/profile')}
+                            className="text-slate-500 py-3 cursor-pointer">Trang cá nhân</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-slate-500 py-3 cursor-pointer">Viết blog</DropdownMenuItem>
                         <DropdownMenuItem className="text-slate-500 py-3 cursor-pointer">Bài viết của bạn</DropdownMenuItem>

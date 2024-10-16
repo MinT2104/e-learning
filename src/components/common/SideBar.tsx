@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faTasks, faUserTie, faBars
+import {
+    faBook, faTasks, faUserTie, faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
