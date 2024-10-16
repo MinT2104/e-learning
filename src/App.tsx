@@ -3,6 +3,7 @@ import { MappedAuthRoute, routes } from "./constants/Routes"
 import AuthRoute from "./middleware/AuthRoute"
 import ProtectedRoute from "./middleware/ProtectedRoute"
 import DefaultLayout from "./Layouts/DefaultLayout"
+// import { useEffect } from "react"
 
 function App() {
 
@@ -30,7 +31,7 @@ function App() {
           element={
             <ProtectedRoute role={role} allowedRoles={route.allowedRoles}>
               <DefaultLayout>
-                {<route.element/>}
+                {<route.element />}
               </DefaultLayout>
             </ProtectedRoute>
           }

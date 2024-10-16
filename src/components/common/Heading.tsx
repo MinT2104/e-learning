@@ -6,9 +6,9 @@ const Heading = () => {
     const mockDataHeading = [
         // { id: 1, name: "Khóa học của bạn", path: "/" },
         // { id: 2, name: "Course", path: "/courses" },
-        // { id: 3, name: "Tasks", path: "/tasks" },
+        { id: 3, name: "Khóa học của bạn", path: "/tasks" },
         { id: 4, name: "Instructors", path: "/instructors" },
-        { id: 5, name: "Profile", path: "/profile" },
+        { id: 5, name: "Trang cá nhân", path: "/profile" },
         { id: 6, name: "Activity", path: "/activity" },
     ]
     useEffect(() => {
@@ -17,7 +17,7 @@ const Heading = () => {
         setCurrentPath(currentHeading?.name)
     })
     return currentPath && (
-        <div className='text-[30px] font-bold'>
+        <div className='text-[30px] font-bold mb-16'>
             {currentPath}
         </div>
     )
