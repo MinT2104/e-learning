@@ -17,7 +17,7 @@ type authType = {
 
 const ProfileView = () => {
 
-    const { authUser } = useSelector((state: RootState) => state.auth)
+    const { authUser } = useSelector((state: RootState) => state.user)
     const [auth, setAuth] = useState<authType>()
     const dispatch = useDispatch()
 
@@ -40,11 +40,16 @@ const ProfileView = () => {
     }
 
     const handleSubmit = async () => {
-        const res = await dispatch(globalThis.$action.updateUserProfile(auth))
+        const res = await dispatch(globalThis.$action.updateUserProfile({ ...auth, _id: authUser._id }))
         if (res?.type.includes('fulfilled')) {
             toast({
                 variant: 'success',
                 title: 'Cập nhập thông tin thành công'
+            })
+            await dispatch(globalThis.$action.me())
+            toast({
+                variant: 'success',
+                title: 'Cập nhập thông tin cá nhân thành công!'
             })
         }
     }
@@ -53,13 +58,15 @@ const ProfileView = () => {
         const { files } = e.target
         const form: any = new FormData()
         if (files) {
-            form.append('image', files[0])
-            const res = await dispatch(globalThis.$action.uploadUserImage(form))
-            if (res?.type.includes('fulfilled')) {
-                await dispatch(globalThis.$action.me())
-                toast({
-                    variant: 'success',
-                    title: 'Cập nhập Ảnh đại diện thành công'
+            form.append('file', files[0])
+            const res = await dispatch(globalThis.$action.uploadImage(form))
+            if (res.payload.data) {
+                const { url } = res.payload.data
+                setAuth((prev): any => {
+                    return {
+                        ...prev,
+                        image: url
+                    }
                 })
             }
         }
@@ -75,8 +82,8 @@ const ProfileView = () => {
                 <div className="w-32 h-32 rounded-full bg-secondary text-5xl flex items-center justify-center border relative">
                     {
                         authUser?.image ?
-                            <img src={authUser?.image} className="w-32 h-32 rounded-full" alt="" />
-                            : <p className="font-semibold text-primary uppercase">{authUser?.userName?.slice(0, 1)}</p>
+                            <img src={auth?.image || authUser?.image} className="w-32 h-32 rounded-full" alt="" />
+                            : <p className="font-semibold text-primary uppercase">{auth?.email || authUser?.userName?.slice(0, 1)}</p>
                     }
                     <Popover>
                         <PopoverTrigger asChild>

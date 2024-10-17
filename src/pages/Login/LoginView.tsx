@@ -22,7 +22,7 @@ const LoginView = () => {
     password: false
   })
 
-  const { isLoading } = useSelector((state: RootState) => state.auth)
+  const { isLoading } = useSelector((state: RootState) => state.user)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -48,6 +48,8 @@ const LoginView = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    console.log(auth)
 
     if (auth.password && auth.email) {
       const res = await dispatch(globalThis.$action.login(auth))
@@ -97,7 +99,7 @@ const LoginView = () => {
             <Input
               id="email"
               name="email"
-              type="email"
+              type="text"
               disabled={isLoading}
               onFocus={() => setError((prev) => {
                 return {
@@ -122,7 +124,7 @@ const LoginView = () => {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Tên tài khoản không được để trống</p>
+                    <p>Email không được để trống</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
