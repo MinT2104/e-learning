@@ -5,6 +5,7 @@ import ProtectedRoute from "./middleware/ProtectedRoute"
 import DefaultLayout from "./Layouts/DefaultLayout"
 import { RootState } from "./redux/store"
 import { useSelector } from "react-redux"
+import AuthLayout from "./Layouts/AuthLayout"
 // import { useEffect } from "react"
 
 function App() {
@@ -20,7 +21,9 @@ function App() {
             path={route.path}
             element={
               <AuthRoute>
-                {<route.element />}
+                <AuthLayout>
+                  {<route.element />}
+                </AuthLayout>
               </AuthRoute>
             }
           />
