@@ -11,12 +11,12 @@ export interface StoreType {
             email: string;
             phoneNumber: string;
             userName: string;
-            cart: CartItemType[];
-            histories: string[];
-            image: string
+            courseIds: string[];
+            image: string;
+            role: string;
+            createdAt: string;
+            updatedAt: string;
         };
-        role: string;
-        userName: string;
         isLoading: boolean
     };
     course: {
