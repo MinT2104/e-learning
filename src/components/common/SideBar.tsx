@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faTasks, faUserTie, faBars
+import {
+    faBook, faTasks, faUserTie, faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
@@ -68,7 +69,7 @@ function SideBar() {
             <div className={`transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 w-64 h-full bg-white shadow-md`}>
                 <div className="p-6">
                     <h1 className="flex justify-items-center text-2xl font-bold text-gray-800">
-                        <span className="text-primary">e</span>-Learning
+                        <span className="text-primary font-bold">EL</span>earning
                     </h1>
                 </div>
 

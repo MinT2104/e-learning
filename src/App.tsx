@@ -1,18 +1,17 @@
-import { Route, Routes, useNavigate } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 import { MappedAuthRoute, routes } from "./constants/Routes"
 import AuthRoute from "./middleware/AuthRoute"
 import ProtectedRoute from "./middleware/ProtectedRoute"
 import DefaultLayout from "./Layouts/DefaultLayout"
-import { useEffect } from "react"
+import { RootState } from "./redux/store"
+import { useSelector } from "react-redux"
+import AuthLayout from "./Layouts/AuthLayout"
+// import { useEffect } from "react"
 
 function App() {
 
-  const role = 'guest'
-  const navigate = useNavigate();
-  useEffect(() => {
-    // Redirect to home when the component mounts (on reload)
-    navigate('/');
-  }, []);
+  const { role } = useSelector((state: RootState) => state.user)
+
   return (
     <Routes>
       {
@@ -22,7 +21,9 @@ function App() {
             path={route.path}
             element={
               <AuthRoute>
-                {<route.element />}
+                <AuthLayout>
+                  {<route.element />}
+                </AuthLayout>
               </AuthRoute>
             }
           />

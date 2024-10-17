@@ -21,7 +21,6 @@ const TaskView: React.FC = () => {
     if (isLoading) {
         return (
             <div className="container mx-auto pb-8 h-fit">
-                <h1 className="text-[24px] font-bold mb-6">Khóa học của bạn</h1>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {assginments && assginments.length > 0 ? (
                         assginments.map((_, index) => (
@@ -51,7 +50,7 @@ const TaskView: React.FC = () => {
         );
     } else return (
         <div className="container mx-auto pb-8 h-fit">
-            <h1 className="text-[24px] font-bold mb-6">Khóa học của bạn</h1>
+            {/* <h1 className="text-[24px] font-bold mb-6">Khóa học của bạn</h1> */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {assginments.map((course: AssignmentType) => (
                     <TaskCard {...course} key={course.courseId} />

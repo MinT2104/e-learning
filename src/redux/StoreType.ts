@@ -1,22 +1,18 @@
 export interface StoreType {
-    product: {
-        products: any[];
-        product: any;
-        isLoading: boolean;
-        error: string | null;
-    };
-    auth: {
+    user: {
         authUser: {
+            _id: string;
             address: string;
             email: string;
             phoneNumber: string;
             userName: string;
-            cart: CartItemType[];
-            histories: string[];
-            image: string
+            courseIds: string[];
+            image: string;
+            role: string;
+            createdAt: string;
+            updatedAt: string;
         };
-        role: string;
-        userName: string;
+        role: string,
         isLoading: boolean
     };
     course: {
@@ -33,30 +29,11 @@ export interface StoreType {
         error: string | null;
         total: number
     };
-    cart: {
-        carts: any[];
-        cart: any;
-        isLoading: boolean;
-        error: string | null;
+    media: {
+        images: { url: string }[];
     };
-    checkout: {
-        checkouts: checkoutItem[];
-        checkout: checkoutItem;
-        isLoading: boolean;
-        error: string | null;
-    }
-
 }
 
-
-export type CartItemType = {
-    skucode: string;
-    quantity: number;
-    name: string;
-    image: string;
-    price: number;
-    totalPrice: number
-}
 
 export type CourseType = {
     _id: string,
@@ -81,22 +58,6 @@ export type CourseType = {
     totalVideos: number,
     level: string
 }
-
-export type checkoutItem = {
-    id: string,
-    userName: string,
-    name: string,
-    email: string,
-    address: string,
-    phoneNumber: string,
-    payment: string,
-    totalMoney: string | null,
-    cartItemList: CartItemType[]
-    createdAt: string,
-    updatedAt: string,
-    status: string
-}
-
 // Assignment
 interface File {
     _id: string,
