@@ -83,7 +83,7 @@ const ProfileView = () => {
                     {
                         authUser?.image ?
                             <img src={auth?.image || authUser?.image} className="w-32 h-32 rounded-full" alt="" />
-                            : <p className="font-semibold text-primary uppercase">{auth?.email || authUser?.userName?.slice(0, 1)}</p>
+                            : <p className="font-semibold text-primary uppercase">{authUser?.userName?.slice(0, 1)}</p>
                     }
                     <Popover>
                         <PopoverTrigger asChild>
