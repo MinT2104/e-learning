@@ -1,4 +1,4 @@
-import { Bell, Search } from "lucide-react";
+import { Bell, CircleUserRound, Search } from "lucide-react";
 import { Button } from "../ui/button";
 import {
     Popover,
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 // import { useState } from "react";
 import { Separator } from "@radix-ui/react-separator";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Header = () => {
 
@@ -118,6 +118,11 @@ export const Header = () => {
                         <DropdownMenuItem className="text-slate-500 py-3 cursor-pointer">Đăng xuất</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
+
+                <Link className="flex items-center gap-2 font-medium cursor-pointer " to="/login">
+                    <CircleUserRound className="" />
+                    <span className="lg:inline hidden">Thành viên</span>
+                </Link>
             </div>
         </header>
     )

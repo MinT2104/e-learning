@@ -32,33 +32,6 @@ interface SliceConfig {
 // export const sliceConfig: Record<string, SliceConfig> = {
 export const sliceConfig: SliceConfig[] = [
     {
-        name: 'fruit',
-        initialState: {
-            fruits: [],         //loadallwithpaging
-            fruit: {},          //getbyid
-            isLoading: false,   //load xong false
-            error: {},          //bao loi
-            total: 0            //tong mang fruit
-        },
-        thunk: [
-            {
-                type: 'loadFruits',
-                endpoint: 'loadAllWithPaging',
-                customAction: (state, action) => {
-                    state.fruits = action.payload.records.rows;
-                    state.total = action.payload.total
-                },
-            },
-            {
-                type: 'getFruit',
-                endpoint: 'getById',
-                customAction: (state, action) => {
-                    state.fruit = action.payload;
-                },
-            },
-        ],
-    },
-    {
         name: 'course',
         initialState: {
             courses: [],         //loadallwithpaging
@@ -115,8 +88,6 @@ export const sliceConfig: SliceConfig[] = [
         name: 'auth',
         initialState: {
             authUser: null,
-            role: 'guest',
-            userName: '',
             isLoading: false
         },
         thunk: [
@@ -131,13 +102,13 @@ export const sliceConfig: SliceConfig[] = [
                 type: 'login',
                 endpoint: 'login',
                 customAction: (state, action) => {
-                    if (action.payload.data) {
-                        const { token, roles, username } = action.payload.data
-                        document.cookie = `_at=${token}`
-                        document.cookie = `_un=${username}`
-                        document.cookie = `_r=${roles}`
-                    }
-                    console.log(state)
+                    // if (action.payload.data) {
+                    //     const { token, roles, username } = action.payload.data
+                    //     document.cookie = `_at=${token}`
+                    //     document.cookie = `_un=${username}`
+                    //     document.cookie = `_r=${roles}`
+                    // }
+                    // console.log(state)
                 },
             },
             {
