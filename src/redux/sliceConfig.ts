@@ -1,20 +1,13 @@
-// import AuthService from "@/services/auth.service";
-// import ProductService from "@/services/product.service";
-// // import { StoreType } from "./StoreType";
-// import FruitService from "@/services/fruit.service";
-// import CartService from "@/services/cart.service";
-// import CheckoutService from "@/services/checkout.service";
 import AssignmentService from '@/services/assginment.service';
 import CourseService from '../services/course.service';
+import AuthService from '@/services/auth.service';
+import MediaService from '@/services/media.service';
 
 export const serviceMapping: any = {
-    // product: new ProductService(undefined),
-    // auth: new AuthService(),
-    // fruit: new FruitService(undefined),
-    // cart: new CartService(undefined),
-    // checkout: new CheckoutService(undefined)
     course: new CourseService(undefined),
-    assginment: new AssignmentService(undefined)
+    assginment: new AssignmentService(undefined),
+    user: new AuthService(),
+    media: new MediaService()
 }
 
 interface ActionConfig {
@@ -85,9 +78,10 @@ export const sliceConfig: SliceConfig[] = [
         ],
     },
     {
-        name: 'auth',
+        name: 'user',
         initialState: {
             authUser: null,
+            role: 'guest',
             isLoading: false
         },
         thunk: [
@@ -102,13 +96,14 @@ export const sliceConfig: SliceConfig[] = [
                 type: 'login',
                 endpoint: 'login',
                 customAction: (state, action) => {
-                    // if (action.payload.data) {
-                    //     const { token, roles, username } = action.payload.data
-                    //     document.cookie = `_at=${token}`
-                    //     document.cookie = `_un=${username}`
-                    //     document.cookie = `_r=${roles}`
-                    // }
-                    // console.log(state)
+                    console.log(action.payload)
+                    if (action.payload.data) {
+                        const { token, user } = action.payload.data
+                        document.cookie = `_at=${token}`
+                        state.authUser = user
+                        state.role = user.role
+                    }
+                    console.log(state)
                 },
             },
             {
@@ -124,7 +119,9 @@ export const sliceConfig: SliceConfig[] = [
                 endpoint: 'me',
                 customAction: (state, action) => {
                     if (action.payload.data) {
-                        state.authUser = action.payload.data
+                        const { data } = action.payload
+                        state.authUser = data
+                        state.role = data.role
                     }
                 },
             },
@@ -137,6 +134,21 @@ export const sliceConfig: SliceConfig[] = [
                 endpoint: 'uploadUserImage'
             }
         ]
+    },
+    {
+        name: 'media',
+        initialState: {
+            images: {}, 
+        },
+        thunk: [
+            {
+                type: 'uploadImage',
+                endpoint: 'uploadImage',
+                customAction: (state, action) => {
+                    state.images = action.payload.data;
+                },
+            },
+        ],
     },
 ]
 
