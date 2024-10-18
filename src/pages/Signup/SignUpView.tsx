@@ -177,7 +177,7 @@ const SignUpView = () => {
                         />
                     </div>
 
-                    <span className="text-sm text-slate-600 mt-4">Xác nhận mật khẩu</span>
+                    <div className="text-sm text-slate-600 mt-4">Xác nhận mật khẩu</div>
                     <div className="mt-2 relative truncate">
                         <Input
                             id="confirmPassword"
