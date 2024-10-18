@@ -202,6 +202,12 @@ const SignUpView = () => {
                             {isLoading ? <LoaderCircle className="animate-spin" /> : 'Đăng ký'}
                         </Button>
                     </div>
+                    <div className="flex items-center justify-center w-full mt-6 text-sm">
+                        <span>Đã có tài khoản? Vui lòng</span>
+                        <Button type="button" variant="link" onClick={() => navigate('/login')} className="cursor-pointer no-underline hover:no-underline pl-1">
+                            Đăng nhập
+                        </Button>
+                    </div>
                 </form>
             </div>
         </section>
