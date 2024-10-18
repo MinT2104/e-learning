@@ -3,11 +3,14 @@ import { MappedAuthRoute, routes } from "./constants/Routes"
 import AuthRoute from "./middleware/AuthRoute"
 import ProtectedRoute from "./middleware/ProtectedRoute"
 import DefaultLayout from "./Layouts/DefaultLayout"
+import { RootState } from "./redux/store"
+import { useSelector } from "react-redux"
+import AuthLayout from "./Layouts/AuthLayout"
 // import { useEffect } from "react"
 
 function App() {
 
-  const role = 'guest'
+  const { role } = useSelector((state: RootState) => state.user)
 
   return (
     <Routes>
@@ -18,7 +21,9 @@ function App() {
             path={route.path}
             element={
               <AuthRoute>
-                {<route.element />}
+                <AuthLayout>
+                  {<route.element />}
+                </AuthLayout>
               </AuthRoute>
             }
           />

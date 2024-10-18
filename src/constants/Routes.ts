@@ -11,37 +11,37 @@ export const routes = [
     // {
     //     path: "/",
     //     element: HomeView,
-    //     allowedRoles: ["guest", "USER", "admin"],
+    //     allowedRoles: ["guest", "student", "teacher", "admin"],
     // },
     {
         path: "/",
         element: CourseView,
-        allowedRoles: ["guest", "USER", "admin"],
+        allowedRoles: ["guest", "student", "teacher", "admin"],
     },
     {
         path: "/tasks",
         element: TasksView,
-        allowedRoles: ["guest", "USER", "admin"],
+        allowedRoles: ["guest", "student", "teacher", "admin"],
     },
     {
         path: "/tasks/:id",
         element: TaskDetailView,
-        allowedRoles: ["guest", "USER", "admin"],
+        allowedRoles: ["guest", "student", "teacher", "admin"],
     },
     {
         path: "/instructors",
         element: InstructorsView,
-        allowedRoles: ["guest", "USER", "admin"],
+        allowedRoles: ["guest", "student", "teacher", "admin"],
     },
     {
         path: "/profile",
         element: ProfileView,
-        allowedRoles: ["guest", "USER", "admin"],
+        allowedRoles: ["guest", "student", "teacher", "admin"],
     },
     //     {
     //         path: "/activity",
     //         element: ActivityView,
-    //         allowedRoles: ["guest", "USER", "admin"],
+    //         allowedRoles: ["guest", "student", "teacher", "admin"],
     //     },
 
 ];
@@ -51,7 +51,7 @@ export const MappedAuthRoute: any = [
     {
         path: "/login",
         element: LoginView,
-        allowedRoles: ["guest", "USER", "admin"],
+        allowedRoles: ["guest"],
     },
     {
         path: "/signup",
