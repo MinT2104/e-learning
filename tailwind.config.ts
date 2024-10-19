@@ -65,7 +65,7 @@ export default {
 			'.scrollbar': {
 				overflowY: 'auto',
 				scrollbarColor: `${theme('colors.slate.600')} ${theme('colors.slate.200')}`,
-				scrollbarWidth: 'thin',
+				scrollbarWidth: 'none',
 			},
 			'.scrollbar::-webkit-scrollbar': {
 				height: '0px',
@@ -80,5 +80,6 @@ export default {
 		});
 	}),
 	],
+
 }
 

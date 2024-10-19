@@ -11,7 +11,7 @@ class BaseService {
 
     loadAllWithPaging(reqObj: any) {
         const {
-            page = 1, limit = 5,
+            page = 1, limit = 10,
         } = reqObj;
         // delete reqObj.query.page
         // delete reqObj.query.limit
