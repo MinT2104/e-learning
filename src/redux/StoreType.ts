@@ -17,6 +17,7 @@ export interface StoreType {
     };
     course: {
         courses: CourseType[];
+        userCourses: CourseType[];
         course: CourseType;
         isLoading: boolean;
         error: string | null;

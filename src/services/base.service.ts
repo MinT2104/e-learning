@@ -20,7 +20,9 @@ class BaseService {
         const request = parsedQuery(url, reqObj);
 
         return new Promise((resolve, reject) => {
-            ApiClient.get(request.url).then((response: any) => {
+            ApiClient.get(request.url, {
+                params: request.params
+            }).then((response: any) => {
                 const res = response || {};
                 let data = {
                     records: [],
@@ -34,7 +36,7 @@ class BaseService {
                 }
                 resolve(data);
             }).catch((e: any) => {
-                console.log(e);
+                console.log(e)
                 reject({ message: 'Failed to load records' });
             });
         });
@@ -80,7 +82,6 @@ class BaseService {
                     resolve(res);
                 })
                 .catch((e: any) => {
-                    console.log(e);
                     reject(e);
                 });
         });
@@ -121,7 +122,6 @@ let parsedQuery = (url: string, reqObj: any) => {
     const params: any = {
         query: {},
     }
-
     params.query = query
 
     if (_id) {

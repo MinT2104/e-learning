@@ -36,8 +36,6 @@ const LoginView = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(auth)
-
     if (auth.password && auth.email) {
       const res = await dispatch(globalThis.$action.login(auth));
       if (res?.type?.includes('rejected')) {

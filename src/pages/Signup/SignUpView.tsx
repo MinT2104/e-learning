@@ -70,7 +70,6 @@ const SignUpView = () => {
                     navigate('/login');
                 }, 1000)
             }
-            console.log(auth)
         } else {
             setError({
                 userName: checkEmpty(auth.userName),

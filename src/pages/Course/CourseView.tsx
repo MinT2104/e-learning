@@ -18,8 +18,7 @@ const CourseView: React.FC = () => {
     const { courses, isLoading } = useSelector((state: RootState) => state.course);
 
     const handleGetData: any = async () => {
-        const res = await dispatch(globalThis.$action.loadCourses({ page: 1, limit: 10 }));
-        console.log(res);
+        dispatch(globalThis.$action.loadCourses({ page: 1, limit: 10 }));
     };
 
     useEffect(() => {

@@ -12,25 +12,32 @@ type props = {
 }
 
 
-const ProtectedRoute = ({ children, role,  allowedRoles }: props) => {
+const ProtectedRoute = ({ children, role, allowedRoles }: props) => {
     const dispatch = useDispatch()
 
     const token = getCookie('_at')
+    const localUser = localStorage.getItem('localUser')
 
     ApiClient.defaults.headers.common = {
         'Authorization': token ? `Bearer ${token}` : null
     }
 
     const handleGetMe = async () => {
-        if (token) await dispatch(globalThis.$action.me())
+        if (token) {
+            const res = await dispatch(globalThis.$action.me())
+            if (localUser) {
+                return
+            }
+            if (res?.type?.includes('fulfilled')) {
+                const { data } = res.payload
+                localStorage.setItem('localUser', data)
+            }
+        }
     }
 
     useLayoutEffect(() => {
         handleGetMe()
     }, [])
-
- 
-    console.log(role)
 
     if (!allowedRoles.includes(role)) {
         return <Navigate to="/login" replace />;

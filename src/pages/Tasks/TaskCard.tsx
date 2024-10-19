@@ -6,7 +6,6 @@ const TaskCard = ({
 }: AssignmentType) => {
     const navigate = useNavigate()
     const handleTask = () => {
-        console.log(props);
         navigate(`/tasks/${props._id}`)
 
     }

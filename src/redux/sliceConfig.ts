@@ -28,6 +28,7 @@ export const sliceConfig: SliceConfig[] = [
         name: 'course',
         initialState: {
             courses: [],         //loadallwithpaging
+            userCourses: [],         //loadallwithpaging
             course: {},          //getbyid
             isLoading: false,   //load xong false
             error: {},          //bao loi
@@ -39,6 +40,14 @@ export const sliceConfig: SliceConfig[] = [
                 endpoint: 'loadAllWithPaging',
                 customAction: (state, action) => {
                     state.courses = action.payload.records.rows;
+                    state.total = action.payload.total
+                },
+            },
+            {
+                type: 'loadUserCourses',
+                endpoint: 'loadAllWithPaging',
+                customAction: (state, action) => {
+                    state.userCourses = action.payload.records.rows;
                     state.total = action.payload.total
                 },
             },
@@ -96,14 +105,12 @@ export const sliceConfig: SliceConfig[] = [
                 type: 'login',
                 endpoint: 'login',
                 customAction: (state, action) => {
-                    console.log(action.payload)
                     if (action.payload.data) {
                         const { token, user } = action.payload.data
                         document.cookie = `_at=${token}`
                         state.authUser = user
                         state.role = user.role
                     }
-                    console.log(state)
                 },
             },
             {
