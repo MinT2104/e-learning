@@ -6,15 +6,12 @@ class BaseService {
     model: any;
     constructor(state: any) {
         Object.assign(this, state);
-        // this.config = getConfig(process.env.NODE_ENV);
     }
 
     loadAllWithPaging(reqObj: any) {
         const {
             page = 1, limit = 10,
         } = reqObj;
-        // delete reqObj.query.page
-        // delete reqObj.query.limit
 
         let url = `/${this.name}?page=${page}&limit=${limit}`;
         const request = parsedQuery(url, reqObj);
@@ -69,12 +66,6 @@ class BaseService {
 
     getById(id: string) {
         let url = `/${this.name}/${id}`;
-        // if (populates && populates.length > 0) {
-        //   url += `/?populate[]=${populates[0]}`;
-        //   for (let i = 1; i < populates.length; i++) {
-        //     url += `&populate[]=${populates[i]}`;
-        //   }
-        // }
         return new Promise((resolve, reject) => {
             ApiClient.get(url)
                 .then((response: any) => {
