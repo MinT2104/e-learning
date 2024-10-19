@@ -22,60 +22,6 @@ const CourseContent = () => {
 
     const [activeChapter, setActiveChapter] = useState<number | null>(0); // Mặc định chọn chương 1
 
-    // const courseData = {
-    //     chapters: [
-    //         {
-    //             name: "Chương 1",
-    //             title: "Chương 1: Chương trình đầu tiên và chú thích",
-    //             lessons: [
-    //                 { title: "Viết chương trình Hello World đầu tiên trong Python", duration: "20 phút" },
-    //                 { title: "Bài tập Python cơ bản: câu lệnh print", duration: "10 phút" },
-    //                 { title: "Bài tập Python cơ bản: tính tổng hai số", duration: "20 phút" },
-    //                 { title: "Bài tập Python cơ bản: tính tổng, hiệu, tích, thương của hai số", duration: "15 phút" },
-    //                 { title: "Bài tập Python cơ bản: tính diện tích hình chữ nhật", duration: "15 phút" },
-    //                 { title: "Comment trong python", duration: "15 phút" }
-    //             ]
-    //         },
-    //         {
-    //             name: "Chương 2",
-    //             title: "Chương 2: Kiểu dữ liệu và cấu trúc điều khiển",
-    //             lessons: [
-    //                 { title: "Kiểu dữ liệu trong Python", duration: "30 phút" },
-    //                 { title: "Câu lệnh điều kiện: if-else", duration: "25 phút" },
-    //                 { title: "Vòng lặp: for, while", duration: "20 phút" },
-    //                 { title: "Bài tập: tính tổng dãy số", duration: "15 phút" }
-    //             ]
-    //         },
-    //         {
-    //             name: "Chương 3",
-    //             title: "Chương 3: Hàm trong Python",
-    //             lessons: [
-    //                 { title: "Giới thiệu về hàm", duration: "15 phút" },
-    //                 { title: "Định nghĩa và gọi hàm", duration: "20 phút" },
-    //                 { title: "Truyền tham số vào hàm", duration: "15 phút" }
-    //             ]
-    //         },
-    //         {
-    //             name: "Chương 4",
-    //             title: "Chương 4: Toán tử cơ bản",
-    //             lessons: [
-    //                 { title: "Giới thiệu về hàm", duration: "15 phút" },
-    //                 { title: "Định nghĩa và gọi hàm", duration: "20 phút" },
-    //                 { title: "Truyền tham số vào hàm", duration: "15 phút" }
-    //             ]
-    //         },
-    //         {
-    //             name: "Chương 6",
-    //             title: "Chương 6: Câu lệnh lựa chọn",
-    //             lessons: [
-    //                 { title: "Giới thiệu về hàm", duration: "15 phút" },
-    //                 { title: "Định nghĩa và gọi hàm", duration: "20 phút" },
-    //                 { title: "Truyền tham số vào hàm", duration: "15 phút" }
-    //             ]
-    //         },
-    //     ]
-    // };
-
     const handleChapterClick = (index: number) => {
         setActiveChapter(index);
     };
