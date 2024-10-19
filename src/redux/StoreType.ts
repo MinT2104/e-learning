@@ -37,27 +37,50 @@ export interface StoreType {
 
 export type CourseType = {
     _id: string,
-    title: string,
-    link: string,
-    image: string,
-    oldPrice: string,
-    mainPrice: string,
-    instructor: {
-        name: string,
-        avatar: string,
-        _id: string
-    },
-    rating: {
-        value: number,
-        max: number,
-        _id: string
-    },
-    videos: number,
-    duration: number,
-    description: string,
-    totalVideos: number,
-    level: string
+    title: string;
+    link: string;
+    image: string;
+    oldPrice: string;
+    mainPrice: string;
+    instructor: Instructor;
+    rating: Rating;
+    videos: number;
+    duration: number;
+    description: string;
+    totalVideos: number;
+    level: string;
+    chapters?: Chapter[];
+    createdAt?: string;
+    updatedAt?: string;
 }
+export interface Instructor {
+    name: string;
+    avatar: string;
+}
+
+// Define Rating interface
+export interface Rating {
+    value: number;
+    max: number;
+}
+
+// Define Lesson interface
+export interface Lesson {
+    duration: string;
+    title: string;
+    url: string;
+    _id: string;
+}
+
+// Define Chapter interface
+export interface Chapter {
+    name: string;
+    title?: string;
+    lessons?: Lesson[];
+    _id: string;
+}
+
+
 // Assignment
 interface File {
     _id: string,

@@ -10,6 +10,7 @@ const Heading = () => {
         { id: 4, name: "Instructors", path: "/instructors" },
         { id: 5, name: "Trang cá nhân", path: "/profile" },
         { id: 6, name: "Activity", path: "/activity" },
+        { id: 7, name: "Nội dung khóa học", path: "/coursedetail" },
     ]
     useEffect(() => {
         const currentPath = location.pathname

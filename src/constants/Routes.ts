@@ -1,3 +1,5 @@
+import CourseDetailView from "@/pages/Course/CourseDetailView";
+import CourseVideo from "@/pages/Course/CourseVideo";
 import CourseView from "@/pages/Course/CourseView";
 import InstructorsView from "@/pages/Instructors/InstructorsView";
 import LoginView from "@/pages/Login/LoginView";
@@ -36,6 +38,15 @@ export const routes = [
     {
         path: "/profile",
         element: ProfileView,
+        allowedRoles: ["guest", "student", "teacher", "admin"],
+    },
+    {
+        path: "/course/:id",
+        element: CourseDetailView,
+        allowedRoles: ["guest", "student", "teacher", "admin"],
+    }, {
+        path: "/course/:id/watch",
+        element: CourseVideo,
         allowedRoles: ["guest", "student", "teacher", "admin"],
     },
     //     {
