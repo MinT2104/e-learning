@@ -1,4 +1,5 @@
 import { RootState } from '@/redux/store';
+import { CirclePlay } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom'; // Thêm useNavigate
@@ -38,6 +39,8 @@ function CourseVideo() {
         setActiveURL(url);
         navigate(`?c=${chapterIndex}&l=${lessonIndex}`);
     };
+
+    console.log(course)
     return (
         <div className='w-full h-fit grid grid-cols-3 gap-4'>
             <div className='col-span-2 aspect-video rounded-xl truncate'>
@@ -68,7 +71,13 @@ function CourseVideo() {
                                         className={`cursor-pointer p-4 border-b hover:text-primary 
                                         ${lesson.url === activeURL ? 'bg-gray-200 text-black rounded-none' : ''}`}
                                     >
-                                        {`${chapterIndex + 1}.${lessonIndex + 1}. ${lesson.title}`}
+                                        <div className='flex flex-col'>
+                                            <span>{`${chapterIndex + 1}.${lessonIndex + 1}. ${lesson.title}`}</span>
+                                            <div className="flex items-center text-gray-600">
+                                                <CirclePlay size={16} />
+                                                <span className='px-2'>{`${lesson.duration}`}</span>
+                                            </div>
+                                        </div>
                                     </li>
                                 ))}
                             </ul>
