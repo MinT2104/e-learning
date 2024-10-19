@@ -17,26 +17,38 @@ import {
 // import { useState } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { logOut } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 export const Header = () => {
 
     const navigate = useNavigate()
 
     const { authUser } = useSelector((state: RootState) => state.user)
+    const [localUser] = useState(localStorage.getItem('localUser'))
 
-    // const [isPopupOpen, setIsPopupOpen] = useState(false);
-    // const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+    const dispatch = useDispatch();
 
-    // function handleCourse(): void {
-    //     setIsPopupOpen(!isPopupOpen); // Bật hoặc tắt pop-up
-    // }
+    const { userCourses, isLoading } = useSelector((state: RootState) => state.course);
 
-    // function handleNotification(): void {
-    //     setIsNotificationOpen(!isNotificationOpen); // Bật hoặc tắt thông báo
-    // }
+    const handleGetData: any = async () => {
+
+        const body = {
+            page: 1,
+            limit: 10,
+            query: {
+                _id: { $in: authUser ? authUser.courseIds : [] }
+            }
+        }
+        await dispatch(globalThis.$action.loadUserCourses(body));
+    };
+
+    useEffect(() => {
+        if (!authUser) return
+        handleGetData();
+    }, [authUser]);
 
     return (
         <header
@@ -54,7 +66,7 @@ export const Header = () => {
                 </Button> */}
 
                 {
-                    authUser ?
+                    (authUser || localUser) ?
                         (
                             <>
                                 {/* Khóa học */}
@@ -62,31 +74,71 @@ export const Header = () => {
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <Button variant="outline" className="font-bold text-sm shadow-none text-slate-500">
-                                                Khóa học của bạn
+                                                Khóa học của tôi
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-64 bg-white shadow-lg rounded-md mr-36 p-4 z-50">
-                                            <h4 className="text-lg font-semibold mb-2">Khóa học của tôi</h4>
+                                        <PopoverContent align="end" className="w-[350px] bg-white border-border/20 rounded-md p-4 z-50">
+                                            <div className="flex justify-between items-center">
+                                                <h4 className="text-md font-medium mb-2">Khóa học của tôi</h4>
+                                                <Button className="" variant={'link'}>Xem tất cả</Button>
+                                            </div>
                                             <ul>
-                                                <li className="text-slate-500 py-3 cursor-pointer">Khóa học 1</li>
-                                                <Separator className="bg-gray-200 h-[1px] my-2" />
-                                                <li className="text-slate-500 py-3 cursor-pointer">Khóa học 2</li>
-                                                <Separator className="bg-gray-200 h-[1px] my-2" />
-                                                <li className="text-slate-500 py-3 cursor-pointer">Khóa học 3</li>
-                                                <Separator className="bg-gray-200 h-[1px] my-2" />
+                                                {
+                                                    isLoading ?
+                                                        <>
+                                                            <li className="py-3 cursor-pointer flex gap-4">
+                                                                <div className="w-1/3 h-16 rounded-md bg-slate-200 animate-pulse" />
+                                                                <div className="w-2/3 flex flex-col justify-between">
+                                                                    <div className="w-full h-8 rounded-md bg-slate-200 animate-pulse" />
+                                                                    <div className="w-2/3 h-6 rounded-md bg-slate-200 animate-pulse" />
+                                                                </div>
+                                                            </li>
+                                                            <li className="py-3 cursor-pointer flex gap-4">
+                                                                <div className="w-1/3 h-16 rounded-md bg-slate-200 animate-pulse" />
+                                                                <div className="w-2/3 flex flex-col justify-between">
+                                                                    <div className="w-full h-8 rounded-md bg-slate-200 animate-pulse" />
+                                                                    <div className="w-2/3 h-6 rounded-md bg-slate-200 animate-pulse" />
+                                                                </div>
+                                                            </li>
+                                                        </>
+                                                        :
+                                                        userCourses.map((course, index) => {
+                                                            return (
+                                                                <li key={index} className="py-3 cursor-pointer flex gap-4">
+                                                                    <div className="w-1/3 h-16 rounded-md bg-gradient-to-r from-blue-500 to-green-400" />
+                                                                    <div className="w-2/3 flex flex-col justify-between">
+                                                                        <h4 className="text-sm font-medium">
+                                                                            {course.title}
+                                                                        </h4>
+                                                                        <span className="text-[12px] text-[#2a2a2a]">
+                                                                            {
+                                                                                course.level
+                                                                            }
+                                                                        </span>
+                                                                        <span className="text-sm text-primary">
+                                                                            {
+                                                                                course.mainPrice
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            )
+                                                        })
+
+                                                }
                                             </ul>
                                         </PopoverContent>
                                     </Popover>
                                 </div>
                                 {/* Thông báo */}
-                                <div className="flex items-center gap-10 justify-center shadow-none mr-2">
+                                <div className="flex items-center gap-10 justify-center border-border/20">
                                     <Popover>
                                         <PopoverTrigger asChild>
-                                            <Button variant="outline" className="hover:text-primary">
-                                                <Bell className="text-slate-500 hover:text-primary" />
+                                            <Button variant="outline" className="text-slate-500 hover:text-primary shadow-none rounded-full h-10 w-10 ">
+                                                <Bell className="hover:text-primary" />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-80 mr-32">
+                                        <PopoverContent align="end" className="w-[350px] bg-white border-border/20 rounded-md p-4 z-50">
                                             <div className="grid gap-4 p-2">
                                                 <h4 className="font-medium leading-none">Thông báo</h4>
                                                 <ul className="text-sm text-muted-foreground mr-2">
@@ -104,16 +156,16 @@ export const Header = () => {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild className="w-10 h-10 rounded-full bg-secondary text-xl flex items-center justify-center border relative cursor-pointer">
                                         {
-                                            authUser?.image ?
-                                                <img src={authUser?.image} className="w-10 h-10 rounded-full" alt="" />
-                                                : <p className="font-semibold text-primary uppercase border">{authUser?.userName?.slice(0, 1)}</p>
+                                            (authUser || localUser)?.image ?
+                                                <img src={(authUser || localUser)?.image} className="w-10 h-10 rounded-full" alt="" />
+                                                : <p className="font-semibold text-primary uppercase border">{(authUser || localUser)?.userName?.slice(0, 1)}</p>
                                         }
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="border-border/20 w-60">
                                         <DropdownMenuLabel>
                                             <div className="py-2">
-                                                <span className="text-normal">{authUser.email}</span>
-                                                <p className="font-light text-[12px] text-slate-500/80">@{authUser.userName}</p>
+                                                <span className="text-normal">{(authUser || localUser).email}</span>
+                                                <p className="font-light text-[12px] text-slate-500/80">@{(authUser || localUser).userName}</p>
                                             </div>
                                         </DropdownMenuLabel>
                                         <DropdownMenuSeparator />

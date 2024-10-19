@@ -35,6 +35,12 @@ function SideBar() {
             path: "/tasks", // Add path for navigation
         },
         {
+            id: 3,
+            label: "Khóa học của tôi",
+            icon: faTasks,
+            path: "/my-course", // Add path for navigation
+        },
+        {
             id: 4, // Changed from 5 to 4 for sequential ID
             label: "Người hướng dẫn",
             icon: faUserTie,
@@ -82,7 +88,6 @@ function SideBar() {
                                     menuItem.path === location.pathname && 'bg-primary text-white hover:bg-primary'
                                 )}
                                 onClick={() => {
-                                    console.log(`Navigating to: ${menuItem.path}`); // Log the navigation path
                                     navigate(menuItem.path); // Navigate on click
                                 }}
                             >

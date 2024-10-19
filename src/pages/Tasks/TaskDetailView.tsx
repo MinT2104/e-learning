@@ -20,9 +20,7 @@ const TaskDetailView = () => {
     const { assginment, isLoading } = useSelector((state: RootState) => state.assginment);
 
     const handleCall: any = async () => {
-        const res = await dispatch(globalThis.$action.getAssginment(param.id));
-        console.log(res);
-        console.log(param);
+        dispatch(globalThis.$action.getAssginment(param.id));
     };
 
     useEffect(() => {

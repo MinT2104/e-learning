@@ -10,8 +10,7 @@ const TaskView: React.FC = () => {
     const { assginments, isLoading } = useSelector((state: RootState) => state.assginment);
 
     const handleCallAss: any = async () => {
-        const res = await dispatch(globalThis.$action.loadAssginments({ page: 1, limit: 5 }));
-        console.log(res);
+        dispatch(globalThis.$action.loadAssginments({ page: 1, limit: 5 }));
     };
 
     useEffect(() => {
