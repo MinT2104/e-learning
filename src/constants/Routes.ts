@@ -3,8 +3,10 @@ import CourseVideo from "@/pages/Course/CourseVideo";
 import CourseView from "@/pages/Course/CourseView";
 import InstructorsView from "@/pages/Instructors/InstructorsView";
 import LoginView from "@/pages/Login/LoginView";
+import TeacherLoginView from "@/pages/Login/TeacherLogin";
 import MyCourseView from "@/pages/MyCourse/MyCourseView";
 import ProfileView from "@/pages/Profile/ProfileView";
+import SignUpTeacherView from "@/pages/Signup/SignUpTeacherView";
 import SignUpView from "@/pages/Signup/SignUpView";
 import TaskDetailView from "@/pages/Tasks/TaskDetailView";
 import TasksView from "@/pages/Tasks/TasksView";
@@ -70,9 +72,19 @@ export const MappedAuthRoute: any = [
         element: LoginView,
         allowedRoles: ["guest"],
     },
+    // {
+    //     path: "/teacherlogin",
+    //     element: TeacherLoginView,
+    //     allowedRoles: ["guest"],
+    // },
     {
         path: "/signup",
         element: SignUpView,
+        allowedRoles: ["guest"],
+    },
+    {
+        path: "/teachersignup",
+        element: SignUpTeacherView,
         allowedRoles: ["guest"],
     },
 ]

@@ -77,3 +77,5 @@ const CourseVideoChapter = ({ chapter, chapterIndex, activeIndex, handleLessonCl
 };
 
 export default CourseVideoChapter;
+
+
