@@ -3,7 +3,6 @@ import CourseVideo from "@/pages/Course/CourseVideo";
 import CourseView from "@/pages/Course/CourseView";
 import InstructorsView from "@/pages/Instructors/InstructorsView";
 import LoginView from "@/pages/Login/LoginView";
-import TeacherLoginView from "@/pages/Login/TeacherLogin";
 import MyCourseView from "@/pages/MyCourse/MyCourseView";
 import ProfileView from "@/pages/Profile/ProfileView";
 import SignUpView from "@/pages/Signup/SignUpView";
