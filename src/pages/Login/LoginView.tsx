@@ -47,13 +47,13 @@ const LoginView = () => {
         });
       } else {
         toast({
-          variant: 'success',
+          variant: 'default',
           title: 'Đăng nhập thành công',
         });
         if (res?.payload?.data) {
           const { status } = res?.payload?.data.user
           if (status === 'onboarding') {
-            navigate('/register/complete-registeration');
+            navigate('/register/completeregisteration');
           } else {
             navigate('/');
           }

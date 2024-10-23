@@ -76,11 +76,12 @@ export const routes: MappedAuthRouteType[] = [
     //         allowedRoles: ["guest", "student", "teacher", "admin"],
     //     },
     {
-        path: "/register/complete-registeration",
+        path: "/register/completeregistration",
         element: InstructorForm,
         allowedRoles: ["guest"],
         isUsedLayout: false
     },
+
 
 ];
 
