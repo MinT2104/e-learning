@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { toast } from "@/hooks/use-toast";
 
-const AppointmentScheduler: React.FC = () => {
+const AppointmentScheduler = () => {
     const [date, setDate] = useState<Date | undefined>(undefined); // Sử dụng undefined thay cho null
 
     const handleDateChange = (selectedDate: Date | undefined) => {
