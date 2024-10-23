@@ -13,7 +13,7 @@ import CourseCard from './CourseCard';
 import { CourseType } from '@/redux/StoreType';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const CourseView: React.FC = () => {
+const CourseView = () => {
     const dispatch = useDispatch();
     const { courses, isLoading } = useSelector((state: RootState) => state.course);
 
