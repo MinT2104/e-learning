@@ -1,16 +1,17 @@
 import { RootState } from '@/redux/store';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom'; // Thêm useNavigate
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import CourseVideoChapter from '@/components/application/Course/CourseVideoChapter';
 import { Lesson } from '@/redux/StoreType';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function CourseVideo() {
     const param = useParams();
     const dispatch = useDispatch();
-    const navigate = useNavigate(); // Khai báo useNavigate
+    const navigate = useNavigate();
     const regex = /c=(\d+)&l=(\d+)/;
 
     let initLesson = {
@@ -68,9 +69,16 @@ function CourseVideo() {
                     ></iframe>
                 </div>
                 <div className='py-4 flex flex-col gap-4'>
-                    <h1 className='font-medium text-xl'>
+                    {/* <h1 className='font-medium text-xl'>
                         {activeLesson && activeLesson.title}
-                    </h1>
+                    </h1> */}
+                    {isLoading ? (
+                        <div className='w-96 h-6 rounded-lg bg-slate-200 animate-pulse' />
+                    ) : (
+                        <h1 className='font-medium text-xl'>
+                            {activeLesson && activeLesson.title}
+                        </h1>
+                    )}
                     <div className='flex gap-4'>
                         <div className='w-16 h-16 rounded-full bg-slate-200 animate-pulse' />
                         {
@@ -106,16 +114,41 @@ function CourseVideo() {
                             </div>
                     }
                 </div>
-                <ul className="max-h-[80vh] overflow-y-scroll p-2 scrollbar">
+                {/* <ul className="max-h-[80vh] overflow-y-scroll p-2 scrollbar">
                     {course?.chapters?.map((chapter, chapterIndex) => (
                         <li key={chapter._id} className={`mb-4 p-0  border w-full rounded border-slate-200 hover:border-primary overflow-hidden`}>
                             <CourseVideoChapter
                                 chapter={chapter}
                                 chapterIndex={chapterIndex}
                                 handleLessonClick={handleLessonClick}
-                                activeIndex={activeIndex} />
+                                activeIndex={activeIndex}
+                                isLoading={!isLoading} />
                         </li>
                     ))}
+                </ul> */}
+                <ul className="max-h-[80vh] overflow-y-scroll p-2 scrollbar">
+                    {isLoading ? (
+                        Array(4).fill(0).map((_, index) => (
+                            <li key={index} className={`mb-4 p-0 border w-full rounded border-slate-200 overflow-hidden`}>
+                                <div className="animate-pulse p-4">
+                                    <div className="h-6 bg-slate-200 rounded w-3/4 mb-2"></div>
+                                    <div className="h-4 bg-slate-200 rounded w-1/2"></div>
+                                </div>
+                            </li>
+                        ))
+                    ) : (
+                        course?.chapters?.map((chapter, chapterIndex) => (
+                            <li key={chapter._id} className={`mb-4 p-0 border w-full rounded border-slate-200 hover:border-primary overflow-hidden`}>
+                                <CourseVideoChapter
+                                    chapter={chapter}
+                                    chapterIndex={chapterIndex}
+                                    handleLessonClick={handleLessonClick}
+                                    activeIndex={activeIndex}
+                                // isLoading={isLoading}
+                                />
+                            </li>
+                        ))
+                    )}
                 </ul>
             </div>
         </div>

@@ -7,7 +7,7 @@ const AuthLayout = ({
     children: ReactNode
 }) => {
     return (
-        <section className="grid grid-cols-2 w-full h-screen">
+        <section className="grid grid-cols-2 w-full h-fit">
             <div
                 style={{
                     backgroundImage: `url(${LoginBg})`,
@@ -15,7 +15,7 @@ const AuthLayout = ({
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
                 }}
-                className="bg-sky-500/20 h-full sticky top-0"
+                className="bg-sky-500/20 min-h-screen sticky top-0"
             />
             {children}
         </section>
