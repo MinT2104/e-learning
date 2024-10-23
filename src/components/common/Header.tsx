@@ -42,6 +42,8 @@ export const Header = () => {
                 _id: { $in: authUser ? authUser.courseIds : [] }
             }
         }
+
+        console.log(authUser)
         await dispatch(globalThis.$action.loadUserCourses(body));
     };
 
@@ -58,13 +60,12 @@ export const Header = () => {
                 <input placeholder="Tìm kiếm khóa học, bài viết, video, ..." className="flex-1 border-none shadow-none outline-none h-9 text-sm text-slate-700" />
             </div>
             <div className="flex-1 flex items-center gap-2 justify-end">
-                {/* <Button variant={'link'} className="font-bold text-sm px-0"
-                    onClick={() => handleNofication()}>Khóa học của bạn</Button>
-                <Bell className="text-slate-500 cursor-pointer" /> */}
+                {/* <Button variant={'link'} className="font-bold text-sm px-0 underline-0"
+                    onClick={() => handleTeacher()}>For teacher</Button> */}
+                {/* <Bell className="text-slate-500 cursor-pointer" /> */}
                 {/* <Button variant={'link'} className="font-bold text-sm px-0" onClick={handleCourse}>
                     Khóa học của tôi
                 </Button> */}
-
                 {
                     (authUser || localUser) ?
                         (
