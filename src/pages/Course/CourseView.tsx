@@ -28,7 +28,6 @@ const CourseView: React.FC = () => {
     if (isLoading) {
         return (
             <div className="flex flex-col container mx-auto pb-8 h-fit">
-                <h1 className="text-[24px] font-bold mb-6">Các khóa học nổi bật</h1>
                 <div className='flex flex-col'>
                     <Skeleton className="h-[250px] w-[1150px] rounded-lg animate-pulse" />
                 </div>
@@ -70,8 +69,6 @@ const CourseView: React.FC = () => {
         );
     } else return (
         <div className="container mx-auto pb-8 h-fit">
-            <h1 className="text-[24px] font-bold mb-6">Các khóa học nổi bật</h1>
-
             <Carousel className="mb-20">
                 <CarouselContent className="w-full">
                     {courses.map((course) => (
