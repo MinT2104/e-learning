@@ -43,7 +43,6 @@ export const Header = () => {
             }
         }
 
-        console.log(authUser)
         await dispatch(globalThis.$action.loadUserCourses(body));
     };
 
