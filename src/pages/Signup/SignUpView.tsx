@@ -17,7 +17,7 @@ const SignUpView = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'student',
+        role: 'student'
     });
     const [error, setError] = useState({
         userName: false,
@@ -29,6 +29,7 @@ const SignUpView = () => {
     const { isLoading } = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [role, setRole] = useState('student');
 
     const handleChangeAuth = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.name;
@@ -92,14 +93,7 @@ const SignUpView = () => {
                 return;
             }
 
-            // const res = await dispatch(globalThis.$action.register({ ...auth, status: auth.role === 'student' ? 'completed' : 'onboarding' }));
-            const res = await dispatch(globalThis.$action.register({
-                ...auth,
-                status: auth.role === 'teacher' ? 'onboarding' : 'completed'
-            }));
-
-
-            console.log("Auth Role:", auth.role);
+            const res = await dispatch(globalThis.$action.register({ ...auth, role }));
 
             if (res?.type?.includes('rejected')) {
                 toast({
@@ -132,10 +126,6 @@ const SignUpView = () => {
         }
     };
 
-    const handleChangeRole = (role: string) => {
-        setAuth((prev) => ({ ...prev, role }));
-    }
-
     return (
         <div className="h-screen p-10 py-10 flex flex-col gap-6 items-center justify-start w-full overflow-auto">
             <img className="w-20 h-auto" src={Logo} alt="Logo" />
@@ -147,14 +137,14 @@ const SignUpView = () => {
             </div>
 
             {/* TabsList cho các vai trò */}
-            <Tabs defaultValue={auth.role} className="flex flex-col items-center justify-center">
-                <TabsList className='w-96 h-fit'>
-                    <TabsTrigger value="student" onClick={() => handleChangeRole('student')}
-                        className='w-48 h-[40px]'>
+            <Tabs defaultValue={role} className="flex flex-col items-center justify-center">
+                <TabsList className='w-96'>
+                    <TabsTrigger value="student" onClick={() => setRole('student')}
+                        className='w-48'>
                         Student
                     </TabsTrigger>
-                    <TabsTrigger value="teacher" onClick={() => handleChangeRole('teacher')}
-                        className='w-48 h-[40px]'>
+                    <TabsTrigger value="teacher" onClick={() => setRole('teacher')}
+                        className='w-48'>
                         Teacher
                     </TabsTrigger>
                 </TabsList>
@@ -163,7 +153,7 @@ const SignUpView = () => {
                 <TabsContent
                     value="student"
                     className='w-96 transition-opacity duration-500 ease-in-out'
-                    style={{ opacity: auth.role === 'student' ? 1 : 0 }}
+                    style={{ opacity: role === 'student' ? 1 : 0 }}
                 >
                     <form onSubmit={handleSubmit} className="w-80 h-fit m-4" action="#" method="POST">
                         <span className="text-sm text-slate-600">Tên tài khoản</span>
@@ -278,7 +268,7 @@ const SignUpView = () => {
                 <TabsContent
                     value="teacher"
                     className='w-96 transition-opacity duration-500 ease-in-out'
-                    style={{ opacity: auth.role === 'teacher' ? 1 : 0 }}
+                    style={{ opacity: role === 'teacher' ? 1 : 0 }}
                 >
                     <form onSubmit={handleSubmit} className="w-80 h-fit m-4" action="#" method="POST">
                         <span className="text-sm text-slate-600">Tên tài khoản giáo viên</span>

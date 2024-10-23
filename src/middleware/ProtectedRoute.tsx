@@ -1,10 +1,8 @@
 import { ApiClient } from "@/customFetch/ApiClient";
 import { getCookie } from "@/lib/utils";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
-import { RootState } from "@/redux/store";
-import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 type Props = {
     children: React.ReactNode;
@@ -19,37 +17,45 @@ const ProtectedRoute = ({ children, role, allowedRoles }: Props) => {
     const localUser = localStorage.getItem('localUser');
     const navigate = useNavigate();
 
-    // Set token in Authorization header
-    useEffect(() => {
-        if (token) {
-            ApiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        }
-    }, [token]);
+    const ProtectedRoute = ({ children, role, allowedRoles }: props) => {
+        const dispatch = useDispatch()
 
-    const handleGetMe = async () => {
-        if (token && !localUser) {
-            const res = await dispatch(globalThis.$action.me());
-            if (res?.type?.includes('fulfilled')) {
-                const { data } = res.payload;
-                localStorage.setItem('localUser', JSON.stringify(data));
-            }
+        const token = getCookie('_at')
+        const localUser = localStorage.getItem('localUser')
+
+        ApiClient.defaults.headers.common = {
+            'Authorization': token ? `Bearer ${token}` : null
         }
+
+        const handleGetMe = async () => {
+            if (token && !localUser) {
+                const res = await dispatch(globalThis.$action.me());
+                if (res?.type?.includes('fulfilled')) {
+                    const { data } = res.payload;
+                    localStorage.setItem('localUser', JSON.stringify(data));
+                }
+            }
+        };
+
+        useEffect(() => {
+            handleGetMe();
+        }, []);
+
+        if (status === 'onboarding') {
+            return <Navigate to="/register/completeregistration" replace />;
+
+        }
+
+        if (!allowedRoles.includes(role)) {
+            return <Navigate to="/login" replace />;
+        }
+
+<<<<<<< HEAD
+        return <>{children}</>;
+=======
+
+    return children;
+>>>>>>> parent of 82583aa (Merge remote-tracking branch 'origin/main' into dev/quan)
     };
 
-    useEffect(() => {
-        handleGetMe();
-    }, []);
-
-    if (status === 'onboarding') {
-        return <Navigate to="/register/completeregistration" replace />;
-
-    }
-
-    if (!allowedRoles.includes(role)) {
-        return <Navigate to="/login" replace />;
-    }
-
-    return <>{children}</>;
-};
-
-export default ProtectedRoute;
+    export default ProtectedRoute;

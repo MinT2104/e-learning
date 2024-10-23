@@ -11,7 +11,6 @@ export interface StoreType {
             role: string;
             createdAt: string;
             updatedAt: string;
-            status: string
         };
         role: string,
         isLoading: boolean

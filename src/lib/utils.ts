@@ -29,7 +29,6 @@ export const isLogin = () => {
 
 export const logOut = () => {
   deleteCookie('_at')
-  deleteCookie('status')
   localStorage.removeItem('localUser')
   setTimeout(() => document.location.replace(import.meta.env.VITE_DOMAIN_NAME || 'http://localhost:5173'), 1000)
 }

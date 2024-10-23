@@ -50,15 +50,7 @@ const LoginView = () => {
           variant: 'default',
           title: 'Đăng nhập thành công',
         });
-        if (res?.payload?.data) {
-          const { status } = res?.payload?.data.user
-          if (status === 'onboarding') {
-            navigate('/register/completeregisteration');
-          } else {
-            navigate('/');
-          }
-        }
-
+        navigate('/');
       }
     } else {
       setError({
@@ -83,24 +75,24 @@ const LoginView = () => {
 
       {/* TabsList cho các vai trò */}
       <Tabs defaultValue={role} className="flex flex-col items-center justify-center">
-        <TabsList className='w-96 h-fit'>
+        <TabsList className='w-80'>
           <TabsTrigger value="student" onClick={() => setRole('student')}
-            className='w-48 h-[40px]'>
+            className='w-48'>
             Student
           </TabsTrigger>
           <TabsTrigger value="teacher" onClick={() => setRole('teacher')}
-            className='w-48 h-[40px]'>
+            className='w-48'>
             Teacher
           </TabsTrigger>
         </TabsList>
 
         <TabsContent
           value="student"
-          className='w-96 transition-opacity duration-500 ease-in-out'
+          className='w-112 transition-opacity duration-500 ease-in-out'
           style={{ opacity: role === 'student' ? 1 : 0 }}
         >
           {/* Nội dung cho sinh viên */}
-          <form onSubmit={handleSubmit} className="w-80 h-fit m-4" action="#" method="POST">
+          <form onSubmit={handleSubmit} className="w-64 h-fit m-4" action="#" method="POST">
             <span className="text-sm text-slate-600">Email của bạn</span>
             <div className="mt-2 relative truncate mb-6">
               <Input
@@ -175,7 +167,7 @@ const LoginView = () => {
           style={{ opacity: role === 'teacher' ? 1 : 0 }}
         >
           {/* Nội dung cho giáo viên */}
-          <form onSubmit={handleSubmit} className="w-80 h-fit m-4" action="#" method="POST">
+          <form onSubmit={handleSubmit} className="w-64 h-fit m-4" action="#" method="POST">
             <span className="text-sm text-slate-600">Email giáo viên</span>
             <div className="mt-2 relative truncate mb-6">
               <Input
@@ -217,7 +209,7 @@ const LoginView = () => {
         </TabsContent>
         <div className="flex items-center justify-center w-full mt-4 text-sm">
           <span>Nếu bạn chưa có tài khoản?</span>
-          <Button type="button" variant="link" onClick={() => navigate('/register')} className="cursor-pointer no-underline hover:no-underline pl-1">
+          <Button type="button" variant="link" onClick={() => navigate('/signup')} className="cursor-pointer no-underline hover:no-underline pl-1">
             Đăng ký
           </Button>
         </div>

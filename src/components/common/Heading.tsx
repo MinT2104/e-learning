@@ -11,6 +11,7 @@ type HeadingProps = {
 const Heading = ({ title, className }: HeadingProps) => {
     // Retrieve authUser from Redux store
     const { authUser } = useSelector((state: RootState) => state.user);
+    console.log(authUser);
 
     const [currentPath, setCurrentPath] = useState<string | undefined>("");
 
