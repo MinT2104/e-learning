@@ -17,7 +17,7 @@ const SignUpView = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'student',
+        role: 'student'
     });
     const [error, setError] = useState({
         userName: false,
@@ -29,6 +29,7 @@ const SignUpView = () => {
     const { isLoading } = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [role, setRole] = useState('student');
 
     const handleChangeAuth = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.name;
@@ -37,6 +38,46 @@ const SignUpView = () => {
     };
 
     const checkEmpty = (value: string) => value.trim().length < 1;
+
+    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+
+    //     if (auth.userName && auth.email && auth.password && auth.confirmPassword) {
+    //         if (auth.password !== auth.confirmPassword) {
+    //             setError({ ...error, confirmPassword: true });
+    //             toast({
+    //                 variant: 'destructive',
+    //                 title: 'Mật khẩu không khớp',
+    //                 description: 'Vui lòng kiểm tra lại mật khẩu của bạn',
+    //             });
+    //             return;
+    //         }
+
+    //         const res = await dispatch(globalThis.$action.register({ ...auth, status: auth.role === 'student' ? 'completed' : 'onboarding' }))
+    //         if (res?.type?.includes('rejected')) {
+    //             toast({
+    //                 variant: 'destructive',
+    //                 title: 'Đăng ký không thành công',
+    //                 description: 'Vui lòng kiểm tra lại thông tin đăng ký',
+    //             });
+    //         } else {
+    //             toast({
+    //                 variant: 'success',
+    //                 title: 'Đăng ký thành công',
+    //             });
+    //             setTimeout(() => {
+    //                 navigate('/login');
+    //             }, 1000);
+    //         }
+    //     } else {
+    //         setError({
+    //             userName: checkEmpty(auth.userName),
+    //             email: checkEmpty(auth.email),
+    //             password: checkEmpty(auth.password),
+    //             confirmPassword: checkEmpty(auth.confirmPassword),
+    //         });
+    //     }
+    // };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -52,7 +93,11 @@ const SignUpView = () => {
                 return;
             }
 
-            const res = await dispatch(globalThis.$action.register({ ...auth, status: auth.role === 'student' ? 'completed' : 'onboarding' }))
+            const res = await dispatch(globalThis.$action.register({
+                ...auth,
+                status: auth.role === 'student' ? 'completed' : 'onboarding'
+            }));
+
             if (res?.type?.includes('rejected')) {
                 toast({
                     variant: 'destructive',
@@ -61,12 +106,16 @@ const SignUpView = () => {
                 });
             } else {
                 toast({
-                    variant: 'success',
+                    variant: 'default',
                     title: 'Đăng ký thành công',
                 });
-                setTimeout(() => {
+
+                // Điều hướng dựa trên vai trò
+                if (auth.role === 'teacher') {
+                    navigate('/register/complete-registeration');
+                } else {
                     navigate('/login');
-                }, 1000);
+                }
             }
         } else {
             setError({
@@ -77,10 +126,6 @@ const SignUpView = () => {
             });
         }
     };
-
-    const handleChangeRole = (role: string) => {
-        setAuth((prev) => ({ ...prev, role }));
-    }
 
     return (
         <div className="h-screen p-10 py-10 flex flex-col gap-6 items-center justify-start w-full overflow-auto">
@@ -93,14 +138,14 @@ const SignUpView = () => {
             </div>
 
             {/* TabsList cho các vai trò */}
-            <Tabs defaultValue={auth.role} className="flex flex-col items-center justify-center">
-                <TabsList className='w-96 h-fit'>
-                    <TabsTrigger value="student" onClick={() => handleChangeRole('student')}
-                        className='w-48 h-[40px]'>
+            <Tabs defaultValue={role} className="flex flex-col items-center justify-center">
+                <TabsList className='w-96'>
+                    <TabsTrigger value="student" onClick={() => setRole('student')}
+                        className='w-48'>
                         Student
                     </TabsTrigger>
-                    <TabsTrigger value="teacher" onClick={() => handleChangeRole('teacher')}
-                        className='w-48 h-[40px]'>
+                    <TabsTrigger value="teacher" onClick={() => setRole('teacher')}
+                        className='w-48'>
                         Teacher
                     </TabsTrigger>
                 </TabsList>
@@ -109,7 +154,7 @@ const SignUpView = () => {
                 <TabsContent
                     value="student"
                     className='w-96 transition-opacity duration-500 ease-in-out'
-                    style={{ opacity: auth.role === 'student' ? 1 : 0 }}
+                    style={{ opacity: role === 'student' ? 1 : 0 }}
                 >
                     <form onSubmit={handleSubmit} className="w-80 h-fit m-4" action="#" method="POST">
                         <span className="text-sm text-slate-600">Tên tài khoản</span>
@@ -224,7 +269,7 @@ const SignUpView = () => {
                 <TabsContent
                     value="teacher"
                     className='w-96 transition-opacity duration-500 ease-in-out'
-                    style={{ opacity: auth.role === 'teacher' ? 1 : 0 }}
+                    style={{ opacity: role === 'teacher' ? 1 : 0 }}
                 >
                     <form onSubmit={handleSubmit} className="w-80 h-fit m-4" action="#" method="POST">
                         <span className="text-sm text-slate-600">Tên tài khoản giáo viên</span>
