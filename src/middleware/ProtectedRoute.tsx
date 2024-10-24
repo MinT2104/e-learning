@@ -54,7 +54,7 @@ const ProtectedRoute = ({ children, role, allowedRoles }: Props) => {
 
     useEffect(() => {
         if (!authUser || !checkTokenValid(token)) {
-            navigate("/");
+            navigate("/login");
         } else if (!allowedRoles.includes(authUser.role)) {
             navigate("/login");
         } else if (status === 'onboarding') {
