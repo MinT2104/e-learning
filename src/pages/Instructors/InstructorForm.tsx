@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import logo from '@/assets/images/EL.png';
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
@@ -71,9 +71,9 @@ function InstructorForm() {
       <div className="text-center mb-16">
         <a href="javascript:void(0)">
           <img
-            src=""
+            src={logo}
             alt="logo"
-            className="w-52 inline-block"
+            className="w-24 inline-block"
           />
         </a>
         <h4 className="text-gray-800 text-base font-semibold mt-6">

@@ -5,7 +5,7 @@ import { AssignmentType } from '@/redux/StoreType';
 import { useEffect } from "react";
 import TaskCard from './TaskCard';
 
-const TaskView: React.FC = () => {
+const TaskView = () => {
     const dispatch = useDispatch();
     const { assginments, isLoading } = useSelector((state: RootState) => state.assginment);
 
