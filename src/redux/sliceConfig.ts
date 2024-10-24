@@ -108,7 +108,6 @@ export const sliceConfig: SliceConfig[] = [
                     if (action.payload.data) {
                         const { token, user } = action.payload.data
                         document.cookie = `_at=${token}`
-                        document.cookie = `_status=${user.status}`
                         state.authUser = user
                         state.role = user.role
                     }
@@ -146,7 +145,7 @@ export const sliceConfig: SliceConfig[] = [
     {
         name: 'media',
         initialState: {
-            images: {},
+            images: {}, 
         },
         thunk: [
             {
