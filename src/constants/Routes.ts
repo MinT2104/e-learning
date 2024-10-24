@@ -9,9 +9,10 @@ import ProfileView from "@/pages/Profile/ProfileView";
 import SignUpView from "@/pages/Signup/SignUpView";
 import TaskDetailView from "@/pages/Tasks/TaskDetailView";
 import TasksView from "@/pages/Tasks/TasksView";
+import { FC } from "react";
 
 
-export const routes = [
+export const routes: MappedAuthRouteType[] = [
     // {
     //     path: "/",
     //     element: HomeView,
@@ -21,40 +22,53 @@ export const routes = [
         path: "/",
         element: CourseView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
+        isUsedLayout: true
     },
     {
         path: "/my-course",
         element: MyCourseView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
+        isUsedLayout: true
     },
     {
         path: "/tasks",
         element: TasksView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
+        isUsedLayout: true
+
     },
     {
         path: "/tasks/:id",
         element: TaskDetailView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
+        isUsedLayout: true
     },
     {
         path: "/instructors",
         element: InstructorsView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
+        isUsedLayout: true
+
     },
     {
         path: "/profile",
         element: ProfileView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
+        isUsedLayout: true
+
     },
     {
         path: "/course/:id",
         element: CourseDetailView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
+        isUsedLayout: true
+
     }, {
         path: "/course/:id/watch",
         element: CourseVideo,
         allowedRoles: ["guest", "student", "teacher", "admin"],
+        isUsedLayout: true
+
     },
     //     {
     //         path: "/activity",
@@ -64,23 +78,25 @@ export const routes = [
     {
         path: "/register/complete-registeration",
         element: InstructorForm,
-        allowedRoles: ["teacher"],
+        allowedRoles: ["guest"],
         isUsedLayout: false
     },
 
 ];
 
 
-export const MappedAuthRoute: any = [
+export const MappedAuthRoute: MappedAuthRouteType[] = [
     {
         path: "/login",
         element: LoginView,
         allowedRoles: ["guest"],
+        isUsedLayout: true
     },
     {
-        path: "/signup",
+        path: "/register",
         element: SignUpView,
         allowedRoles: ["guest"],
+        isUsedLayout: true
     },
     // {
     //     path: "/teachersignup",
@@ -88,4 +104,12 @@ export const MappedAuthRoute: any = [
     //     allowedRoles: ["guest"],
     // },
 
+
 ]
+
+export interface MappedAuthRouteType {
+    path: string;
+    element: () => JSX.Element | FC<{}> | any;
+    allowedRoles: string[];
+    isUsedLayout: boolean;
+}
