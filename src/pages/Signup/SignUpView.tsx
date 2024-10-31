@@ -38,6 +38,46 @@ const SignUpView = () => {
 
     const checkEmpty = (value: string) => value.trim().length < 1;
 
+    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+
+    //     if (auth.userName && auth.email && auth.password && auth.confirmPassword) {
+    //         if (auth.password !== auth.confirmPassword) {
+    //             setError({ ...error, confirmPassword: true });
+    //             toast({
+    //                 variant: 'destructive',
+    //                 title: 'Mật khẩu không khớp',
+    //                 description: 'Vui lòng kiểm tra lại mật khẩu của bạn',
+    //             });
+    //             return;
+    //         }
+
+    //         const res = await dispatch(globalThis.$action.register({ ...auth, status: auth.role === 'student' ? 'completed' : 'onboarding' }))
+    //         if (res?.type?.includes('rejected')) {
+    //             toast({
+    //                 variant: 'destructive',
+    //                 title: 'Đăng ký không thành công',
+    //                 description: 'Vui lòng kiểm tra lại thông tin đăng ký',
+    //             });
+    //         } else {
+    //             toast({
+    //                 variant: 'default',
+    //                 title: 'Đăng ký thành công',
+    //             });
+    //             setTimeout(() => {
+    //                 navigate('/login');
+    //             }, 1000);
+    //         }
+    //     } else {
+    //         setError({
+    //             userName: checkEmpty(auth.userName),
+    //             email: checkEmpty(auth.email),
+    //             password: checkEmpty(auth.password),
+    //             confirmPassword: checkEmpty(auth.confirmPassword),
+    //         });
+    //     }
+    // };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -52,7 +92,11 @@ const SignUpView = () => {
                 return;
             }
 
-            const res = await dispatch(globalThis.$action.register({ ...auth, status: auth.role === 'student' ? 'completed' : 'onboarding' }))
+            const res = await dispatch(globalThis.$action.register({
+                ...auth,
+                status: auth.role === 'student' ? 'completed' : 'onboarding'
+            }));
+
             if (res?.type?.includes('rejected')) {
                 toast({
                     variant: 'destructive',
@@ -64,9 +108,13 @@ const SignUpView = () => {
                     variant: 'success',
                     title: 'Đăng ký thành công',
                 });
-                setTimeout(() => {
+
+                // Điều hướng dựa trên vai trò
+                if (auth.role === 'teacher') {
+                    navigate('/register/complete-registeration');
+                } else {
                     navigate('/login');
-                }, 1000);
+                }
             }
         } else {
             setError({
@@ -77,6 +125,7 @@ const SignUpView = () => {
             });
         }
     };
+
 
     const handleChangeRole = (role: string) => {
         setAuth((prev) => ({ ...prev, role }));
