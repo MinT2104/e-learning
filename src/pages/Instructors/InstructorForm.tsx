@@ -13,8 +13,9 @@ import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import CustomDropDown from "@/components/common/CustomDropDown";
-import CustomCheckboxGroup from "@/components/common/CustomCheckBoxGroup";
 import CountryOptions from '@/constants/country.json'
+import CustomCheckboxGroup from "@/components/common/CustomCheckboxGroup";
+import { FaceIcon } from "@radix-ui/react-icons";
 
 const mockCategories = [
   {
@@ -40,8 +41,8 @@ function InstructorForm() {
     address: '',
     phoneNumber: '',
     country: '',
-    certifications: '',
-    social_links: '',
+    certifications: [] as string[],
+    social_links: [] as string[],
     bio: '',
     teaching_levels: ''
   });
@@ -56,10 +57,29 @@ function InstructorForm() {
     teaching_levels: true
   });
 
+  const [social, setSocial] = useState({
+    facebook: '',
+    youtube: ''
+  });
   const handleChangeAuth = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const name = e.target.name;
     const value = e.target.value;
     setAuth((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleChangeCountry = (data: { label: string, key: string }) => {
+    setAuth((prev) => ({ ...prev, country: data.label }));
+  };
+
+  const handleChangeTeaching = (data: { label: string, key: string }) => {
+    setAuth((prev) => ({ ...prev, teaching_levels: data.key }));
+  };
+  const handleChangeLink = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    console.log(e)
+    const name = e.target.name;
+    const value = e.target.value;
+    setSocial((prev) => ({ ...prev, [name]: value }));
+
   };
 
   const dispatch = useDispatch();
@@ -69,7 +89,15 @@ function InstructorForm() {
   }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(auth)
+    const social_value = [
+      social.facebook,
+      social.youtube
+    ]
+    // setAuth((prev) => ({ ...prev, social_links:}))
+    const authSocial = { ...auth, social_links: social_value }
+    console.log(auth.social_links)
+    console.log(social_value)
+    console.log(authSocial)
   }
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +117,6 @@ function InstructorForm() {
       }
     }
   }
-
 
   const EnglishCertificatesOptions = [
     { key: 'ielts', label: 'IELTS (International English Language Testing System)' },
@@ -112,6 +139,8 @@ function InstructorForm() {
 
   const handleChangeCategories = (data: string[]) => {
     console.log(data)
+    setAuth((prev) => ({ ...prev, certifications: data }));
+
   }
 
   return (
@@ -202,7 +231,9 @@ function InstructorForm() {
           <div className="w-[90%]">
             <span className="text-sm text-slate-600">Quốc gia</span>
             <div className="mt-2 relative truncate mb-6">
-              <CustomDropDown dropDownList={CountryOptions} placeholder="Select your country" />
+              <CustomDropDown dropDownList={CountryOptions} placeholder="Select your country"
+                onChange={handleChangeCountry}
+              />
 
               <CustomTooltip
                 isHidden={!error.country}
@@ -222,7 +253,9 @@ function InstructorForm() {
           <div className="w-[90%]">
             <span className="text-sm text-slate-600">Trình độ giảng dạy</span>
             <div className="mt-2 relative truncate mb-6">
-              <CustomDropDown dropDownList={mockCategories} placeholder="Select teaching level" />
+              <CustomDropDown dropDownList={mockCategories} placeholder="Select teaching level"
+                onChange={handleChangeTeaching}
+              />
               <CustomTooltip
                 isHidden={!error.teaching_levels}
                 triggerElement={
@@ -285,15 +318,15 @@ function InstructorForm() {
                   </svg>
                 </div>
                 <Input
-                  id="teaching_levels"
-                  name="teaching_levels"
+                  id="facebook"
+                  name="facebook"
                   type="text"
                   disabled={isLoading}
-                  onFocus={() => setError((prev) => ({ ...prev, teaching_levels: false }))}
-                  autoComplete="teaching_levels"
-                  defaultValue={auth.teaching_levels}
-                  onChange={handleChangeAuth}
-                  className={cn('border-none rounded-none', error.teaching_levels && 'redBorder')}
+                  onFocus={() => setError((prev) => ({ ...prev, facebook: false }))}
+                  autoComplete="facebook"
+                  defaultValue={social.facebook}
+                  onChange={handleChangeLink}
+                  className={cn('border-none rounded-none')}
                   placeholder="Nhập vào link facebook của bạn"
                 />
               </div>
@@ -306,15 +339,15 @@ function InstructorForm() {
                   </path> </g> </g> </g> </g></svg>
                 </div>
                 <Input
-                  id="teaching_levels"
-                  name="teaching_levels"
+                  id="youtube"
+                  name="youtube"
                   type="text"
                   disabled={isLoading}
-                  onFocus={() => setError((prev) => ({ ...prev, teaching_levels: false }))}
-                  autoComplete="teaching_levels"
-                  defaultValue={auth.teaching_levels}
-                  onChange={handleChangeAuth}
-                  className={cn('border-none rounded-none', error.teaching_levels && 'redBorder')}
+                  onFocus={() => setError((prev) => ({ ...prev, youtube: false }))}
+                  autoComplete="youtube"
+                  defaultValue={social.youtube}
+                  onChange={handleChangeLink}
+                  className={cn('border-none rounded-none')}
                   placeholder="Nhập vào link youtube của bạn"
                 />
               </div>
