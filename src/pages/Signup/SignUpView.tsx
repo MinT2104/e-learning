@@ -157,10 +157,10 @@ const SignUpView = () => {
                 {/* Nội dung cho sinh viên */}
                 <TabsContent
                     value="student"
-                    className='w-96 transition-opacity duration-500 ease-in-out'
+                    className='transition-opacity duration-500 ease-in-out p-0 border-none'
                     style={{ opacity: auth.role === 'student' ? 1 : 0 }}
                 >
-                    <form onSubmit={handleSubmit} className="w-80 h-fit m-4" action="#" method="POST">
+                    <form onSubmit={handleSubmit} className="w-96 h-fit m-4 p-0" action="#" method="POST">
                         <span className="text-sm text-slate-600">Tên tài khoản</span>
                         <div className="mt-2 relative truncate mb-6">
                             <Input
@@ -272,10 +272,10 @@ const SignUpView = () => {
                 {/* Nội dung cho giáo viên */}
                 <TabsContent
                     value="teacher"
-                    className='w-96 transition-opacity duration-500 ease-in-out'
+                    className='transition-opacity duration-500 ease-in-out p-0 border-none'
                     style={{ opacity: auth.role === 'teacher' ? 1 : 0 }}
                 >
-                    <form onSubmit={handleSubmit} className="w-80 h-fit m-4" action="#" method="POST">
+                    <form onSubmit={handleSubmit} className="w-96 h-fit m-4 p-0s" action="#" method="POST">
                         <span className="text-sm text-slate-600">Tên tài khoản giáo viên</span>
                         <div className="mt-2 relative truncate mb-6">
                             <Input
