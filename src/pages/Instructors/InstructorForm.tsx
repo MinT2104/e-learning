@@ -1,6 +1,6 @@
 "use client";
 
-import { z } from "zod";
+import { object, z } from "zod";
 import logo from '@/assets/images/EL.png';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,9 @@ import { Textarea } from "@/components/ui/textarea";
 import CustomDropDown from "@/components/common/CustomDropDown";
 import CountryOptions from '@/constants/country.json'
 import CustomCheckboxGroup from "@/components/common/CustomCheckboxGroup";
-import { FaceIcon } from "@radix-ui/react-icons";
+import { useNavigate } from "react-router-dom";
+import { faL } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "@/hooks/use-toast";
 
 const mockCategories = [
   {
@@ -47,14 +49,11 @@ function InstructorForm() {
     teaching_levels: ''
   });
   const [error, setError] = useState({
-    image: false,
     address: false,
     phoneNumber: false,
     country: false,
     certifications: false,
-    social_links: false,
-    bio: false,
-    teaching_levels: true
+    teaching_levels: false
   });
 
   const [social, setSocial] = useState({
@@ -83,21 +82,59 @@ function InstructorForm() {
   };
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await dispatch(globalThis.$action.logOut())
   }
+
+  const requireKey = [
+    'address',
+    'phoneNumber',
+    'country',
+    'certifications',
+    'teaching_levels',
+  ]
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const social_value = [
       social.facebook,
       social.youtube
     ]
-    // setAuth((prev) => ({ ...prev, social_links:}))
     const authSocial = { ...auth, social_links: social_value }
-    console.log(auth.social_links)
-    console.log(social_value)
-    console.log(authSocial)
+    let errorNumber = 0;
+    for (let key in authSocial) {
+      if (requireKey.includes(key)) {
+        if ((authSocial as any)[key] === '' || (authSocial as any)[key].length < 1) {
+          setError((prev) => ({ ...prev, [key]: true }));
+          errorNumber += 1
+        }
+        else {
+          setError((prev) => ({ ...prev, [key]: false }));
+        }
+      }
+    }
+    if (!errorNumber) {
+      const newData = {
+        _id: authUser._id,
+        data: authSocial
+      }
+      const res = await dispatch(globalThis.$action.completeRegisteration(newData))
+      console.log(res)
+      if (res?.type?.includes('rejected')) {
+        toast({
+          variant: 'destructive',
+          title: 'Đăng ký không thành công',
+          description: 'Vui lòng kiểm tra lại thông tin đăng ký',
+        });
+      } else {
+        toast({
+          variant: 'success',
+          title: 'Đăng ký thành công',
+        });
+      }
+    }
+
   }
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +179,6 @@ function InstructorForm() {
     setAuth((prev) => ({ ...prev, certifications: data }));
 
   }
-
   return (
     <div className=" ">
       <div className="w-full px-10 py-8">
@@ -175,7 +211,7 @@ function InstructorForm() {
 
 
           <div className="w-[90%]">
-            <span className="text-sm text-slate-600">Địa chỉ nơi ở của bạn</span>
+            <span className="text-sm text-slate-600">Địa chỉ nơi ở của bạn *</span>
             <div className="mt-2 relative truncate mb-6">
               <Input
                 id="address"
@@ -196,13 +232,13 @@ function InstructorForm() {
                     <Info className="text-red-500" size={18} />
                   </div>
                 }
-                message="Mật khẩu không được để trống"
+                message="Địa chỉ không được để trống"
               />
             </div>
           </div>
 
           <div className="w-[90%]">
-            <span className="text-sm text-slate-600">Số điện thoại</span>
+            <span className="text-sm text-slate-600">Số điện thoại *</span>
             <div className="mt-2 relative truncate mb-6">
               <Input
                 id="phoneNumber"
@@ -229,7 +265,7 @@ function InstructorForm() {
           </div>
 
           <div className="w-[90%]">
-            <span className="text-sm text-slate-600">Quốc gia</span>
+            <span className="text-sm text-slate-600">Quốc gia *</span>
             <div className="mt-2 relative truncate mb-6">
               <CustomDropDown dropDownList={CountryOptions} placeholder="Select your country"
                 onChange={handleChangeCountry}
@@ -251,7 +287,7 @@ function InstructorForm() {
 
 
           <div className="w-[90%]">
-            <span className="text-sm text-slate-600">Trình độ giảng dạy</span>
+            <span className="text-sm text-slate-600">Trình độ giảng dạy *</span>
             <div className="mt-2 relative truncate mb-6">
               <CustomDropDown dropDownList={mockCategories} placeholder="Select teaching level"
                 onChange={handleChangeTeaching}
@@ -356,10 +392,24 @@ function InstructorForm() {
           </div>
 
           <div className="w-[90%]">
-            <span className="text-sm text-slate-600">Chứng chỉ hiện có</span>
+            <div className="flex items-center gap-4 ">
+              <span className="text-sm text-slate-600">Chứng chỉ hiện có *</span>
+              <CustomTooltip
+                isHidden={!error.certifications}
+                triggerElement={
+                  <div className=" w-8 h-8 bg-white flex items-center justify-center ">
+                    <Info className="text-red-500" size={18} />
+                  </div>
+                }
+                message="Vui lòng chọn ít nhất một chứng chỉ"
+                className="top-0 right-0 sticky "
+              />
+            </div>
             <div className="mt-2 relative truncate mb-6">
               <CustomCheckboxGroup options={EnglishCertificatesOptions} className='text-[14px]' name="categories" change={handleChangeCategories} />
             </div>
+
+
           </div>
 
           <div className="w-[90%]">
@@ -374,7 +424,7 @@ function InstructorForm() {
                 autoComplete="bio"
                 defaultValue={auth.bio}
                 onChange={handleChangeAuth}
-                className={cn('authInput', error.bio && 'redBorder')}
+                className={cn('authInput')}
                 placeholder="Nhập vào trình độ giảng dạy của bạn"
               />
             </div>
@@ -382,7 +432,7 @@ function InstructorForm() {
 
           <div className=" flex justify-end mt-12 gap-4 col-span-2">
             <Button
-              type="submit"
+              type="button"
               className="w-40"
               variant={'outline'}
               onClick={handleLogout}

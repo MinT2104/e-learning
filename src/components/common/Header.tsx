@@ -50,6 +50,7 @@ export const Header = () => {
 
     useEffect(() => {
         if (!authUser) return
+        // if (authUser.courseIds.length < 1) return
         handleGetData();
     }, [authUser]);
 

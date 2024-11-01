@@ -10,6 +10,7 @@ import { Info, LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import CustomTooltip from '@/components/common/CustomTooltip';
 
 const LoginView = () => {
   const [auth, setAuth] = useState({
@@ -94,20 +95,15 @@ const LoginView = () => {
             className={cn('authInput', error.email && 'redBorder')}
             placeholder="Nhập tên tài khoản của bạn"
           />
-          <div hidden={!error.email} className="absolute w-10 h-full bg-transparent top-0 right-0 flex items-center justify-start">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="w-8 h-8 bg-white flex items-center justify-center">
-                    <Info className="text-red-500" size={18} />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Email không được để trống</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+          <CustomTooltip
+            isHidden={!error.email}
+            triggerElement={
+              <div className="w-8 h-8 bg-white flex items-center justify-center">
+                <Info className="text-red-500" size={18} />
+              </div>
+            }
+            message="Email không được để trống"
+          />
         </div>
 
         <span className="text-sm text-slate-600">Mật khẩu</span>
@@ -124,22 +120,16 @@ const LoginView = () => {
             className={cn('authInput', error.password && 'redBorder')}
             placeholder="Mật khẩu"
           />
-          <div hidden={!error.password} className="absolute w-10 h-full bg-transparent top-0 right-0 flex items-center justify-start">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="w-8 h-8 bg-white flex items-center justify-center">
-                    <Info className="text-red-500" size={18} />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Mật khẩu không được để trống</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+          <CustomTooltip
+            isHidden={!error.password}
+            triggerElement={
+              <div className="w-8 h-8 bg-white flex items-center justify-center">
+                <Info className="text-red-500" size={18} />
+              </div>
+            }
+            message="Mật khẩu không được để trống"
+          />
         </div>
-
         <div className="mt-6">
           <Button disabled={isLoading} type="submit" className="w-full">
             {isLoading ? <LoaderCircle className="animate-spin" /> : 'Đăng nhập'}

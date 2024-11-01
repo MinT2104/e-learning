@@ -46,7 +46,7 @@ export const sliceConfig: SliceConfig[] = [
             },
             {
                 type: 'loadUserCourses',
-                endpoint: 'loadAllWithPaging',
+                endpoint: 'loadAllCoursesWithPaging',
                 customAction: (state, action) => {
                     state.userCourses = action.payload.records.rows;
                     state.total = action.payload.total
@@ -103,6 +103,15 @@ export const sliceConfig: SliceConfig[] = [
                     document.cookie = `_at=${token}`
                     state.authUser = newUser
                     state.role = newUser.role
+                },
+            },
+            {
+                type: 'completeRegisteration',
+                endpoint: 'completeRegisteration',
+                customAction: (state, action) => {
+                    const user = action.payload.data
+                    state.authUser = user
+                    state.role = user.role
                 },
             },
             {
