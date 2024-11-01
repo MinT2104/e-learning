@@ -1,5 +1,5 @@
 import { ApiClient } from "@/customFetch/ApiClient";
-import { getCookie } from "@/lib/utils";
+import { deleteCookie, getCookie } from "@/lib/utils";
 
 class AuthService {
     name: any
@@ -63,6 +63,7 @@ class AuthService {
     }
 
     async logOut() {
+
         return new Promise(async (resolve) => {
             resolve('Đăng xuất thành công')
         })
@@ -104,6 +105,19 @@ class AuthService {
         })
 
     }
+    async completeRegisteration(reqObj: any) {
+        const url = `/${this.name}/complete-registeration`
+        return new Promise(async (resolve, reject) => {
+            ApiClient.post(url, reqObj).then((res) => {
+                resolve(res)
+            }).catch((err) => {
+                reject(err)
+            })
+        })
+
+    }
+
+
 
 }
 

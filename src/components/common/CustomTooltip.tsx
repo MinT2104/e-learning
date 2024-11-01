@@ -5,16 +5,18 @@ import { cn } from "@/lib/utils";
 type CustomTooltipProps = {
     isHidden: boolean;
     triggerElement: ReactNode;
-    message: string
+    message: string;
+    className?: string
 }
 
 const CustomTooltip = ({
     isHidden,
     triggerElement,
-    message
+    message,
+    className
 }: CustomTooltipProps) => {
     return (
-        <div hidden={isHidden} className={cn("absolute w-10 h-full bg-transparent top-0 right-0 items-center justify-start",
+        <div hidden={isHidden} className={cn("absolute w-10 h-full bg-transparent top-0 right-0 items-center justify-start ", className,
             isHidden ? 'hidden' : 'flex'
         )}>
             <TooltipProvider>
