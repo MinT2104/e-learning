@@ -1,6 +1,7 @@
 import CourseDetailView from "@/pages/Course/CourseDetailView";
 import CourseVideo from "@/pages/Course/CourseVideo";
 import CourseView from "@/pages/Course/CourseView";
+import InstructorForm from "@/pages/Instructors/InstructorForm";
 import InstructorsView from "@/pages/Instructors/InstructorsView";
 import LoginView from "@/pages/Login/LoginView";
 import MyCourseView from "@/pages/MyCourse/MyCourseView";
@@ -74,6 +75,13 @@ export const routes: MappedAuthRouteType[] = [
     //         element: ActivityView,
     //         allowedRoles: ["guest", "student", "teacher", "admin"],
     //     },
+    {
+        path: "/register/complete-registeration",
+        element: InstructorForm,
+        allowedRoles: ["teacher"],
+        isUsedLayout: false
+
+    },
 ];
 
 

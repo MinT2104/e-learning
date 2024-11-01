@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { MappedAuthRoute, MappedAuthRouteType, routes } from "@/constants/Routes";
-import InstructorForm from "@/pages/Instructors/InstructorForm";
 import AuthRoute from "@/middleware/AuthRoute";
 import AuthLayout from "@/Layouts/AuthLayout";
 import DefaultLayout from "@/Layouts/DefaultLayout";
@@ -14,11 +13,6 @@ const RouterWrapper = () => {
 
     return (
         <Routes>
-            <Route path="/register/complete-registeration" element={
-                <ProtectedRoute role={role} allowedRoles={['teacher']}>
-                    <InstructorForm />
-                </ProtectedRoute>}
-            />
             {MappedAuthRoute.map((route: MappedAuthRouteType, index: number) => (
                 <Route
                     key={index}

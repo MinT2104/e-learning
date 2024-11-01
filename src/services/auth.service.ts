@@ -2,7 +2,11 @@ import { ApiClient } from "@/customFetch/ApiClient";
 import { getCookie } from "@/lib/utils";
 
 class AuthService {
-    name: any = 'user'
+    name: any
+
+    constructor(name: string) {
+        this.name = name
+    }
 
     async register(reqObj: any) {
         const url = `/${this.name}/register`

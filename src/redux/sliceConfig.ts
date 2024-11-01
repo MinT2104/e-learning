@@ -7,7 +7,7 @@ import { deleteCookie } from '@/lib/utils';
 export const serviceMapping: any = {
     course: new CourseService(undefined),
     assginment: new AssignmentService(undefined),
-    user: new AuthService(),
+    user: new AuthService('user'),
     media: new MediaService()
 }
 
@@ -99,7 +99,10 @@ export const sliceConfig: SliceConfig[] = [
                 type: 'register',
                 endpoint: 'register',
                 customAction: (state, action) => {
-                    state.authUser = action.payload.data;
+                    const { token, newUser } = action.payload.data
+                    document.cookie = `_at=${token}`
+                    state.authUser = newUser
+                    state.role = newUser.role
                 },
             },
             {

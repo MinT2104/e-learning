@@ -30,9 +30,6 @@ const ProtectedRoute = ({ children, role, allowedRoles }: Props) => {
 
     useLayoutEffect(() => {
         handleGetMe();
-
-
-
     }, [token]);
 
     useEffect(() => {
