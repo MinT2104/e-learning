@@ -20,7 +20,6 @@ const LoginView = () => {
     email: false,
     password: false,
   });
-  const [role, setRole] = useState('student');
 
   const { isLoading } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
