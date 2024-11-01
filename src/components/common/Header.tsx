@@ -19,7 +19,8 @@ import { Separator } from "@radix-ui/react-separator";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { CourseType } from "@/redux/StoreType";
 
 export const Header = () => {
 
@@ -29,19 +30,26 @@ export const Header = () => {
 
     const dispatch = useDispatch();
 
-    const { userCourses, isLoading } = useSelector((state: RootState) => state.course);
+    const { isLoading } = useSelector((state: RootState) => state.course);
+
+    const [coursess, setCoursess] = useState<CourseType[]>([])
 
     const handleGetData: any = async () => {
 
         const body = {
             page: 1,
-            limit: 10,
+            limit: 20,
             query: {
                 _id: { $in: authUser ? authUser.courseIds : [] }
             }
         }
 
-        await dispatch(globalThis.$action.loadUserCourses(body));
+        if (authUser && authUser.courseIds.length < 1) return
+
+        const res = await dispatch(globalThis.$action.loadUserCourses(body));
+        if (res?.payload?.records?.rows) {
+            setCoursess(res.payload.records.rows)
+        }
     };
 
     const handleLogout = async () => {
@@ -50,7 +58,6 @@ export const Header = () => {
 
     useEffect(() => {
         if (!authUser) return
-        // if (authUser.courseIds.length < 1) return
         handleGetData();
     }, [authUser]);
 
@@ -105,22 +112,22 @@ export const Header = () => {
                                                             </li>
                                                         </>
                                                         :
-                                                        userCourses.map((course, index) => {
+                                                        coursess && coursess.length > 0 && coursess.map((item, index) => {
                                                             return (
                                                                 <li key={index} className="py-3 cursor-pointer flex gap-4">
                                                                     <div className="w-1/3 h-16 rounded-md bg-gradient-to-r from-blue-500 to-green-400" />
                                                                     <div className="w-2/3 flex flex-col justify-between">
                                                                         <h4 className="text-sm font-medium">
-                                                                            {course.title}
+                                                                            {item.title}
                                                                         </h4>
                                                                         <span className="text-[12px] text-[#2a2a2a]">
                                                                             {
-                                                                                course.level
+                                                                                item.level
                                                                             }
                                                                         </span>
                                                                         <span className="text-sm text-primary">
                                                                             {
-                                                                                course.mainPrice
+                                                                                item.mainPrice
                                                                             }
                                                                         </span>
                                                                     </div>

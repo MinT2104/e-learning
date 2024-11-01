@@ -36,7 +36,6 @@ const ProtectedRoute = ({ children, role, allowedRoles }: Props) => {
         if (authUser) {
             if (authUser.role === 'teacher' && authUser.status === 'onboarding') {
                 navigate('/register/complete-registeration')
-                console.log('alo')
             } else {
                 navigate('/');
             }

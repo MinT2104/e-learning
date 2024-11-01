@@ -26,9 +26,9 @@ const CustomDropDown = ({ dropDownList, onChange, placeholder, width, className 
 
     const [item, setItem] = useState<DropDownItem | null>(null);
     const [open, setIsOpen] = useState(false);
+    console.log(open)
     const [searchValue, setSearchValue] = useState<string>('');
     const [dropdownFilterList, setDropdownFilterList] = useState<DropDownItem[]>(dropDownList || []);
-
     const handleChangeItem = (data: DropDownItem) => {
         if (typeof onChange === 'function') {
             onChange(data);

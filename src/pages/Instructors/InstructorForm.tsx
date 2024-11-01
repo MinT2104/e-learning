@@ -1,6 +1,5 @@
 "use client";
 
-import { object, z } from "zod";
 import logo from '@/assets/images/EL.png';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,8 +14,6 @@ import { Textarea } from "@/components/ui/textarea";
 import CustomDropDown from "@/components/common/CustomDropDown";
 import CountryOptions from '@/constants/country.json'
 import CustomCheckboxGroup from "@/components/common/CustomCheckboxGroup";
-import { useNavigate } from "react-router-dom";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "@/hooks/use-toast";
 
 const mockCategories = [
@@ -74,7 +71,6 @@ function InstructorForm() {
     setAuth((prev) => ({ ...prev, teaching_levels: data.key }));
   };
   const handleChangeLink = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    console.log(e)
     const name = e.target.name;
     const value = e.target.value;
     setSocial((prev) => ({ ...prev, [name]: value }));
@@ -82,7 +78,6 @@ function InstructorForm() {
   };
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await dispatch(globalThis.$action.logOut())
@@ -103,7 +98,7 @@ function InstructorForm() {
     ]
     const authSocial = { ...auth, social_links: social_value }
     let errorNumber = 0;
-    for (let key in authSocial) {
+    for (const key in authSocial) {
       if (requireKey.includes(key)) {
         if ((authSocial as any)[key] === '' || (authSocial as any)[key].length < 1) {
           setError((prev) => ({ ...prev, [key]: true }));
@@ -120,7 +115,6 @@ function InstructorForm() {
         data: authSocial
       }
       const res = await dispatch(globalThis.$action.completeRegisteration(newData))
-      console.log(res)
       if (res?.type?.includes('rejected')) {
         toast({
           variant: 'destructive',
@@ -175,7 +169,6 @@ function InstructorForm() {
 
 
   const handleChangeCategories = (data: string[]) => {
-    console.log(data)
     setAuth((prev) => ({ ...prev, certifications: data }));
 
   }
@@ -430,7 +423,7 @@ function InstructorForm() {
             </div>
           </div>
 
-          <div className=" flex justify-end mt-12 gap-4 col-span-2">
+          <div className=" flex justify-end mt-12 gap-4 col-span-2 w-[95%]">
             <Button
               type="button"
               className="w-40"

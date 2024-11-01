@@ -1,5 +1,5 @@
 import { ApiClient } from "@/customFetch/ApiClient";
-import { deleteCookie, getCookie } from "@/lib/utils";
+import { getCookie } from "@/lib/utils";
 
 class AuthService {
     name: any
