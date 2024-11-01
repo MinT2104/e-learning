@@ -2,6 +2,7 @@ import AssignmentService from '@/services/assginment.service';
 import CourseService from '../services/course.service';
 import AuthService from '@/services/auth.service';
 import MediaService from '@/services/media.service';
+import { deleteCookie } from '@/lib/utils';
 
 export const serviceMapping: any = {
     course: new CourseService(undefined),
@@ -108,7 +109,6 @@ export const sliceConfig: SliceConfig[] = [
                     if (action.payload.data) {
                         const { token, user } = action.payload.data
                         document.cookie = `_at=${token}`
-                        document.cookie = `_status=${user.status}`
                         state.authUser = user
                         state.role = user.role
                     }
@@ -121,6 +121,15 @@ export const sliceConfig: SliceConfig[] = [
             {
                 type: 'resetPassword',
                 endpoint: 'resetPassword',
+            },
+            {
+                type: 'logOut',
+                endpoint: 'logOut',
+                customAction: (state, _) => {
+                    deleteCookie('_at')
+                    state.authUser = null
+                    state.role = 'guest'
+                },
             },
             {
                 type: 'me',

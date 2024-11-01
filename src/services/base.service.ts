@@ -13,7 +13,7 @@ class BaseService {
             page = 1, limit = 10,
         } = reqObj;
 
-        let url = `/${this.name}?page=${page}&limit=${limit}`;
+        const url = `/${this.name}?page=${page}&limit=${limit}`;
         const request = parsedQuery(url, reqObj);
 
         return new Promise((resolve, reject) => {
@@ -21,7 +21,7 @@ class BaseService {
                 params: request.params
             }).then((response: any) => {
                 const res = response || {};
-                let data = {
+                const data = {
                     records: [],
                     total: 0,
                     errors: ""
@@ -40,7 +40,7 @@ class BaseService {
     }
 
     save(reqObj: any) {
-        let url = `/api/${this.name}/`;
+        const url = `/api/${this.name}/`;
         return new Promise((resolve, reject) => {
             ApiClient.post(url, reqObj)
                 .then((response: any) => {
@@ -53,7 +53,7 @@ class BaseService {
 
     update(reqObj: any) {
         const { _id } = reqObj;
-        let url = `/api/${this.name}/${_id}/`;
+        const url = `/api/${this.name}/${_id}/`;
         return new Promise((resolve, reject) => {
             ApiClient.put(url, reqObj)
                 .then((response: { data: {}; }) => {
@@ -65,7 +65,7 @@ class BaseService {
     }
 
     getById(id: string) {
-        let url = `/${this.name}/${id}`;
+        const url = `/${this.name}/${id}`;
         return new Promise((resolve, reject) => {
             ApiClient.get(url)
                 .then((response: any) => {
@@ -84,7 +84,7 @@ class BaseService {
 
     remove(reqObj: { _id: string; }) {
         const { _id } = reqObj;
-        let url = `/api/${this.name}/${_id}`;
+        const url = `/api/${this.name}/${_id}`;
         return new Promise((resolve, reject) => {
             ApiClient.delete(url)
                 .then((response: { data: {}; }) => {
@@ -102,8 +102,8 @@ function handleError(): any {
     throw new Error('Function not implemented.');
 }
 
-let parsedQuery = (url: string, reqObj: any) => {
-    let requestUrl = url
+const parsedQuery = (url: string, reqObj: any) => {
+    const requestUrl = url
 
     const {
         query,

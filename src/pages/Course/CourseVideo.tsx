@@ -6,7 +6,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import CourseVideoChapter from '@/components/application/Course/CourseVideoChapter';
 import { Lesson } from '@/redux/StoreType';
-import { Skeleton } from '@/components/ui/skeleton';
 
 function CourseVideo() {
     const param = useParams();
@@ -14,7 +13,7 @@ function CourseVideo() {
     const navigate = useNavigate();
     const regex = /c=(\d+)&l=(\d+)/;
 
-    let initLesson = {
+    const initLesson = {
         duration: '',
         title: '',
         url: '',

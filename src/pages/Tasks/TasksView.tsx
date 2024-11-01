@@ -22,7 +22,7 @@ const TaskView = () => {
             <div className="container mx-auto pb-8 h-fit">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {assginments && assginments.length > 0 ? (
-                        assginments.map((_, index) => (
+                        assginments.map((_: AssignmentType, index: number) => (
                             <div key={index} className="flex flex-col space-y-3">
                                 <Skeleton className="h-[176px] w-full rounded-lg animate-pulse" />
                                 <div className="space-y-2">

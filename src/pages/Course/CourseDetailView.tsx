@@ -38,7 +38,7 @@ const CourseContent = () => {
         if (!authUser) return
         if (!course) return
 
-        let isSubcribed = authUser.courseIds.includes(course._id)
+        const isSubcribed = authUser.courseIds.includes(course._id)
 
         subscribedCourse.current = isSubcribed
 
@@ -46,7 +46,7 @@ const CourseContent = () => {
 
     return (
         <div className="flex flex-col mt-2 mx-auto p-2 h-fit">
-            <Heading title={`Khóa học: ${course?.title}`} className='' />
+            {isLoading ? <div className='w-2/3 h-10 bg-slate-200 animate-pulse rounded-sm mb-10' /> : <Heading title={`Khóa học: ${course?.title}`} className='' />}
             <div className='flex gap-2'>
                 {
                     isLoading ? <div className='w-2/3 h-[500px] bg-slate-200 animate-pulse rounded-sm' /> :

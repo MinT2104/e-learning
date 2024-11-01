@@ -19,15 +19,13 @@ import { Separator } from "@radix-ui/react-separator";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { logOut } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export const Header = () => {
 
     const navigate = useNavigate()
 
     const { authUser } = useSelector((state: RootState) => state.user)
-    const [localUser] = useState(localStorage.getItem('localUser'))
 
     const dispatch = useDispatch();
 
@@ -46,6 +44,10 @@ export const Header = () => {
         await dispatch(globalThis.$action.loadUserCourses(body));
     };
 
+    const handleLogout = async () => {
+        await dispatch(globalThis.$action.logOut())
+    }
+
     useEffect(() => {
         if (!authUser) return
         handleGetData();
@@ -58,7 +60,7 @@ export const Header = () => {
                 <Search size={18} className="text-slate-400" />
                 <input placeholder="Tìm kiếm khóa học, bài viết, video, ..." className="flex-1 border-none shadow-none outline-none h-9 text-sm text-slate-700" />
             </div>
-            <div className="flex-1 flex items-center gap-2 justify-end">
+            <div className="flex-1 flex items-center gap-4 justify-end">
                 {/* <Button variant={'link'} className="font-bold text-sm px-0 underline-0"
                     onClick={() => handleTeacher()}>For teacher</Button> */}
                 {/* <Bell className="text-slate-500 cursor-pointer" /> */}
@@ -66,14 +68,14 @@ export const Header = () => {
                     Khóa học của tôi
                 </Button> */}
                 {
-                    (authUser || localUser) ?
+                    authUser ?
                         (
                             <>
                                 {/* Khóa học */}
                                 <div className="flex items-center gap-10 justify-end">
                                     <Popover>
                                         <PopoverTrigger asChild>
-                                            <Button variant="outline" className="font-bold text-sm shadow-none text-slate-500">
+                                            <Button variant="outline" className="font-bold border-none text-sm shadow-none text-slate-500">
                                                 Khóa học của tôi
                                             </Button>
                                         </PopoverTrigger>
@@ -156,16 +158,16 @@ export const Header = () => {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild className="w-10 h-10 rounded-full bg-secondary text-xl flex items-center justify-center border relative cursor-pointer">
                                         {
-                                            (authUser || localUser)?.image ?
-                                                <img src={(authUser || localUser)?.image} className="w-10 h-10 rounded-full" alt="" />
-                                                : <p className="font-semibold text-primary uppercase border">{(authUser || localUser)?.userName?.slice(0, 1)}</p>
+                                            authUser?.image ?
+                                                <img src={authUser?.image} className="w-10 h-10 rounded-full" alt="" />
+                                                : <p className="font-semibold text-primary uppercase border">{authUser?.userName?.slice(0, 1)}</p>
                                         }
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="border-border/20 w-60">
                                         <DropdownMenuLabel>
                                             <div className="py-2">
-                                                <span className="text-normal">{(authUser || localUser).email}</span>
-                                                <p className="font-light text-[12px] text-slate-500/80">@{(authUser || localUser).userName}</p>
+                                                <span className="text-normal">{authUser.email}</span>
+                                                <p className="font-light text-[12px] text-slate-500/80">@{authUser.userName}</p>
                                             </div>
                                         </DropdownMenuLabel>
                                         <DropdownMenuSeparator />
@@ -178,7 +180,7 @@ export const Header = () => {
                                         <DropdownMenuItem className="text-slate-500 py-3 cursor-pointer">Bài viết đã lưu</DropdownMenuItem>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem
-                                            onClick={() => logOut()}
+                                            onClick={handleLogout}
                                             className="text-slate-500 py-3 cursor-pointer">Đăng xuất</DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>

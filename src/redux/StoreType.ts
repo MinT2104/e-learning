@@ -84,13 +84,13 @@ export interface Chapter {
 
 
 // Assignment
-interface File {
+export interface File {
     _id: string,
     name: string;
     url?: string; // URL không bắt buộc
 }
 
-interface Section {
+export interface Section {
     _id: string,
     name: string;
     files?: File[]; // Mảng file, không bắt buộc

@@ -13,6 +13,7 @@ import { File } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import RatingTask from "@/components/common/RatingTask";
+import { File as FileType, Section } from "@/redux/StoreType";
 
 const TaskDetailView = () => {
     const param = useParams();
@@ -32,10 +33,10 @@ const TaskDetailView = () => {
             <div className="container mx-auto pb-8 h-fit">
                 <div className="flex flex-col gap-4">
                     {assginment.sections && assginment.sections.length > 0
-                        ? assginment.sections.map((_, index) => (
+                        ? assginment.sections.map((_, index: number) => (
                             <Skeleton key={index} className="h-[79px] w-[761px] rounded-lg" />
                         ))
-                        : Array(2).fill(0).map((_, index) => (
+                        : Array(2).fill(0).map((_, index: number) => (
                             <Skeleton key={index} className="h-[79px] w-[761px] rounded-lg" />
                         ))}
                 </div>
@@ -47,7 +48,7 @@ const TaskDetailView = () => {
                 <Accordion type="single" collapsible className="space-y-4 flex-1">
                     {assginment.sections &&
                         assginment?.sections?.length > 0 &&
-                        assginment.sections?.map((data) => {
+                        assginment.sections?.map((data: Section) => {
                             return (
                                 <AccordionItem
                                     className="border border-slate-500/20 p-2 rounded-[8px]"
@@ -62,7 +63,7 @@ const TaskDetailView = () => {
                                         <div className="p-4 flex flex-col gap-4 items-start">
                                             {data.files &&
                                                 data.files.length > 0 &&
-                                                data.files.map((file, index) => {
+                                                data.files.map((file: FileType, index: number) => {
                                                     return (
                                                         <Fragment key={file._id}>
                                                             <div className="flex items-center justify-start gap-4 pt-4 text-slate-500 px-4">

@@ -9,11 +9,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
@@ -76,7 +72,7 @@ function InstructorForm() {
             className="w-24 inline-block"
           />
         </a>
-        <h4 className="text-gray-800 text-base font-semibold mt-6">
+        <h4 className="text-gray-800 text-xl font-semibold mt-6">
           Instructor Registration Form
         </h4>
       </div>

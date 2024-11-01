@@ -5,7 +5,7 @@ class AuthService {
     name: any = 'user'
 
     async register(reqObj: any) {
-        let url = `/${this.name}/register`
+        const url = `/${this.name}/register`
         return new Promise(async (resolve, reject) => {
             ApiClient.post(url, reqObj).then((res) => {
                 resolve(res)
@@ -17,7 +17,7 @@ class AuthService {
     }
 
     async login(reqObj: any) {
-        let url = `/${this.name}/login`
+        const url = `/${this.name}/login`
         return new Promise(async (resolve, reject) => {
             ApiClient.post(url, reqObj).then((res) => {
                 resolve(res)
@@ -30,7 +30,7 @@ class AuthService {
 
 
     async forgotPassword(reqObj: any) {
-        let url = `/${this.name}/forgot-password`
+        const url = `/${this.name}/forgot-password`
         return new Promise(async (resolve, reject) => {
             ApiClient.post(url, reqObj).then((res) => {
                 resolve(res)
@@ -43,7 +43,7 @@ class AuthService {
     async resetPassword(reqObj: any) {
         const { token } = reqObj
         delete reqObj.token
-        let url = `/${this.name}/reset-password?t=${token}`
+        const url = `/${this.name}/reset-password?t=${token}`
         return new Promise(async (resolve, reject) => {
             ApiClient.post(url, reqObj.password, {
                 headers: {
@@ -57,8 +57,15 @@ class AuthService {
         })
 
     }
+
+    async logOut() {
+        return new Promise(async (resolve) => {
+            resolve('Đăng xuất thành công')
+        })
+    }
+
     async me() {
-        let url = `/${this.name}/me`
+        const url = `/${this.name}/me`
         return new Promise(async (resolve, reject) => {
             ApiClient.get(url).then((res) => {
                 resolve(res)
@@ -70,7 +77,7 @@ class AuthService {
     }
 
     async updateUserProfile(reqObj: any) {
-        let url = `/user/${reqObj._id}`
+        const url = `/user/${reqObj._id}`
         return new Promise(async (resolve, reject) => {
             ApiClient.put(url, reqObj).then((res) => {
                 resolve(res)
@@ -82,8 +89,8 @@ class AuthService {
     }
 
     async uploadUserImage(form: any) {
-        let userName = getCookie('_un')
-        let url = `/image/${userName}`
+        const userName = getCookie('_un')
+        const url = `/image/${userName}`
         return new Promise(async (resolve, reject) => {
             ApiClient.put(url, form).then((res) => {
                 resolve(res)

@@ -14,22 +14,8 @@ type Props = {
 const ProtectedRoute = ({ children, role, allowedRoles }: Props) => {
     const dispatch = useDispatch();
     const token = getCookie('_at');
-    const localUser = localStorage.getItem('localUser');
     const navigate = useNavigate();
     const { authUser } = useSelector((state: RootState) => state.user);
-    const status = getCookie('_status');
-
-    const checkTokenValid = (token: string | null): boolean => {
-        if (!token) return false;
-
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1])); // Giải mã payload từ JWT token
-            const currentTime = Math.floor(Date.now() / 1000); // Thời gian hiện tại tính bằng giây
-            return payload.exp > currentTime; // Kiểm tra xem token có hết hạn không
-        } catch (e) {
-            return false;
-        }
-    };
 
     ApiClient.defaults.headers.common = {
         'Authorization': token ? `Bearer ${token}` : null,
@@ -37,30 +23,28 @@ const ProtectedRoute = ({ children, role, allowedRoles }: Props) => {
 
     const handleGetMe = async () => {
         if (token) {
-            const res = await dispatch(globalThis.$action.me());
-            if (localUser) {
-                return;
-            }
-            if (res?.type?.includes('fulfilled')) {
-                const { data } = res.payload;
-                localStorage.setItem('localUser', JSON.stringify(data));
-            }
+            await dispatch(globalThis.$action.me());
         }
     };
 
+
     useLayoutEffect(() => {
         handleGetMe();
-    }, [token, dispatch]);
+
+
+
+    }, [token]);
 
     useEffect(() => {
-        if (!authUser || !checkTokenValid(token)) {
-            navigate("/login");
-        } else if (!allowedRoles.includes(authUser.role)) {
-            navigate("/login");
-        } else if (status === 'onboarding') {
-            navigate("/register/complete-registeration");
+        if (authUser) {
+            if (authUser.role === 'teacher' && authUser.status === 'onboarding') {
+                navigate('/register/complete-registeration')
+                console.log('alo')
+            } else {
+                navigate('/');
+            }
         }
-    }, [authUser, token, status, allowedRoles, navigate]);
+    }, [authUser])
 
     if (!allowedRoles.includes(role)) {
         return <Navigate to="/login" replace />;

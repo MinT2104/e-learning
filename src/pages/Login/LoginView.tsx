@@ -96,11 +96,11 @@ const LoginView = () => {
 
         <TabsContent
           value="student"
-          className='w-96 transition-opacity duration-500 ease-in-out'
+          className='transition-opacity duration-500 ease-in-out p-0 border-none'
           style={{ opacity: role === 'student' ? 1 : 0 }}
         >
           {/* Nội dung cho sinh viên */}
-          <form onSubmit={handleSubmit} className="w-80 h-fit m-4" action="#" method="POST">
+          <form onSubmit={handleSubmit} className="w-96 h-fit m-4 p-0" action="#" method="POST">
             <span className="text-sm text-slate-600">Email của bạn</span>
             <div className="mt-2 relative truncate mb-6">
               <Input
@@ -171,11 +171,11 @@ const LoginView = () => {
 
         <TabsContent
           value="teacher"
-          className='transition-opacity duration-500 ease-in-out'
+          className='transition-opacity duration-500 ease-in-out p-0 border-none'
           style={{ opacity: role === 'teacher' ? 1 : 0 }}
         >
           {/* Nội dung cho giáo viên */}
-          <form onSubmit={handleSubmit} className="w-80 h-fit m-4" action="#" method="POST">
+          <form onSubmit={handleSubmit} className="w-96 h-fit m-4" action="#" method="POST">
             <span className="text-sm text-slate-600">Email giáo viên</span>
             <div className="mt-2 relative truncate mb-6">
               <Input
