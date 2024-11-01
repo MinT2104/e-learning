@@ -1,23 +1,27 @@
 "use client";
 
 import { useState } from "react";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 import { toast } from "@/hooks/use-toast";
 
 const AppointmentScheduler = () => {
-    const [date, setDate] = useState<Date | undefined>(undefined); // Sử dụng undefined thay cho null
-
-    const handleDateChange = (selectedDate: Date | undefined) => {
-        setDate(selectedDate);
-    };
+    const [date, setDate] = useState<Date | undefined>(undefined);
 
     const handleSubmit = () => {
         if (date) {
-            // Xử lý logic gửi lịch hẹn đến giáo viên ở đây
             toast({
                 title: "Hẹn lịch thành công!",
-                description: `Bạn đã chọn ngày: ${date.toDateString()}`,
+                description: `Bạn đã chọn ngày: ${format(date, "PPP")}`,
             });
         } else {
             toast({
@@ -30,13 +34,31 @@ const AppointmentScheduler = () => {
     return (
         <div>
             <h2>Đặt Lịch Hẹn</h2>
-            <Calendar
-                mode="single"
-                selected={date}
-                onSelect={handleDateChange}
-                initialFocus
-            />
-            <Button onClick={handleSubmit}>Xác Nhận Lịch</Button>
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button
+                        variant="outline"
+                        className={cn(
+                            "w-[280px] justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                        )}
+                    >
+                        <CalendarIcon className="mr-2" />
+                        {date ? format(date, "PPP") : <span>Chọn ngày</span>}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                    <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                    />
+                </PopoverContent>
+            </Popover>
+            <Button onClick={handleSubmit} className="mt-4">
+                Xác Nhận Lịch
+            </Button>
         </div>
     );
 };

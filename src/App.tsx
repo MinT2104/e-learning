@@ -6,6 +6,7 @@ import DefaultLayout from "./Layouts/DefaultLayout"
 import { RootState } from "./redux/store"
 import { useSelector } from "react-redux"
 import AuthLayout from "./Layouts/AuthLayout"
+import { ToastProvider } from "@radix-ui/react-toast"
 // import { useEffect } from "react"
 
 function App() {
@@ -13,52 +14,55 @@ function App() {
   const { role } = useSelector((state: RootState) => state.user)
 
   return (
-    <Routes>
-      {
-        MappedAuthRoute.map((route: MappedAuthRouteType, index: number) => (
+
+    <ToastProvider>
+      <Routes>
+        {
+          MappedAuthRoute.map((route: MappedAuthRouteType, index: number) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                <AuthRoute role={role} allowedRoles={route.allowedRoles}>
+                  {
+                    route.isUsedLayout ?
+
+                      (
+                        <AuthLayout >
+                          {<route.element />}
+                        </AuthLayout>
+                      )
+                      :
+                      <route.element />
+                  }
+                </AuthRoute>
+              }
+            />
+          ))
+        }
+        {routes.map((route: MappedAuthRouteType, index) => (
           <Route
             key={index}
             path={route.path}
             element={
-              <AuthRoute role={role} allowedRoles={route.allowedRoles}>
+              <ProtectedRoute role={role} allowedRoles={route.allowedRoles}>
                 {
                   route.isUsedLayout ?
-
                     (
-                      <AuthLayout >
+                      <DefaultLayout>
                         {<route.element />}
-                      </AuthLayout>
+                      </DefaultLayout>
                     )
                     :
                     <route.element />
                 }
-              </AuthRoute>
+
+              </ProtectedRoute>
             }
           />
-        ))
-      }
-      {routes.map((route: MappedAuthRouteType, index) => (
-        <Route
-          key={index}
-          path={route.path}
-          element={
-            <ProtectedRoute role={role} allowedRoles={route.allowedRoles}>
-              {
-                route.isUsedLayout ?
-                  (
-                    <DefaultLayout>
-                      {<route.element />}
-                    </DefaultLayout>
-                  )
-                  :
-                  <route.element />
-              }
-
-            </ProtectedRoute>
-          }
-        />
-      ))}
-    </Routes>
+        ))}
+      </Routes>
+    </ToastProvider>
   )
 }
 

@@ -1,7 +1,7 @@
 import { ApiClient } from "@/customFetch/ApiClient";
 import { getCookie } from "@/lib/utils";
 import { RootState } from "@/redux/store";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -23,9 +23,9 @@ const ProtectedRoute = ({ children, role, allowedRoles }: Props) => {
         if (!token) return false;
 
         try {
-            const payload = JSON.parse(atob(token.split('.')[1])); // Giải mã payload từ JWT token
-            const currentTime = Math.floor(Date.now() / 1000); // Thời gian hiện tại tính bằng giây
-            return payload.exp > currentTime; // Kiểm tra xem token có hết hạn không
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentTime = Math.floor(Date.now() / 1000);
+            return payload.exp > currentTime;
         } catch (e) {
             return false;
         }
@@ -54,7 +54,7 @@ const ProtectedRoute = ({ children, role, allowedRoles }: Props) => {
 
     useEffect(() => {
         if (!authUser || !checkTokenValid(token)) {
-            navigate("/login");
+            navigate("/");
         } else if (!allowedRoles.includes(authUser.role)) {
             navigate("/login");
         } else if (status === 'onboarding') {

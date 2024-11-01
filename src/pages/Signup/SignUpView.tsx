@@ -92,10 +92,13 @@ const SignUpView = () => {
                 return;
             }
 
-            const res = await dispatch(globalThis.$action.register({
-                ...auth,
-                status: auth.role === 'student' ? 'completed' : 'onboarding'
-            }));
+            // Gọi API đăng ký với role hiện tại
+            const res = await dispatch(
+                globalThis.$action.register({
+                    ...auth,
+                    status: auth.role === 'student' ? 'completed' : 'onboarding',
+                })
+            );
 
             if (res?.type?.includes('rejected')) {
                 toast({
@@ -109,9 +112,12 @@ const SignUpView = () => {
                     title: 'Đăng ký thành công',
                 });
 
-                // Điều hướng dựa trên vai trò
+                // Lưu role vào sessionStorage
+                sessionStorage.setItem('role', auth.role);
+
+                // Điều hướng dựa trên role
                 if (auth.role === 'teacher') {
-                    navigate('/register/complete-registeration');
+                    navigate('/register/complete-registration');
                 } else {
                     navigate('/login');
                 }
@@ -125,6 +131,8 @@ const SignUpView = () => {
             });
         }
     };
+
+
 
 
     const handleChangeRole = (role: string) => {
