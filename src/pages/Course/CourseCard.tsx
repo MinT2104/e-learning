@@ -1,5 +1,6 @@
 import { CourseType } from '@/redux/StoreType';
 import { useNavigate } from 'react-router-dom';
+import CourseImage from '@/assets/images/courseImage.png'
 
 const CourseCard = ({
     ...props
@@ -7,30 +8,24 @@ const CourseCard = ({
     const navigate = useNavigate();
 
     const handleToCourse = () => {
-        navigate(`/course/${props._id}`)
+        navigate(`/courses/${props._id}`)
     }
 
     return (
-        <div className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden hover:-translate-y-2 delay-50 transition">
-            <div className={`bg-gradient-to-r from-blue-500 to-green-400  flex flex-col items-center justify-center px-6 py-16`}>
-                <h2 className="text-white text-2xl font-bold text-center">{props.title}</h2>
-                <p className="text-yellow-300 text-center">{props.title}</p>
+        <div className="flex flex-col bg-white rounded-lg shadow-sm overflow-hidden hover:-translate-y-2 delay-50 transition border">
+            <div
+                style={{
+                    backgroundImage: `url(${CourseImage})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'contain'
+                }}
+                className={`flex flex-col items-center justify-center px-6 py-16 h-[160px]`}>
             </div>
-            <div className="p-6 bg-white">
-                <h3 className="text-lg font-semibold hover:text-primary cursor-pointer"
+            <div className="p-4 bg-secondary flex-1 min-h-14">
+                <h3 className="text-sm font-semibold hover:text-primary cursor-pointer break-all"
                     onClick={handleToCourse}
                 >{props.title}</h3>
-                <p className="text-red-500 font-semibold">{props.mainPrice}</p>
-                <div className="flex items-center text-gray-500 mt-4">
-                    <i className="fas fa-users mr-0"></i>
-                    <span>{props.instructor.name}</span>
-                    <i className="fas fa-circle mx-2 text-xs"></i>
-                    <i className="fas fa-layer-group mr-2"></i>
-                    <span>{props.level}</span>
-                    <i className="fas fa-circle mx-2 text-xs"></i>
-                    <i className="fas fa-clock mr-2"></i>
-                    <span>{props.duration}</span>
-                </div>
             </div>
         </div>
     );

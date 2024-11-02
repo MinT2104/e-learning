@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTooltip from "@/components/common/CustomTooltip";
 import { Info, Pencil } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RootState } from "@/redux/store";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -15,6 +15,7 @@ import CustomDropDown from "@/components/common/CustomDropDown";
 import CountryOptions from '@/constants/country.json'
 import CustomCheckboxGroup from "@/components/common/CustomCheckboxGroup";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from 'react-router-dom';
 
 const mockCategories = [
   {
@@ -78,6 +79,8 @@ function InstructorForm() {
   };
 
   const dispatch = useDispatch();
+
+  const navigate = useNavigate()
 
   const handleLogout = async () => {
     await dispatch(globalThis.$action.logOut())
@@ -172,6 +175,15 @@ function InstructorForm() {
     setAuth((prev) => ({ ...prev, certifications: data }));
 
   }
+
+  useEffect(() => {
+    if (authUser) {
+      if (authUser.status !== 'onboarding') {
+        navigate('/')
+      }
+    }
+  }, [authUser])
+
   return (
     <div className=" ">
       <div className="w-full px-10 py-8">

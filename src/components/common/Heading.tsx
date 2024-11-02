@@ -1,14 +1,15 @@
 import { cn } from '@/lib/utils';
 import { RootState } from '@/redux/store';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 type HeadingProps = {
     title?: string;
     className?: string;
+    rightIcon?: ReactNode
 };
 
-const Heading = ({ title, className }: HeadingProps) => {
+const Heading = ({ title, className, rightIcon }: HeadingProps) => {
     // Retrieve authUser from Redux store
     const { authUser } = useSelector((state: RootState) => state.user);
 
@@ -21,7 +22,6 @@ const Heading = ({ title, className }: HeadingProps) => {
         { id: 5, name: "Trang cá nhân", path: "/profile" },
         { id: 6, name: "Activity", path: "/activity" },
         { id: 7, name: "Nội dung khóa học", path: "/coursedetail" },
-        { id: 8, name: "Khóa học của tôi", path: "/my-course" },
     ];
 
     useEffect(() => {
@@ -35,8 +35,12 @@ const Heading = ({ title, className }: HeadingProps) => {
     }
 
     return (
-        <div className={cn('text-[30px] font-bold mb-10', className)}>
-            {currentPath || title}
+        <div className={cn('text-[30px] font-bold justify-between flex items-center', className)}>
+            <span>
+                {currentPath || title}
+
+            </span>
+            {rightIcon}
         </div>
     );
 };

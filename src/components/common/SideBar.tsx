@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faBook, faTasks, faUserTie, faBars
+    faBook, faTasks, faUserTie, faBars, faLayerGroup
 } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
@@ -16,17 +16,19 @@ function SideBar() {
     };
 
     const mockDataSidebar = [
-        // {
-        //     id: 1,
-        //     label: "Dashboard",
-        //     icon: faTachometerAlt,
-        //     path: "/", // Add path for navigation
-        // },
+
         {
             id: 2,
             label: "Trang chủ",
             icon: faBook,
             path: "/", // Add path for navigation
+        },
+
+        {
+            id: 2,
+            label: "Lớp học phần",
+            icon: faLayerGroup,
+            path: "/courses", // Add path for navigation
         },
         {
             id: 3,
@@ -34,30 +36,18 @@ function SideBar() {
             icon: faTasks,
             path: "/tasks", // Add path for navigation
         },
+        // {
+        //     id: 4,
+        //     label: "Khóa học của tôi",
+        //     icon: faTasks,
+        //     path: "/my-course", // Add path for navigation
+        // },
         {
-            id: 3,
-            label: "Khóa học của tôi",
-            icon: faTasks,
-            path: "/my-course", // Add path for navigation
-        },
-        {
-            id: 4, // Changed from 5 to 4 for sequential ID
+            id: 5, // Changed from 5 to 4 for sequential ID
             label: "Người hướng dẫn",
             icon: faUserTie,
             path: "/instructors", // Add path for navigation
         },
-        // {
-        //     id: 5, // Changed from 6 to 5 for sequential ID
-        //     label: "Profile",
-        //     icon: faUser,
-        //     path: "/profile", // Add path for navigation
-        // },
-        // {
-        //     id: 6, // Changed from 7 to 6 for sequential ID
-        //     label: "Activity",
-        //     icon: faChartBar,
-        //     path: "/activity", // Add path for navigation
-        // }
     ];
 
     return (
