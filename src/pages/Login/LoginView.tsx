@@ -1,11 +1,9 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import Logo from '@/assets/images/EL.png';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { RootState } from '@/redux/store';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@radix-ui/react-tooltip';
 import { Info, LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

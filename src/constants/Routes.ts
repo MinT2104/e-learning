@@ -25,7 +25,7 @@ export const routes: MappedAuthRouteType[] = [
         isUsedLayout: true
     },
     {
-        path: "/my-course",
+        path: "/courses",
         element: MyCourseView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
         isUsedLayout: true
@@ -58,7 +58,7 @@ export const routes: MappedAuthRouteType[] = [
 
     },
     {
-        path: "/course/:id",
+        path: "/courses/:id",
         element: CourseDetailView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
         isUsedLayout: true

@@ -1,13 +1,12 @@
 "use client";
 
-import { object, z } from "zod";
 import logo from '@/assets/images/EL.png';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTooltip from "@/components/common/CustomTooltip";
 import { Info, Pencil } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RootState } from "@/redux/store";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -15,9 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import CustomDropDown from "@/components/common/CustomDropDown";
 import CountryOptions from '@/constants/country.json'
 import CustomCheckboxGroup from "@/components/common/CustomCheckboxGroup";
-import { useNavigate } from "react-router-dom";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from 'react-router-dom';
 
 const mockCategories = [
   {
@@ -74,7 +72,6 @@ function InstructorForm() {
     setAuth((prev) => ({ ...prev, teaching_levels: data.key }));
   };
   const handleChangeLink = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    console.log(e)
     const name = e.target.name;
     const value = e.target.value;
     setSocial((prev) => ({ ...prev, [name]: value }));
@@ -82,7 +79,8 @@ function InstructorForm() {
   };
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
+  const navigate = useNavigate()
 
   const handleLogout = async () => {
     await dispatch(globalThis.$action.logOut())
@@ -103,7 +101,7 @@ function InstructorForm() {
     ]
     const authSocial = { ...auth, social_links: social_value }
     let errorNumber = 0;
-    for (let key in authSocial) {
+    for (const key in authSocial) {
       if (requireKey.includes(key)) {
         if ((authSocial as any)[key] === '' || (authSocial as any)[key].length < 1) {
           setError((prev) => ({ ...prev, [key]: true }));
@@ -120,7 +118,6 @@ function InstructorForm() {
         data: authSocial
       }
       const res = await dispatch(globalThis.$action.completeRegisteration(newData))
-      console.log(res)
       if (res?.type?.includes('rejected')) {
         toast({
           variant: 'destructive',
@@ -175,10 +172,18 @@ function InstructorForm() {
 
 
   const handleChangeCategories = (data: string[]) => {
-    console.log(data)
     setAuth((prev) => ({ ...prev, certifications: data }));
 
   }
+
+  useEffect(() => {
+    if (authUser) {
+      if (authUser.status !== 'onboarding') {
+        navigate('/')
+      }
+    }
+  }, [authUser])
+
   return (
     <div className=" ">
       <div className="w-full px-10 py-8">
@@ -430,7 +435,7 @@ function InstructorForm() {
             </div>
           </div>
 
-          <div className=" flex justify-end mt-12 gap-4 col-span-2">
+          <div className=" flex justify-end mt-12 gap-4 col-span-2 w-[95%]">
             <Button
               type="button"
               className="w-40"

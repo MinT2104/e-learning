@@ -24,15 +24,13 @@ const store = configureStore({
     reducer: persistedReducer,
 });
 
-// Thiết lập trạng thái toàn cục để dễ dàng truy cập
-(globalThis as any).$state = store.getState() as unknown as StoreType;
-console.log('State updated:', (globalThis as any).$state); // Dòng để debug
-
 // Đăng ký lắng nghe store và cập nhật trạng thái toàn cục
 store.subscribe(() => {
     (globalThis as any).$state = store.getState() as unknown as StoreType;
+    setTimeout(() => {
+        console.log(store.getState())
+    }, 2000)
 });
-
 // Tạo persistor
 export const persistor = persistStore(store);
 

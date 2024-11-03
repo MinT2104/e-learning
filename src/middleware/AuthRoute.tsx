@@ -17,7 +17,6 @@ const AuthRoute = ({ children, allowedRoles, role }: props) => {
     const dispatch = useDispatch();
 
     const { authUser } = useSelector((state: RootState) => state.user);
-    console.log(authUser)
 
     const handleGetMe = async () => {
         if (token) {
