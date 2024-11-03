@@ -6,10 +6,14 @@ import {
 import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { cn } from '@/lib/utils';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 function SideBar() {
     const [isOpen, setIsOpen] = useState(true);
     const navigate = useNavigate(); // Initialize useNavigate
+
+    const { authUser } = useSelector((state: RootState) => state.user)
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -18,23 +22,25 @@ function SideBar() {
     const mockDataSidebar = [
 
         {
-            id: 2,
+            id: 1,
             label: "Trang chủ",
             icon: faBook,
             path: "/", // Add path for navigation
+            allowRoles: ['admin', 'student', 'teacher']
         },
-
         {
             id: 2,
             label: "Lớp học phần",
             icon: faLayerGroup,
             path: "/courses", // Add path for navigation
+            allowRoles: ['admin']
         },
         {
             id: 3,
             label: "Bài tập của bạn",
             icon: faTasks,
             path: "/tasks", // Add path for navigation
+            allowRoles: ['admin']
         },
         // {
         //     id: 4,
@@ -42,11 +48,18 @@ function SideBar() {
         //     icon: faTasks,
         //     path: "/my-course", // Add path for navigation
         // },
+        // {
+        //     id: 5, // Changed from 5 to 4 for sequential ID
+        //     label: "Người hướng dẫn",
+        //     icon: faUserTie,
+        //     path: "/instructors", // Add path for navigation
+        // },
         {
             id: 5, // Changed from 5 to 4 for sequential ID
-            label: "Người hướng dẫn",
+            label: "Quản lý lớp học phần",
             icon: faUserTie,
-            path: "/instructors", // Add path for navigation
+            path: "/class-management", // Add path for navigation
+            allowRoles: ['admin']
         },
     ];
 
@@ -71,20 +84,22 @@ function SideBar() {
 
                 <nav className="mt-6 mx-4">
                     <ul>
-                        {mockDataSidebar.map((menuItem) => (
-                            <li
-                                key={menuItem.id}
-                                className={cn("flex items-center p-4 text-gray-700 rounded-lg mb-2 cursor-pointer hover:bg-slate-100",
-                                    menuItem.path === location.pathname && 'bg-primary text-white hover:bg-primary'
-                                )}
-                                onClick={() => {
-                                    navigate(menuItem.path); // Navigate on click
-                                }}
-                            >
-                                <FontAwesomeIcon icon={menuItem.icon} className="mr-3" />
-                                <span>{menuItem.label}</span>
-                            </li>
-                        ))}
+                        {mockDataSidebar.map((menuItem) => {
+                            return menuItem.allowRoles.includes(authUser.role) && (
+                                <li
+                                    key={menuItem.id}
+                                    className={cn("flex items-center p-4 text-gray-700 rounded-lg mb-2 cursor-pointer hover:bg-slate-100",
+                                        menuItem.path === location.pathname && 'bg-primary text-white hover:bg-primary'
+                                    )}
+                                    onClick={() => {
+                                        navigate(menuItem.path); // Navigate on click
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={menuItem.icon} className="mr-3" />
+                                    <span>{menuItem.label}</span>
+                                </li>
+                            )
+                        })}
                     </ul>
                 </nav>
             </div>

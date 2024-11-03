@@ -40,18 +40,9 @@ export interface StoreType {
 export type CourseType = {
     _id: string,
     title: string;
-    link: string;
-    image: string;
-    oldPrice: string;
-    mainPrice: string;
-    instructor: Instructor;
-    rating: Rating;
-    videos: number;
-    duration: number;
+    courseId: string;
+    groupIds: string[];
     description: string;
-    totalVideos: number;
-    level: string;
-    chapters?: Chapter[];
     createdAt?: string;
     updatedAt?: string;
 }

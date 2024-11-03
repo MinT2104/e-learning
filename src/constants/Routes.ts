@@ -1,3 +1,4 @@
+import ClassManagement from "@/pages/admin/ClassManagement/ClassManagement";
 import CourseDetailView from "@/pages/Course/CourseDetailView";
 import CourseVideo from "@/pages/Course/CourseVideo";
 import CourseView from "@/pages/Course/CourseView";
@@ -80,6 +81,13 @@ export const routes: MappedAuthRouteType[] = [
         element: InstructorForm,
         allowedRoles: ["teacher"],
         isUsedLayout: false
+
+    },
+    {
+        path: "/class-management",
+        element: ClassManagement,
+        allowedRoles: ["admin"],
+        isUsedLayout: true
 
     },
 ];
