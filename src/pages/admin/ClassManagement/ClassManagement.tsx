@@ -9,7 +9,7 @@ import { FileDown, MoreHorizontal, Plus, Search, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomFormClassManagement from "@/components/application/admin/ClassManagement/CustomFormClassManagement";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CourseType } from "@/redux/StoreType";
 
@@ -33,12 +33,6 @@ const ClassManagement = () => {
         handleGetData();
     }, []);
 
-    const mockDropdown = [
-        {
-            key: 'edit',
-            label: 'Chỉnh sửa'
-        },
-    ]
 
     const navigate = useNavigate()
 

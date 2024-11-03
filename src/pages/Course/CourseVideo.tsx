@@ -1,38 +1,38 @@
-import { RootState } from '@/redux/store';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
+// import { RootState } from '@/redux/store';
+// import { useEffect, useState } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { useParams, useNavigate } from 'react-router-dom';
 
-import { Button } from '@/components/ui/button';
-import CourseVideoChapter from '@/components/application/Course/CourseVideoChapter';
-import { Lesson } from '@/redux/StoreType';
+// import { Button } from '@/components/ui/button';
+// import CourseVideoChapter from '@/components/application/Course/CourseVideoChapter';
+// import { Lesson } from '@/redux/StoreType';
 
 function CourseVideo() {
-    const param = useParams();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const regex = /c=(\d+)&l=(\d+)/;
+    // const param = useParams();
+    // const dispatch = useDispatch();
+    // const navigate = useNavigate();
+    // const regex = /c=(\d+)&l=(\d+)/;
 
-    const initLesson = {
-        duration: '',
-        title: '',
-        url: '',
-        _id: ''
-    }
+    // const initLesson = {
+    //     duration: '',
+    //     title: '',
+    //     url: '',
+    //     _id: ''
+    // }
 
-    const [activeLesson, setActiveLeson] = useState<Lesson>(initLesson);
-    const [activeIndex, setActiveIndex] = useState([0, 0])
+    // const [activeLesson, setActiveLeson] = useState<Lesson>(initLesson);
+    // const [activeIndex, setActiveIndex] = useState([0, 0])
 
-    // const { course, isLoading } = useSelector((state: RootState) => state.course);
+    // // const { course, isLoading } = useSelector((state: RootState) => state.course);
 
-    const handleGetIndex = (str: string) => {
-        const result = str.match(regex);
-        return result ? [+result[1], +result[2]] : null;
-    };
+    // const handleGetIndex = (str: string) => {
+    //     const result = str.match(regex);
+    //     return result ? [+result[1], +result[2]] : null;
+    // };
 
-    const handleCall: any = async () => {
-        await dispatch(globalThis.$action.getCourse(param.id));
-    };
+    // const handleCall: any = async () => {
+    //     await dispatch(globalThis.$action.getCourse(param.id));
+    // };
 
     // useEffect(() => {
     //     const index: number[] | null = handleGetIndex(location.search);
@@ -42,15 +42,15 @@ function CourseVideo() {
     //     }
     // }, [course]);
 
-    useEffect(() => {
-        handleCall();
-    }, []);
+    // useEffect(() => {
+    //     // handleCall();
+    // }, []);
 
-    const handleLessonClick = (chapterIndex: number, lessonIndex: number, lesson: any) => {
-        setActiveLeson(lesson);
-        navigate(`?c=${chapterIndex}&l=${lessonIndex}`);
-        setActiveIndex([chapterIndex, lessonIndex])
-    };
+    // const handleLessonClick = (chapterIndex: number, lessonIndex: number, lesson: any) => {
+    //     setActiveLeson(lesson);
+    //     navigate(`?c=${chapterIndex}&l=${lessonIndex}`);
+    //     setActiveIndex([chapterIndex, lessonIndex])
+    // };
 
     return (
         // <div className='w-full h-fit grid grid-cols-5 gap-4'>

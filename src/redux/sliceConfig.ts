@@ -3,12 +3,14 @@ import CourseService from '../services/course.service';
 import AuthService from '@/services/auth.service';
 import MediaService from '@/services/media.service';
 import { deleteCookie } from '@/lib/utils';
+import GroupService from '@/services/group.service';
 
 export const serviceMapping: any = {
     course: new CourseService(undefined),
     assginment: new AssignmentService(undefined),
     user: new AuthService('user'),
-    media: new MediaService()
+    media: new MediaService(),
+    group: new GroupService(undefined)
 }
 
 interface ActionConfig {
@@ -59,8 +61,16 @@ export const sliceConfig: SliceConfig[] = [
                     state.course = action.payload;
                 },
             },
+            {
+                type: 'updateCourse',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.course = action.payload;
+                },
+            },
         ],
-    }, {
+    },
+    {
         name: 'assginment',
         initialState: {
             assginments: [],        //loadallwithpaging
@@ -83,6 +93,40 @@ export const sliceConfig: SliceConfig[] = [
                 endpoint: 'getById',
                 customAction: (state, action) => {
                     state.assginment = action.payload;
+                },
+            },
+        ],
+    },
+    {
+        name: 'group',
+        initialState: {
+            groups: [],        //loadallwithpaging
+            group: {},         //getbyid
+            isLoading: false,       //load xong false
+            error: {},              //bao loi
+            total: 0                //tong mang fruit
+        },
+        thunk: [
+            {
+                type: 'loadGroups',
+                endpoint: 'loadAllWithPaging',
+                customAction: (state, action) => {
+                    state.groups = action.payload.records.rows;
+                    state.total = action.payload.total
+                },
+            },
+            {
+                type: 'getGroup',
+                endpoint: 'getById',
+                customAction: (state, action) => {
+                    state.group = action.payload;
+                },
+            },
+            {
+                type: 'createGroup',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.group = action.payload;
                 },
             },
         ],

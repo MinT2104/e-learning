@@ -3,7 +3,6 @@ import CustomTooltip from '@/components/common/CustomTooltip'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogHeader,
@@ -13,12 +12,10 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
-import { RootState } from '@/redux/store'
 import { CourseType } from '@/redux/StoreType'
-import { Inbox, Info, Plus, PlusCircle, X } from 'lucide-react'
+import { Inbox, Info, Plus, X } from 'lucide-react'
 import { ReactNode, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 const CustomFormClassManagement = ({
     triggerElement,
@@ -76,8 +73,6 @@ const CustomFormClassManagement = ({
         groupIds: false
     });
 
-    const { course } = useSelector((state: RootState) => state.course)
-
     const [activeId, setActiveId] = useState('')
 
     const [isOpenConfirm, setIsOpenConfirm] = useState(false)
@@ -129,8 +124,19 @@ const CustomFormClassManagement = ({
         setIsOpenConfirm(value)
     }
 
-    const handleCreateGroup = () => {
-        console.log(groupData)
+    const handleCreateGroup = async () => {
+        const res = await dispatch(globalThis.$action.createGroup(groupData))
+        if (res.payload) {
+            const data = await dispatch(globalThis.$action.updateCourse({
+                _id: activeData?._id,
+                $addToSet: {
+                    groupIds: res.payload._id
+                }
+            }))
+            if (data.payload) {
+                handleGetData(activeId)
+            }
+        }
         handleOpenConfirm(false)
 
     }
@@ -139,16 +145,18 @@ const CustomFormClassManagement = ({
         setGroupData((prev) => {
             return {
                 ...prev,
-                "courseData":
+                title: `Nhóm - ${classDetail.groupIds.length + 1}`,
+                description: `Nhóm - ${classDetail.groupIds.length + 1}`,
+                courseData:
                 {
-                    "title": activeData?.title,
-                    "courseId": activeData?.courseId
+                    title: activeData?.title,
+                    courseId: activeData?.courseId
                 },
             }
 
         })
         console.log(activeData)
-    }, [isOpen])
+    }, [isOpen, classDetail])
 
     return (
         <Dialog open={isOpen}>
@@ -214,7 +222,7 @@ const CustomFormClassManagement = ({
                                     (
                                         <div className='w-full h-[325px] rounded-sm border border-border flex justify-center items-center flex-col gap-2 mt-2'>
                                             <ul className='w-full h-full p-2 flex flex-col gap-2'>
-                                                {Array.from({ length: 5 }).map((_, index) => {
+                                                {classDetail.groupIds.map((_, index) => {
                                                     return (
                                                         <li key={index} className='h-[48px] p-2 px-4 flex bg-secondary text-black items-center justify-between'>
                                                             <span className='text-sm'>Nhóm - {index + 1}</span>
