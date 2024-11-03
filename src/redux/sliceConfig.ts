@@ -29,11 +29,11 @@ export const sliceConfig: SliceConfig[] = [
         name: 'course',
         initialState: {
             courses: [],         //loadallwithpaging
-            userCourses: [],         //loadallwithpaging
+            userCourses: [],     //loadallwithpaging
             course: {},          //getbyid
-            isLoading: false,   //load xong false
-            error: {},          //bao loi
-            total: 0            //tong mang fruit
+            isLoading: false,    //load xong false
+            error: {},           //bao loi
+            total: 0             //tong mang fruit
         },
         thunk: [
             {

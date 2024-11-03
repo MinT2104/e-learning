@@ -51,9 +51,9 @@ export const Header = () => {
             setCoursess(res.payload.records.rows)
         }
     };
-
     const handleLogout = async () => {
         await dispatch(globalThis.$action.logOut())
+        navigate("/login")
     }
 
     useEffect(() => {
