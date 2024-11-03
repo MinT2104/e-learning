@@ -12,10 +12,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
+import { RootState } from '@/redux/store'
 import { CourseType } from '@/redux/StoreType'
 import { Inbox, Info, Plus, X } from 'lucide-react'
 import { ReactNode, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const CustomFormClassManagement = ({
     triggerElement,
@@ -39,6 +40,7 @@ const CustomFormClassManagement = ({
     }
 
     const [classDetail, setClassDetail] = useState(initValue);
+    const { course } = useSelector((state: RootState) => state.course)
 
     let initGroup = {
         "title": "",
@@ -73,42 +75,15 @@ const CustomFormClassManagement = ({
         groupIds: false
     });
 
-    const [activeId, setActiveId] = useState('')
+    // const [activeId, setActiveId] = useState('')
 
     const [isOpenConfirm, setIsOpenConfirm] = useState(false)
 
 
     const dispatch = useDispatch();
-    const regex = /[?&]id=([^&]+)/;
-
-    const handleGetIndex = (str: string) => {
-        const result = str.match(regex);
-        return result && result[1]
-    };
-
-    const handleGetData: any = async (id: string) => {
-        const res = await dispatch(globalThis.$action.getCourse(id));
-        if (res.payload) {
-            const { title, groupIds, courseId, description } = res.payload
-            setClassDetail({ title, groupIds, courseId, description })
-            console.log(res.payload)
-        }
-
-    };
 
 
-    useEffect(() => {
-        const id = handleGetIndex(window.location.search)
-        if (id) {
-            setActiveId(id)
-        }
-    }, [window.location.search])
 
-    useEffect(() => {
-        if (activeId) {
-            handleGetData(activeId)
-        }
-    }, [activeId])
 
     const handleSubmit = () => {
 
@@ -134,7 +109,7 @@ const CustomFormClassManagement = ({
                 }
             }))
             if (data.payload) {
-                handleGetData(activeId)
+                // handleGetData(activeId)
             }
         }
         handleOpenConfirm(false)
@@ -158,6 +133,12 @@ const CustomFormClassManagement = ({
         console.log(activeData)
     }, [isOpen, classDetail])
 
+    useEffect(() => {
+        if (course) {
+            const { title, groupIds, courseId, description } = course
+            setClassDetail({ title, groupIds, courseId, description })
+        }
+    }, [course])
     return (
         <Dialog open={isOpen}>
             <DialogTrigger className={className}>{triggerElement}</DialogTrigger>
@@ -183,6 +164,7 @@ const CustomFormClassManagement = ({
                                     id="title"
                                     name="title"
                                     type="text"
+                                    value={course.title}
                                     defaultValue={classDetail.title}
                                     autoComplete="title"
                                     onChange={handleChangeClassDetail}
@@ -212,7 +194,7 @@ const CustomFormClassManagement = ({
                             </div>
 
                             {
-                                classDetail.groupIds && classDetail.groupIds.length === 0 ? (
+                                course.groupIds && course.groupIds.length === 0 ? (
                                     <div className='w-full h-[325px] rounded-sm border border-border flex justify-center items-center flex-col gap-2 mt-2'>
                                         <Inbox size={40} className='text-gray-500' />
                                         <span className='text-gray-500 text-[12px]'>Học phần này chưa có nhóm</span>
@@ -222,7 +204,7 @@ const CustomFormClassManagement = ({
                                     (
                                         <div className='w-full h-[325px] rounded-sm border border-border flex justify-center items-center flex-col gap-2 mt-2'>
                                             <ul className='w-full h-full p-2 flex flex-col gap-2'>
-                                                {classDetail.groupIds.map((_, index) => {
+                                                {course.groupIds.map((_, index) => {
                                                     return (
                                                         <li key={index} className='h-[48px] p-2 px-4 flex bg-secondary text-black items-center justify-between'>
                                                             <span className='text-sm'>Nhóm - {index + 1}</span>
@@ -244,6 +226,7 @@ const CustomFormClassManagement = ({
                                     name="courseId"
                                     type="text"
                                     autoComplete="courseId"
+                                    value={course.courseId}
                                     defaultValue={classDetail.courseId}
                                     onChange={handleChangeClassDetail}
                                     className={cn('authInput', error.courseId && 'redBorder')}
@@ -265,6 +248,7 @@ const CustomFormClassManagement = ({
                             <span className="text-sm text-slate-600">Mô tả học phần *</span>
                             <div className="mt-2 relative truncate mb-6">
                                 <Textarea
+                                    value={course.description}
                                     defaultValue={classDetail.description}
                                     rows={4}
                                     id="bio"
