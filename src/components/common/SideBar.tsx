@@ -33,7 +33,7 @@ function SideBar() {
             label: "Lớp học phần",
             icon: faLayerGroup,
             path: "/courses", // Add path for navigation
-            allowRoles: ['admin']
+            allowRoles: ['admin', 'teacher', 'student']
         },
         {
             id: 3,

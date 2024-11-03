@@ -40,7 +40,7 @@ class BaseService {
     }
 
     save(reqObj: any) {
-        const url = `/api/${this.name}/`;
+        const url = `/${this.name}/`;
         return new Promise((resolve, reject) => {
             ApiClient.post(url, reqObj)
                 .then((response: any) => {
@@ -53,7 +53,7 @@ class BaseService {
 
     update(reqObj: any) {
         const { _id } = reqObj;
-        const url = `/api/${this.name}/${_id}/`;
+        const url = `/${this.name}/${_id}/`;
         return new Promise((resolve, reject) => {
             ApiClient.put(url, reqObj)
                 .then((response: { data: {}; }) => {
