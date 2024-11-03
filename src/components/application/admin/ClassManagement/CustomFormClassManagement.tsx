@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { RootState } from '@/redux/store'
+import { CourseType } from '@/redux/StoreType'
 import { Inbox, Info, Plus, PlusCircle, X } from 'lucide-react'
 import { ReactNode, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,12 +24,14 @@ const CustomFormClassManagement = ({
     triggerElement,
     className,
     isOpen,
-    close
+    close,
+    activeData
 }: {
     triggerElement: ReactNode
     className?: string;
     isOpen: boolean;
-    close: () => void
+    close: () => void;
+    activeData: CourseType | undefined
 }) => {
 
     let initValue = {
@@ -39,6 +42,26 @@ const CustomFormClassManagement = ({
     }
 
     const [classDetail, setClassDetail] = useState(initValue);
+
+    let initGroup = {
+        "title": "",
+        "courseData":
+        {
+            "title": activeData?.title,
+            "courseId": activeData?.courseId
+        },
+        "description": "",
+        "teacherId": "",
+        "Chapters": []
+    }
+
+    const [groupData, setGroupData] = useState({
+        ...initGroup,
+        courseData: {
+            "title": activeData?.title,
+            "courseId": activeData?.courseId
+        },
+    });
 
     const handleChangeClassDetail = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const name = e.target.name;
@@ -84,10 +107,12 @@ const CustomFormClassManagement = ({
         if (id) {
             setActiveId(id)
         }
-    }, [window.location.search, window.location.pathname])
+    }, [window.location.search])
 
     useEffect(() => {
-        handleGetData(activeId)
+        if (activeId) {
+            handleGetData(activeId)
+        }
     }, [activeId])
 
     const handleSubmit = () => {
@@ -95,7 +120,7 @@ const CustomFormClassManagement = ({
     }
 
     useEffect(() => {
-        if (!isOpen) {
+        if (isOpen) {
             setClassDetail(initValue)
         }
     }, [isOpen])
@@ -105,10 +130,25 @@ const CustomFormClassManagement = ({
     }
 
     const handleCreateGroup = () => {
-        console.log('create')
+        console.log(groupData)
         handleOpenConfirm(false)
+
     }
 
+    useEffect(() => {
+        setGroupData((prev) => {
+            return {
+                ...prev,
+                "courseData":
+                {
+                    "title": activeData?.title,
+                    "courseId": activeData?.courseId
+                },
+            }
+
+        })
+        console.log(activeData)
+    }, [isOpen])
 
     return (
         <Dialog open={isOpen}>
@@ -135,7 +175,7 @@ const CustomFormClassManagement = ({
                                     id="title"
                                     name="title"
                                     type="text"
-                                    value={classDetail.title}
+                                    defaultValue={classDetail.title}
                                     autoComplete="title"
                                     onChange={handleChangeClassDetail}
                                     className={cn('authInput', error.title && 'redBorder')}
@@ -196,7 +236,7 @@ const CustomFormClassManagement = ({
                                     name="courseId"
                                     type="text"
                                     autoComplete="courseId"
-                                    value={classDetail.courseId}
+                                    defaultValue={classDetail.courseId}
                                     onChange={handleChangeClassDetail}
                                     className={cn('authInput', error.courseId && 'redBorder')}
                                     placeholder="Nhập mã học phần"
@@ -217,7 +257,7 @@ const CustomFormClassManagement = ({
                             <span className="text-sm text-slate-600">Mô tả học phần *</span>
                             <div className="mt-2 relative truncate mb-6">
                                 <Textarea
-                                    value={classDetail.description}
+                                    defaultValue={classDetail.description}
                                     rows={4}
                                     id="bio"
                                     name="bio"

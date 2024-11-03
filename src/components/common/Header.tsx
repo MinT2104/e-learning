@@ -120,7 +120,7 @@ export const Header = () => {
                                                                         <h4 className="text-sm font-medium">
                                                                             {item.title}
                                                                         </h4>
-                                                                        <span className="text-[12px] text-[#2a2a2a]">
+                                                                        {/* <span className="text-[12px] text-[#2a2a2a]">
                                                                             {
                                                                                 item.level
                                                                             }
@@ -129,7 +129,7 @@ export const Header = () => {
                                                                             {
                                                                                 item.mainPrice
                                                                             }
-                                                                        </span>
+                                                                        </span> */}
                                                                     </div>
                                                                 </li>
                                                             )
