@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomFormClassManagement from "@/components/application/admin/ClassManagement/CustomFormClassManagement";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { CourseType } from "@/redux/StoreType";
 
 const ClassManagement = () => {
 
@@ -24,6 +25,7 @@ const ClassManagement = () => {
     };
 
     const [activeId, setActiveId] = useState('')
+    const [activeData, setActiveData] = useState<CourseType>()
 
     const [isOpen, setIsOpen] = useState(false)
 
@@ -79,6 +81,7 @@ const ClassManagement = () => {
                                     onClick={() => {
                                         setActiveId(id)
                                         setIsOpen(true)
+                                        setActiveData(row.original)
                                     }}
                                 >
                                     <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
@@ -149,7 +152,7 @@ const ClassManagement = () => {
 
             </div>
             <CustomTable columns={columns} data={courses || []} loading={false} />
-            <CustomFormClassManagement close={handleClose} isOpen={isOpen} className="w-full" triggerElement={<></>} />
+            <CustomFormClassManagement close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
 
         </div>
     )
