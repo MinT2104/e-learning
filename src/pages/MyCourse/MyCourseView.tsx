@@ -49,7 +49,7 @@ const MyCourseView = () => {
     } else return (
         <div className="container mx-auto pb-8 h-fit">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {userCourses.map((course: CourseType) => (
+                {userCourses.map((course) => (
                     <CourseCard {...course} key={course._id} />
                 ))}
             </div>

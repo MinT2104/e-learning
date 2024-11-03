@@ -20,6 +20,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useEffect } from "react";
+import { CourseType } from "@/redux/StoreType";
 
 export const Header = () => {
 
@@ -43,7 +44,6 @@ export const Header = () => {
 
         await dispatch(globalThis.$action.loadUserCourses(body));
     };
-
     const handleLogout = async () => {
         await dispatch(globalThis.$action.logOut())
     }
