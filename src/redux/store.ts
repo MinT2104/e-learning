@@ -28,7 +28,6 @@ const store = configureStore({
 store.subscribe(() => {
     (globalThis as any).$state = store.getState() as unknown as StoreType;
     setTimeout(() => {
-        console.log(store.getState())
     }, 2000)
 });
 // Tạo persistor
