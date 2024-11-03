@@ -92,6 +92,21 @@ const ClassManagement = () => {
     ];
 
     const handleClose = () => setIsOpen(false)
+    const regex = /[?&]id=([^&]+)/;
+    const handleGetIndex = (str: string) => {
+        const result = str.match(regex);
+        return result && result[1]
+    };
+
+    const handleGetCourseDetail: any = async (id: string) => {
+        const res = await dispatch(globalThis.$action.getCourse(id));
+        if (res.payload) {
+            // const { title, groupIds, courseId, description } = res.payload
+            // setClassDetail({ title, groupIds, courseId, description })
+            console.log(res.payload)
+        }
+
+    };
 
     useEffect(() => {
         if (activeId) {
@@ -106,6 +121,19 @@ const ClassManagement = () => {
             navigate('/class-management')
         }
     }, [isOpen])
+
+    useEffect(() => {
+        const id = handleGetIndex(window.location.search)
+        if (id) {
+            setActiveId(id)
+        }
+    }, [window.location.search])
+
+    useEffect(() => {
+        if (activeId) {
+            handleGetCourseDetail(activeId)
+        }
+    }, [activeId])
 
     return (
         <div>
