@@ -1,18 +1,8 @@
 export interface StoreType {
     user: {
-        authUser: {
-            _id: string;
-            address: string;
-            email: string;
-            phoneNumber: string;
-            userName: string;
-            courseIds: string[];
-            image: string;
-            role: string;
-            createdAt: string;
-            updatedAt: string;
-            status: string
-        };
+        users: UserType[]
+        user: UserType
+        authUser: UserType
         role: string,
         isLoading: boolean
     };
@@ -31,10 +21,48 @@ export interface StoreType {
         error: string | null;
         total: number
     };
+    group: {
+        groups: GroupType[],
+        group: GroupType;
+        isLoading: boolean;
+        error: string | null;
+        total: number;
+    };
     media: {
         images: { url: string }[];
     };
 }
+
+export type GroupType = {
+    title: string;
+    courseData: CourseType
+    teacherData?: {
+        email: string;
+        image: string;
+        userName: string;
+    };
+    description: string;
+    chapters: Chapter[];
+    createdAt: Date;
+    updatedAt: Date;
+    _id: string
+
+}
+
+export type UserType =
+    {
+        _id: string;
+        address: string;
+        email: string;
+        phoneNumber: string;
+        userName: string;
+        courseIds: string[];
+        image: string;
+        role: string;
+        createdAt: string;
+        updatedAt: string;
+        status: string
+    };
 
 
 export type CourseType = {
@@ -46,16 +74,10 @@ export type CourseType = {
     createdAt?: string;
     updatedAt?: string;
 }
-export interface Instructor {
-    name: string;
-    avatar: string;
-}
+
 
 // Define Rating interface
-export interface Rating {
-    value: number;
-    max: number;
-}
+
 
 // Define Lesson interface
 export interface Lesson {

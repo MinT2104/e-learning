@@ -1,10 +1,12 @@
 import { ApiClient } from "@/customFetch/ApiClient";
 import { getCookie } from "@/lib/utils";
+import BaseService from "./base.service";
 
-class AuthService {
+class AuthService extends BaseService {
     name: any
 
     constructor(name: string) {
+        super(null);
         this.name = name
     }
 
