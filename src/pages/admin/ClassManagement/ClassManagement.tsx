@@ -9,7 +9,6 @@ import { FileDown, MoreHorizontal, Plus, Search, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomFormClassManagement from "@/components/application/admin/ClassManagement/CustomFormClassManagement";
-import { useNavigate } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CourseType } from "@/redux/StoreType";
 
@@ -18,23 +17,35 @@ const ClassManagement = () => {
     const [search, setSearch] = useState<string>('')
 
     const dispatch = useDispatch();
+
     const { courses, isLoading } = useSelector((state: RootState) => state.course);
+
+    const { groups } = useSelector((state: RootState) => state.group);
 
     const handleGetData: any = async () => {
         dispatch(globalThis.$action.loadCourses({ page: 1, limit: 10 }));
     };
 
-    const [activeId, setActiveId] = useState('')
     const [activeData, setActiveData] = useState<CourseType>()
 
     const [isOpen, setIsOpen] = useState(false)
 
-    useEffect(() => {
-        handleGetData();
-    }, []);
+    const [activeId, setActiveId] = useState('')
 
 
-    const navigate = useNavigate()
+    const handleLoadGroup = async () => {
+        const groupId = activeData?.groupIds || []
+        const query = {
+            page: 1,
+            limit: 100,
+            query: {
+                _id: {
+                    $in: [...groupId]
+                }
+            }
+        }
+        await dispatch(globalThis.$action.loadGroups(query))
+    }
 
     const columns: ColumnDef<typeof courses[0]>[] = [
         {
@@ -73,9 +84,10 @@ const ClassManagement = () => {
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                 <DropdownMenuItem
                                     onClick={() => {
-                                        setActiveId(id)
                                         setIsOpen(true)
                                         setActiveData(row.original)
+                                        handleGetData()
+                                        setActiveId(id)
                                     }}
                                 >
                                     <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
@@ -92,48 +104,31 @@ const ClassManagement = () => {
     ];
 
     const handleClose = () => setIsOpen(false)
-    const regex = /[?&]id=([^&]+)/;
-    const handleGetIndex = (str: string) => {
-        const result = str.match(regex);
-        return result && result[1]
-    };
+
+    const handleReload = () => {
+        handleGetData()
+    }
 
     const handleGetCourseDetail: any = async (id: string) => {
-        const res = await dispatch(globalThis.$action.getCourse(id));
-        if (res.payload) {
-            // const { title, groupIds, courseId, description } = res.payload
-            // setClassDetail({ title, groupIds, courseId, description })
-            console.log(res.payload)
-        }
+        await dispatch(globalThis.$action.getCourse(id));
 
     };
-
-    useEffect(() => {
-        if (activeId) {
-            setTimeout(() => {
-                navigate(`/class-management?id=${activeId}`)
-            }, 200)
-        }
-    }, [activeId])
-
-    useEffect(() => {
-        if (!isOpen) {
-            navigate('/class-management')
-        }
-    }, [isOpen])
-
-    useEffect(() => {
-        const id = handleGetIndex(window.location.search)
-        if (id) {
-            setActiveId(id)
-        }
-    }, [window.location.search])
 
     useEffect(() => {
         if (activeId) {
             handleGetCourseDetail(activeId)
         }
     }, [activeId])
+
+    useEffect(() => {
+        handleGetData();
+    }, []);
+
+    useEffect(() => {
+        if (activeData && activeData?.groupIds.length > 0) {
+            handleLoadGroup()
+        }
+    }, [activeData])
 
     return (
         <div>
@@ -173,7 +168,7 @@ const ClassManagement = () => {
 
             </div>
             <CustomTable columns={columns} data={courses || []} loading={false} />
-            <CustomFormClassManagement close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
+            <CustomFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} groupActive={groups} className="w-full" triggerElement={<></>} />
 
         </div>
     )

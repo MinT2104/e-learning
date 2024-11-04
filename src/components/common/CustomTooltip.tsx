@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 type CustomTooltipProps = {
     isHidden: boolean;
     triggerElement: ReactNode;
-    message: string;
+    message: string | ReactNode;
     className?: string
 }
 

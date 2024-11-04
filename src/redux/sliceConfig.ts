@@ -129,16 +129,34 @@ export const sliceConfig: SliceConfig[] = [
                     state.group = action.payload;
                 },
             },
+            {
+                type: 'updateGroup',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.group = action.payload;
+                },
+            },
         ],
     },
     {
         name: 'user',
         initialState: {
+            users: null,
+            user: null,
             authUser: null,
             role: 'guest',
-            isLoading: false
+            isLoading: false,
+            total: 0
         },
         thunk: [
+            {
+                type: 'loadUsers',
+                endpoint: 'loadAllWithPaging',
+                customAction: (state, action) => {
+                    state.users = action.payload.records.rows;
+                    state.total = action.payload.total
+                },
+            },
             {
                 type: 'register',
                 endpoint: 'register',

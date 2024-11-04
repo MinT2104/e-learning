@@ -4,7 +4,7 @@ import {
     PopoverTrigger
 } from '@/components/ui/popover'
 import { ChevronDown } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { Input } from '../ui/input';
@@ -21,10 +21,11 @@ type CustomDropDownProps = {
     width?: string;
     className?: string;
     isNotUseAuthInputClass?: boolean;
-    isHiddenSearch?: boolean
+    isHiddenSearch?: boolean;
+    customIcon?: ReactNode;
 };
 
-const CustomDropDown = ({ dropDownList, onChange, placeholder, width, className, isNotUseAuthInputClass = false, isHiddenSearch = false }: CustomDropDownProps) => {
+const CustomDropDown = ({ customIcon, dropDownList, onChange, placeholder, width, className, isNotUseAuthInputClass = false, isHiddenSearch = false }: CustomDropDownProps) => {
 
     const [item, setItem] = useState<DropDownItem | null>(null);
     const [open, setIsOpen] = useState(false);
@@ -63,15 +64,18 @@ const CustomDropDown = ({ dropDownList, onChange, placeholder, width, className,
         }
     };
 
+
     return (
         <Popover onOpenChange={handlePopoverChange}>
             <PopoverTrigger className="py-0" asChild>
-                <Button className={cn('bg-transparent justify-between items-center hover:bg-transparent text-black', !isNotUseAuthInputClass && 'authInput', className, width)}>
-                    <span className="">{item ? item.label : placeholder}</span>
-                    <ChevronDown className="" />
-                </Button>
+                {customIcon ? customIcon :
+                    <Button className={cn('bg-transparent justify-between items-center hover:bg-transparent text-black', !isNotUseAuthInputClass && 'authInput', className, width)}>
+                        <span className="">{item ? item.label : placeholder}</span>
+                        <ChevronDown className="" />
+                    </Button>
+                }
             </PopoverTrigger>
-            <PopoverContent align="start" className={cn('max-w-80 p-0', width)}>
+            <PopoverContent align="start" className={cn('max-w-80 p-0 z-[9999]', width)}>
                 <div className={cn("p-2", isHiddenSearch && 'hidden')}>
                     <Input
                         className="w-full h-[48px]"
