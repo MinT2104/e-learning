@@ -156,15 +156,14 @@ const ClassManagement = () => {
                         <Search size={20} />
                     </div>
                 </div>
-
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3 mb-2">
                     <Button className="h-[48px]">
                         <FileDown />
-                        <span>Xuất danh sách sinh viên</span>
+                        <span>Xuất danh sách học phần </span>
                     </Button>
                     <Button className="h-[48px]">
                         <Plus />
-                        <span>Thêm sinh viên</span>
+                        <span>Thêm học phần</span>
                     </Button>
                     <Button className="h-[48px] w-[48px]">
                         <Settings />
