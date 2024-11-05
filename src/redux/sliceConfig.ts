@@ -68,6 +68,13 @@ export const sliceConfig: SliceConfig[] = [
                     state.course = action.payload;
                 },
             },
+            {
+                type: 'createCourse',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.course = action.payload;
+                },
+            },
         ],
     },
     {
