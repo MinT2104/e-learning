@@ -5,12 +5,13 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { FileDown, MoreHorizontal, Plus, Search, Settings } from "lucide-react";
+import { FileDown, Import, MoreHorizontal, Plus, Search, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomFormClassManagement from "@/components/application/admin/ClassManagement/CustomFormClassManagement";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CourseType } from "@/redux/StoreType";
+import CreateFormClassManagement from "@/components/application/admin/ClassManagement/CreateFormClassManagement";
 
 const ClassManagement = () => {
 
@@ -20,8 +21,6 @@ const ClassManagement = () => {
 
     const { courses, isLoading } = useSelector((state: RootState) => state.course);
 
-    const { groups } = useSelector((state: RootState) => state.group);
-
     const handleGetData: any = async () => {
         dispatch(globalThis.$action.loadCourses({ page: 1, limit: 10 }));
     };
@@ -29,19 +28,16 @@ const ClassManagement = () => {
     const [activeData, setActiveData] = useState<CourseType>()
 
     const [isOpen, setIsOpen] = useState(false)
+    const [isOpenCreation, setIsOpenCreation] = useState(false)
 
     const [activeId, setActiveId] = useState('')
 
-
     const handleLoadGroup = async () => {
-        const groupId = activeData?.groupIds || []
         const query = {
             page: 1,
             limit: 100,
             query: {
-                _id: {
-                    $in: [...groupId]
-                }
+                'courseData.courseId': activeData?.courseId
             }
         }
         await dispatch(globalThis.$action.loadGroups(query))
@@ -104,14 +100,14 @@ const ClassManagement = () => {
     ];
 
     const handleClose = () => setIsOpen(false)
+    const handleCloseCreation = () => setIsOpenCreation(false)
 
     const handleReload = () => {
-        handleGetData()
+        handleLoadGroup()
     }
 
     const handleGetCourseDetail: any = async (id: string) => {
         await dispatch(globalThis.$action.getCourse(id));
-
     };
 
     useEffect(() => {
@@ -125,9 +121,7 @@ const ClassManagement = () => {
     }, []);
 
     useEffect(() => {
-        if (activeData && activeData?.groupIds.length > 0) {
-            handleLoadGroup()
-        }
+        handleLoadGroup()
     }, [activeData])
 
     return (
@@ -154,21 +148,23 @@ const ClassManagement = () => {
                 <div className="flex items-center gap-3 mb-2">
                     <Button className="h-[48px]">
                         <FileDown />
-                        <span>Xuất danh sách học phần </span>
+                        <span>Xuất danh sách</span>
+                    </Button>
+                    <Button onClick={() => setIsOpenCreation(true)} className="h-[48px]">
+                        <Plus />
+                        <span>Tạo mới</span>
                     </Button>
                     <Button className="h-[48px]">
-                        <Plus />
-                        <span>Thêm học phần</span>
-                    </Button>
-                    <Button className="h-[48px] w-[48px]">
-                        <Settings />
+                        <Import />
+                        <span>Nhập dữ liệu</span>
                     </Button>
                 </div>
 
 
             </div>
             <CustomTable columns={columns} data={courses || []} loading={false} />
-            <CustomFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} groupActive={groups} className="w-full" triggerElement={<></>} />
+            <CustomFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
+            <CreateFormClassManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
 
         </div>
     )

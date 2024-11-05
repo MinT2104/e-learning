@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { RootState } from '@/redux/store'
 import { CourseType, GroupType, UserType } from '@/redux/StoreType'
-import { Inbox, Info, Plus, X } from 'lucide-react'
+import { Inbox, Info, Loader, Plus, X } from 'lucide-react'
 import { ReactNode, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -25,7 +25,6 @@ const CustomFormClassManagement = ({
     isOpen,
     close,
     activeData,
-    groupActive,
     reload
 }: {
     triggerElement: ReactNode
@@ -33,7 +32,6 @@ const CustomFormClassManagement = ({
     isOpen: boolean;
     close: () => void;
     activeData: CourseType | undefined;
-    groupActive: GroupType[] | undefined;
     reload: () => void
 
 }) => {
@@ -47,6 +45,8 @@ const CustomFormClassManagement = ({
 
     const [classDetail, setClassDetail] = useState(initValue);
     const { course } = useSelector((state: RootState) => state.course)
+    const { groups, isLoading: groupLoading } = useSelector((state: RootState) => state.group);
+
 
     let initGroup = {
         "title": "",
@@ -103,16 +103,6 @@ const CustomFormClassManagement = ({
 
     const handleCreateGroup = async () => {
         const res = await dispatch(globalThis.$action.createGroup(groupData))
-        if (res.payload) {
-            const data = await dispatch(globalThis.$action.updateCourse({
-                _id: activeData?._id,
-                $addToSet: {
-                    groupIds: res.payload._id
-                }
-            }))
-            if (data.payload) {
-            }
-        }
         handleOpenConfirm(false)
         reload()
     }
@@ -137,8 +127,8 @@ const CustomFormClassManagement = ({
         setGroupData((prev) => {
             return {
                 ...prev,
-                title: `Nhóm - ${classDetail.groupIds.length + 1}`,
-                description: `Nhóm - ${classDetail.groupIds.length + 1}`,
+                title: `Nhóm - ${groups.length + 1}`,
+                description: `Nhóm - ${groups.length + 1}`,
                 courseData:
                 {
                     title: activeData?.title,
@@ -148,7 +138,7 @@ const CustomFormClassManagement = ({
 
         })
         console.log(activeData)
-    }, [isOpen, groupActive])
+    }, [isOpen, groups])
 
     useEffect(() => {
         if (course) {
@@ -227,68 +217,78 @@ const CustomFormClassManagement = ({
                                         } />
                                     } message='Tạo nhóm' isHidden={false} />
                                 </div>
+                                {!groupLoading ?
 
-                                {
-                                    course.groupIds && course.groupIds.length === 0 ? (
-                                        <div className='w-full h-[325px] rounded-sm border border-border flex justify-center items-center flex-col gap-2 mt-2'>
-                                            <Inbox size={40} className='text-gray-500' />
-                                            <span className='text-gray-500 text-[12px]'>Học phần này chưa có nhóm</span>
-                                        </div>
-                                    )
-                                        :
-                                        (
-                                            <div className='w-full h-[325px] max-h-full overflow-auto rounded-sm border border-border flex justify-center items-center flex-col gap-2 mt-2'>
-                                                <ul className='w-full h-fit p-2 flex flex-col gap-2 pt-20'>
-                                                    {groupActive && groupActive.length > 0 && groupActive.map((item, index) => {
-                                                        return (
-                                                            <li key={index} className='h-[56px] p-2 px-4 flex bg-secondary text-black items-center justify-between relative'>
-                                                                <span className='text-sm'>{item.title}</span>
-                                                                {!item.teacherData ?
-                                                                    <Popover>
-                                                                        <PopoverTrigger className="py-0" asChild>
-                                                                            <Button type='button' className='h-[32px]'>Giảng viên</Button>
-                                                                        </PopoverTrigger>
-                                                                        <PopoverContent align="end" className={cn('max-w-80 p-0 z-[9999]')}>
-                                                                            <div className={cn("p-2")}>
-                                                                                <Input
-                                                                                    className="w-full h-[48px]"
-                                                                                    onChange={handleSearch}
-                                                                                    value={searchValue}
-                                                                                />
-                                                                            </div>
-                                                                            <div className="min-h-[48px] max-h-[242px] h-fit p-0 overflow-y-auto z-[9999]">
-                                                                                <ul>
-                                                                                    {users && users.length > 0 && users.map((dropdownItem) => (
-                                                                                        <li
-                                                                                            onClick={() => handleChangeItem(dropdownItem, item._id)}
-                                                                                            key={dropdownItem._id}
-                                                                                            className="h-fit flex flex-col text-[#21272A] hover:bg-secondary p-4 items-start text-sm cursor-pointer"
-                                                                                        >
-                                                                                            <span>{dropdownItem.userName}</span>
-                                                                                            <span>{dropdownItem.email}</span>
-                                                                                        </li>
-                                                                                    ))}
-                                                                                </ul>
-                                                                            </div>
-                                                                        </PopoverContent>
-                                                                    </Popover>
-                                                                    :
-                                                                    (
-                                                                        <CustomTooltip className='right-4' isHidden={false} message={<div className='flex flex-col items-start'>
-                                                                            <span>{item.teacherData.userName}</span>
-                                                                            <span>{item.teacherData.email}</span>
-                                                                        </div>} triggerElement={
-                                                                            <div className='w-[40px] h-[40px] rounded-full border border-primary cursor-pointer' />
-                                                                        } />
-                                                                    )
-
-                                                                }
-                                                            </li>
-                                                        )
-                                                    })}
-                                                </ul>
+                                    (
+                                        groups.length === 0 ? (
+                                            <div className='w-full h-[325px] rounded-sm border border-border flex justify-center items-center flex-col gap-2 mt-2'>
+                                                <Inbox size={40} className='text-gray-500' />
+                                                <span className='text-gray-500 text-[12px]'>Học phần này chưa có nhóm</span>
                                             </div>
                                         )
+                                            :
+                                            (
+                                                <div className='w-full h-[325px] max-h-full overflow-auto rounded-sm border border-border flex justify-start items-center flex-col gap-2 mt-2'>
+                                                    <ul className='w-full h-fit p-2 flex flex-col gap-2'>
+                                                        {(groups && groups.length > 0 && groups.map((item, index) => {
+                                                            return (
+                                                                <li key={index} className='h-[56px] p-2 px-4 flex bg-secondary text-black items-center justify-between relative'>
+                                                                    <span className='text-sm'>{item.title}</span>
+                                                                    {!item.teacherData ?
+                                                                        <Popover>
+                                                                            <PopoverTrigger className="py-0" asChild>
+                                                                                <Button type='button' className='h-[32px]'>Giảng viên</Button>
+                                                                            </PopoverTrigger>
+                                                                            <PopoverContent align="end" className={cn('max-w-80 p-0 z-[9999]')}>
+                                                                                <div className={cn("p-2")}>
+                                                                                    <Input
+                                                                                        className="w-full h-[48px]"
+                                                                                        onChange={handleSearch}
+                                                                                        value={searchValue}
+                                                                                    />
+                                                                                </div>
+                                                                                <div className="min-h-[48px] max-h-[242px] h-fit p-0 overflow-y-auto z-[9999]">
+                                                                                    <ul>
+                                                                                        {users && users.length > 0 && users.map((dropdownItem) => (
+                                                                                            <li
+                                                                                                onClick={() => handleChangeItem(dropdownItem, item._id)}
+                                                                                                key={dropdownItem._id}
+                                                                                                className="h-fit flex flex-col text-[#21272A] hover:bg-secondary p-4 items-start text-sm cursor-pointer"
+                                                                                            >
+                                                                                                <span>{dropdownItem.userName}</span>
+                                                                                                <span>{dropdownItem.email}</span>
+                                                                                            </li>
+                                                                                        ))}
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </PopoverContent>
+                                                                        </Popover>
+                                                                        :
+                                                                        (
+                                                                            <CustomTooltip className='right-4' isHidden={false} message={<div className='flex flex-col items-start'>
+                                                                                <span>{item.teacherData.userName}</span>
+                                                                                <span>{item.teacherData.email}</span>
+                                                                            </div>} triggerElement={
+                                                                                <div className='w-[40px] h-[40px] rounded-full border border-primary cursor-pointer' />
+                                                                            } />
+                                                                        )
+
+                                                                    }
+                                                                </li>
+                                                            )
+                                                        }))
+
+                                                        }
+                                                    </ul>
+
+
+                                                </div>
+                                            )
+                                    )
+                                    :
+                                    <div className='w-full h-[325px] flex items-center justify-center border border-border mt-2'>
+                                        <Loader className='animate-spin' />
+                                    </div>
                                 }
                             </div>
 
@@ -327,10 +327,10 @@ const CustomFormClassManagement = ({
                                     value={course.description}
                                     defaultValue={classDetail.description}
                                     rows={4}
-                                    id="bio"
-                                    name="bio"
-                                    onFocus={() => setError((prev) => ({ ...prev, bio: false }))}
-                                    autoComplete="bio"
+                                    id="description"
+                                    name="description"
+                                    onFocus={() => setError((prev) => ({ ...prev, description: false }))}
+                                    autoComplete="description"
                                     onChange={handleChangeClassDetail}
                                     className={cn('authInput')}
                                     placeholder="Nhập vào mô tả học phần"

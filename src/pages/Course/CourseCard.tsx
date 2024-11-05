@@ -1,10 +1,10 @@
-import { CourseType } from '@/redux/StoreType';
+import { CourseType, GroupType } from '@/redux/StoreType';
 import { useNavigate } from 'react-router-dom';
 import CourseImage from '@/assets/images/courseImage.png'
 
 const CourseCard = ({
     ...props
-}: CourseType) => {
+}: GroupType) => {
     const navigate = useNavigate();
 
     const handleToCourse = () => {

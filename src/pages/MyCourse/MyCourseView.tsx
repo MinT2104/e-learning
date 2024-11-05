@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { CourseType } from '@/redux/StoreType';
+import { CourseType, GroupType } from '@/redux/StoreType';
 import CourseCard from '../Course/CourseCard';
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -18,35 +18,42 @@ const MyCourseView = () => {
 
     const [search, setSearch] = useState<string>('')
 
-    const [coursess, setCoursess] = useState<CourseType[]>([])
+    const [coursess, setCoursess] = useState<GroupType[][]>([])
     const [loadingState, setLoadingState] = useState<boolean>(false);
 
-    const handleGetData: any = async () => {
-        setLoadingState(true);
-        const body = {
+
+    const handleLoadGroup = async () => {
+        const query = {
             page: 1,
-            limit: 20,
+            limit: 100,
             query: {
-                _id: { $in: authUser ? authUser.courseIds : [] }
+                'teacherData.email': authUser.email
             }
         }
+        await dispatch(globalThis.$action.loadGroups(query))
+    }
+    const { groups } = useSelector((state: RootState) => state.group)
 
-        if (authUser && authUser.courseIds.length < 1) return
+    const handleSplit = () => {
+        const groupedByCourseId: any = [];
+        const uniqueCourseIds = [...new Set(groups.map(item => item.courseData.courseId))]; // Lấy các courseId duy nhất
 
-        const res = await dispatch(globalThis.$action.loadUserCourses(body));
-        if (res.payload.records.rows) {
-            setCoursess(res.payload.records.rows)
-        }
-
-        setLoadingState(false);
-
-
-    };
+        uniqueCourseIds.forEach(courseId => {
+            const group = groups.filter(item => item.courseData.courseId === courseId);
+            groupedByCourseId.push(group);
+        });
+        setCoursess(groupedByCourseId)
+        console.log(groupedByCourseId);
+    }
 
     useEffect(() => {
-        if (!authUser) return
-        handleGetData();
-    }, [authUser]);
+        handleLoadGroup()
+    }, [])
+    useEffect(() => {
+        if (groups.length > 0) {
+            handleSplit()
+        }
+    }, [groups])
 
 
     // const { isLoading } = useSelector((state: RootState) => state.course);
@@ -112,7 +119,9 @@ const MyCourseView = () => {
     } else return (
         <div className='mx-auto pb-8 h-fit w-full flex flex-col gap-4'>
             <Heading title='Lớp học phần' rightIcon={
-                <Button>
+                <Button
+                    className=''
+                >
                     <Plus />
                     <span>Thêm nhóm mới</span>
                 </Button>
@@ -142,31 +151,38 @@ const MyCourseView = () => {
             </div>
             {
                 authUser.role === 'teacher' ? (
-                    <div className='flex flex-col gap-4'>
-                        <span className='font-bold text-lg'>
-                            21AB4B4 - Lịch Sử Đảng
-                        </span>
-                        <div className="container mx-auto pb-8 h-fit">
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                                {coursess.map((course: CourseType) => (
-                                    <CourseCard {...course} key={course._id} />
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+                    coursess.map((groupItem: GroupType[]) => {
+                        return (
+                            < div className='flex flex-col gap-4'>
+                                <span className='font-bold text-lg'>
+                                    {groupItem[0].courseData.courseId}
+                                    {' - '}
+                                    {groupItem[0].courseData.title}
+                                </span>
+                                <div className="container mx-auto pb-8 h-fit">
+                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                        {groupItem.map((item: GroupType) => (
+                                            <CourseCard {...item} key={item._id} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>)
+
+                    })
+
                 ) : null
             }
 
             {
-                authUser.role === 'student' ? (
-                    <div className="container mx-auto pb-8 h-fit">
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            {coursess.map((course: CourseType) => (
-                                <CourseCard {...course} key={course._id} />
-                            ))}
-                        </div>
-                    </div>
-                ) : null
+                // authUser.role === 'student' ? (
+                //     <div className="container mx-auto pb-8 h-fit">
+                //         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                //             {coursess.map((course: CourseType) => (
+                //                 <CourseCard {...course} key={course._id} />
+                //             ))}
+                //         </div>
+                //     </div>
+                // ) : null
             }
 
         </div >
