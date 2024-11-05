@@ -111,7 +111,6 @@ const CustomFormClassManagement = ({
                 }
             }))
             if (data.payload) {
-                // handleGetData(activeId)
             }
         }
         handleOpenConfirm(false)
@@ -149,7 +148,7 @@ const CustomFormClassManagement = ({
 
         })
         console.log(activeData)
-    }, [isOpen, classDetail])
+    }, [isOpen, groupActive])
 
     useEffect(() => {
         if (course) {
