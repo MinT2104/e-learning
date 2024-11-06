@@ -1,9 +1,8 @@
 import { ApiClient } from "@/customFetch/ApiClient";
 import { getCookie } from "@/lib/utils";
-import { RootState } from "@/redux/store";
-import { useEffect, useLayoutEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useLayoutEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Navigate, } from "react-router-dom";
 
 type Props = {
     children: React.ReactNode;
@@ -14,8 +13,6 @@ type Props = {
 const ProtectedRoute = ({ children, role, allowedRoles }: Props) => {
     const dispatch = useDispatch();
     const token = getCookie('_at');
-    const navigate = useNavigate();
-    const { authUser } = useSelector((state: RootState) => state.user);
 
     ApiClient.defaults.headers.common = {
         'Authorization': token ? `Bearer ${token}` : null,
@@ -27,18 +24,10 @@ const ProtectedRoute = ({ children, role, allowedRoles }: Props) => {
         }
     };
 
-
     useLayoutEffect(() => {
         handleGetMe();
     }, [token]);
 
-    useEffect(() => {
-        if (authUser) {
-            if (authUser.role === 'teacher' && authUser.status === 'onboarding') {
-                navigate('/register/complete-registeration')
-            }
-        }
-    }, [authUser])
 
     if (!allowedRoles.includes(role)) {
         return <Navigate to="/login" replace />;

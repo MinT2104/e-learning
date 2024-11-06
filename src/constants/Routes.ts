@@ -1,4 +1,5 @@
 import ClassManagement from "@/pages/admin/ClassManagement/ClassManagement";
+import TeacherManagement from "@/pages/admin/TeacherManagement/TeacherManagement";
 import CourseDetailView from "@/pages/Course/CourseDetailView";
 import CourseVideo from "@/pages/Course/CourseVideo";
 import CourseView from "@/pages/Course/CourseView";
@@ -31,19 +32,19 @@ export const routes: MappedAuthRouteType[] = [
         allowedRoles: ["guest", "student", "teacher", "admin"],
         isUsedLayout: true
     },
-    {
-        path: "/tasks",
-        element: TasksView,
-        allowedRoles: ["guest", "student", "teacher", "admin"],
-        isUsedLayout: true
+    // {
+    //     path: "/tasks",
+    //     element: TasksView,
+    //     allowedRoles: ["guest", "student", "teacher", "admin"],
+    //     isUsedLayout: true
 
-    },
-    {
-        path: "/tasks/:id",
-        element: TaskDetailView,
-        allowedRoles: ["guest", "student", "teacher", "admin"],
-        isUsedLayout: true
-    },
+    // },
+    // {
+    //     path: "/tasks/:id",
+    //     element: TaskDetailView,
+    //     allowedRoles: ["guest", "student", "teacher", "admin"],
+    //     isUsedLayout: true
+    // },
     {
         path: "/instructors",
         element: InstructorsView,
@@ -69,23 +70,29 @@ export const routes: MappedAuthRouteType[] = [
         element: CourseVideo,
         allowedRoles: ["guest", "student", "teacher", "admin"],
         isUsedLayout: true
-
     },
     //     {
     //         path: "/activity",
     //         element: ActivityView,
     //         allowedRoles: ["guest", "student", "teacher", "admin"],
     //     },
-    {
-        path: "/register/complete-registeration",
-        element: InstructorForm,
-        allowedRoles: ["teacher"],
-        isUsedLayout: false
+    // {
+    //     path: "/register/complete-registeration",
+    //     element: InstructorForm,
+    //     allowedRoles: ["teacher"],
+    //     isUsedLayout: false
 
-    },
+    // },
     {
         path: "/class-management",
         element: ClassManagement,
+        allowedRoles: ["admin"],
+        isUsedLayout: true
+
+    },
+    {
+        path: "/teacher-management",
+        element: TeacherManagement,
         allowedRoles: ["admin"],
         isUsedLayout: true
 

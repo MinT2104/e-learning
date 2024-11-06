@@ -14,13 +14,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-// import { useState } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { useEffect, useState } from "react";
-import { CourseType } from "@/redux/StoreType";
 
 export const Header = () => {
 
@@ -32,34 +29,10 @@ export const Header = () => {
 
     const { isLoading } = useSelector((state: RootState) => state.course);
 
-    const [coursess, setCoursess] = useState<CourseType[]>([])
-
-    const handleGetData: any = async () => {
-
-        const body = {
-            page: 1,
-            limit: 20,
-            query: {
-                _id: { $in: authUser ? authUser.courseIds : [] }
-            }
-        }
-
-        if (authUser && authUser.courseIds.length < 1) return
-
-        const res = await dispatch(globalThis.$action.loadUserCourses(body));
-        if (res?.payload?.records?.rows) {
-            setCoursess(res.payload.records.rows)
-        }
-    };
     const handleLogout = async () => {
         await dispatch(globalThis.$action.logOut())
         navigate("/login")
     }
-
-    useEffect(() => {
-        if (!authUser) return
-        handleGetData();
-    }, [authUser]);
 
     return (
         <header
@@ -79,67 +52,6 @@ export const Header = () => {
                     authUser ?
                         (
                             <>
-                                {/* Khóa học */}
-                                <div className="flex items-center gap-10 justify-end">
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <Button variant="outline" className="font-bold border-none text-sm shadow-none text-slate-500">
-                                                Khóa học của tôi
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent align="end" className="w-[350px] bg-white border-border/20 rounded-md p-4 z-50">
-                                            <div className="flex justify-between items-center">
-                                                <h4 className="text-md font-medium mb-2">Khóa học của tôi</h4>
-                                                <Button className="" variant={'link'}>Xem tất cả</Button>
-                                            </div>
-                                            <ul>
-                                                {
-                                                    isLoading ?
-                                                        <>
-                                                            <li className="py-3 cursor-pointer flex gap-4">
-                                                                <div className="w-1/3 h-16 rounded-md bg-slate-200 animate-pulse" />
-                                                                <div className="w-2/3 flex flex-col justify-between">
-                                                                    <div className="w-full h-8 rounded-md bg-slate-200 animate-pulse" />
-                                                                    <div className="w-2/3 h-6 rounded-md bg-slate-200 animate-pulse" />
-                                                                </div>
-                                                            </li>
-                                                            <li className="py-3 cursor-pointer flex gap-4">
-                                                                <div className="w-1/3 h-16 rounded-md bg-slate-200 animate-pulse" />
-                                                                <div className="w-2/3 flex flex-col justify-between">
-                                                                    <div className="w-full h-8 rounded-md bg-slate-200 animate-pulse" />
-                                                                    <div className="w-2/3 h-6 rounded-md bg-slate-200 animate-pulse" />
-                                                                </div>
-                                                            </li>
-                                                        </>
-                                                        :
-                                                        coursess && coursess.length > 0 && coursess.map((item, index) => {
-                                                            return (
-                                                                <li key={index} className="py-3 cursor-pointer flex gap-4">
-                                                                    <div className="w-1/3 h-16 rounded-md bg-gradient-to-r from-blue-500 to-green-400" />
-                                                                    <div className="w-2/3 flex flex-col justify-between">
-                                                                        <h4 className="text-sm font-medium">
-                                                                            {item.title}
-                                                                        </h4>
-                                                                        {/* <span className="text-[12px] text-[#2a2a2a]">
-                                                                            {
-                                                                                item.level
-                                                                            }
-                                                                        </span>
-                                                                        <span className="text-sm text-primary">
-                                                                            {
-                                                                                item.mainPrice
-                                                                            }
-                                                                        </span> */}
-                                                                    </div>
-                                                                </li>
-                                                            )
-                                                        })
-
-                                                }
-                                            </ul>
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
                                 {/* Thông báo */}
                                 <div className="flex items-center gap-10 justify-center border-border/20">
                                     <Popover>

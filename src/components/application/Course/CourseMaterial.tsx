@@ -17,17 +17,17 @@ import { File as FileType, Section } from "@/redux/StoreType";
 import { Button } from "@/components/ui/button";
 
 const CourseMaterial = () => {
-    const param = useParams();
-    const dispatch = useDispatch();
+    // const param = useParams();
+    // const dispatch = useDispatch();
     const { assginment, isLoading } = useSelector((state: RootState) => state.assginment);
 
-    const handleCall: any = async () => {
-        dispatch(globalThis.$action.getAssginment(param.id));
-    };
+    // const handleCall: any = async () => {
+    //     dispatch(globalThis.$action.getAssginment(param.id));
+    // };
 
-    useEffect(() => {
-        handleCall();
-    }, []);
+    // useEffect(() => {
+    //     handleCall();
+    // }, []);
 
     if (isLoading) {
         return (

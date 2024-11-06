@@ -12,36 +12,21 @@ type props = {
 }
 
 const AuthRoute = ({ children, allowedRoles, role }: props) => {
-    const navigate = useNavigate()
     let token = '';
-    const dispatch = useDispatch();
-
-    const { authUser } = useSelector((state: RootState) => state.user);
-
-    const handleGetMe = async () => {
-        if (token) {
-            await dispatch(globalThis.$action.me());
-        }
-    };
-
-    useLayoutEffect(() => {
-        handleGetMe();
-    }, [token]);
 
     useEffect(() => {
-        token = getCookie('_at')
+        handleCheckToken
     }, [])
 
-    if (authUser) {
-        if (authUser.role === 'teacher' && authUser.status === 'onboarding') {
-            navigate('/register/complete-registeration')
-        } else {
-            navigate('/');
+    const handleCheckToken = () => {
+        token = getCookie('_at')
+        if (token) {
+            return <Navigate to="/" replace />
         }
     }
 
     if (!allowedRoles.includes(role)) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/404" replace />;
     }
 
     return children;
