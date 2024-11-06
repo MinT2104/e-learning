@@ -16,7 +16,7 @@ import { Info, X } from 'lucide-react'
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-const CreateFormTeacherManagement = ({
+const CreateFormClassManagement = ({
     triggerElement,
     className,
     isOpen,
@@ -29,10 +29,13 @@ const CreateFormTeacherManagement = ({
 }) => {
 
     let initValue = {
-        title: '',
-        description: '',
-        courseId: '',
-    }
+        userName: '',
+        country: '',
+        phoneNumber: '',
+        email: '',
+        address: '',
+        role: 'teacher'
+    };
 
     const [classDetail, setClassDetail] = useState(initValue);
 
@@ -52,7 +55,8 @@ const CreateFormTeacherManagement = ({
     const dispatch = useDispatch();
 
     const handleGetData: any = async () => {
-        dispatch(globalThis.$action.loadCourses({ page: 1, limit: 10 }));
+        await dispatch(globalThis.$action.loadUsers({ page: 1, limit: 10, query: { role: 'teacher' } }));
+
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -83,7 +87,7 @@ const CreateFormTeacherManagement = ({
 
                 <DialogHeader className="w-full mx-auto">
                     <DialogTitle className="text-left text-[28px] font-medium">
-                        Thêm giảng viên
+                        Tạo giảng viên
                     </DialogTitle>
                     <DialogDescription className="text-lg text-left">
                         Tạo thông tin giảng viên
@@ -98,7 +102,7 @@ const CreateFormTeacherManagement = ({
                                     id="title"
                                     name="title"
                                     type="text"
-                                    defaultValue={classDetail.title}
+                                    // defaultValue={classDetail.title}
                                     autoComplete="title"
                                     onChange={handleChangeClassDetail}
                                     className={cn('authInput', error.title && 'redBorder')}
@@ -124,7 +128,7 @@ const CreateFormTeacherManagement = ({
                                     name="courseId"
                                     type="text"
                                     autoComplete="courseId"
-                                    defaultValue={classDetail.courseId}
+                                    // defaultValue={classDetail.courseId}
                                     onChange={handleChangeClassDetail}
                                     className={cn('authInput', error.courseId && 'redBorder')}
                                     placeholder="Nhập mã học phần"
@@ -145,7 +149,7 @@ const CreateFormTeacherManagement = ({
                             <span className="text-sm text-slate-600">Mô tả học phần *</span>
                             <div className="mt-2 relative truncate mb-6">
                                 <Textarea
-                                    defaultValue={classDetail.description}
+                                    // defaultValue={classDetail.description}
                                     rows={4}
                                     id="description"
                                     name="description"
@@ -168,4 +172,4 @@ const CreateFormTeacherManagement = ({
     )
 }
 
-export default CreateFormTeacherManagement
+export default CreateFormClassManagement

@@ -51,17 +51,17 @@ export type GroupType = {
 
 export type UserType =
     {
-        _id: string;
+        _id?: string;
         address: string;
         email: string;
         phoneNumber: string;
         userName: string;
-        courseIds: string[];
-        image: string;
+        courseIds?: string[];
+        image?: string;
         role: string;
-        createdAt: string;
-        updatedAt: string;
-        status: string
+        createdAt?: string;
+        updatedAt?: string;
+        status?: string
     };
 
 

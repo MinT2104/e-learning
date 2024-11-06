@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { FileDown, Import, MoreHorizontal, Plus, Search, Settings } from "lucide-react";
+import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomFormClassManagement from "@/components/application/admin/ClassManagement/CustomFormClassManagement";
