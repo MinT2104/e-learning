@@ -30,26 +30,28 @@ const CreateFormClassManagement = ({
 
     let initValue = {
         userName: '',
-        country: '',
+        password: '',
         phoneNumber: '',
         email: '',
         address: '',
-        role: 'teacher'
+        role: 'teacher',
+        status: 'completed'
     };
 
-    const [classDetail, setClassDetail] = useState(initValue);
+    const [teacherDetails, setteacherDetails] = useState(initValue);
 
-    const handleChangeClassDetail = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChangeteacherDetails = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const name = e.target.name;
         const value = e.target.value;
-        setClassDetail((prev) => ({ ...prev, [name]: value }));
+        setteacherDetails((prev) => ({ ...prev, [name]: value }));
     };
 
     const [error, setError] = useState({
-        title: false,
-        description: false,
-        courseId: false,
-        groupIds: false
+        userName: false,
+        password: false,
+        phoneNumber: false,
+        email: false,
+        address: false
     });
 
     const dispatch = useDispatch();
@@ -61,26 +63,26 @@ const CreateFormClassManagement = ({
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(classDetail)
-        const res = await dispatch(globalThis.$action.createCourse(classDetail))
+        console.log(teacherDetails)
+        const res = await dispatch(globalThis.$action.createUsers(teacherDetails))
         console.log(res)
         if (res.payload) {
             handleGetData()
             close()
-            setClassDetail(initValue)
+            setteacherDetails(initValue)
         }
     }
 
     useEffect(() => {
         if (isOpen) {
-            setClassDetail(initValue)
+            setteacherDetails(initValue)
         }
     }, [isOpen])
 
     return (
         <Dialog open={isOpen}>
             <DialogTrigger className={className}>{triggerElement}</DialogTrigger>
-            <DialogContent className="bg-white border-none max-w-lg text-black rounded-[20px] z-[9995]">
+            <DialogContent className="bg-white border-none max-w-2xl text-black rounded-[20px] z-[9995]">
                 <div className='flex justify-end w-full cursor-pointer'>
                     <X onClick={close} />
                 </div>
@@ -94,73 +96,144 @@ const CreateFormClassManagement = ({
                     </DialogDescription>
                 </DialogHeader>
                 <div className='w-full'>
-                    <form onSubmit={(handleSubmit)} className="w-full grid grid-cols-1 gap-2 gap-x-10 h-fit p-0 px-0" action="#" method="POST">
+                    <form onSubmit={(handleSubmit)} className="w-full grid grid-cols-2 gap-2 gap-x-10 h-fit p-0 px-0" action="#" method="POST">
                         <div className="w-full">
-                            <span className="text-sm text-slate-600">Tên học phần *</span>
+                            <span className="text-sm text-slate-600">Tên giảng viên *</span>
                             <div className="mt-2 relative truncate mb-6">
                                 <Input
-                                    id="title"
-                                    name="title"
+                                    id="userName"
+                                    name="userName"
                                     type="text"
-                                    // defaultValue={classDetail.title}
-                                    autoComplete="title"
-                                    onChange={handleChangeClassDetail}
-                                    className={cn('authInput', error.title && 'redBorder')}
-                                    placeholder="Nhập tên học phần"
+                                    defaultValue={teacherDetails.userName}
+                                    autoComplete="userName"
+                                    onChange={handleChangeteacherDetails}
+                                    className={cn('authInput', error.userName && 'redBorder')}
+                                    placeholder="Nhập tên giảng viên"
                                 />
                                 <CustomTooltip
-                                    isHidden={!error.title}
+                                    isHidden={!error.userName}
                                     triggerElement={
                                         <div className="w-8 h-8 bg-white flex items-center justify-center">
                                             <Info className="text-red-500" size={18} />
                                         </div>
                                     }
-                                    message="Tên học phần không được để trống"
+                                    message="Tên giảng viên không được để trống"
                                 />
                             </div>
                         </div>
-
                         <div className="w-full">
-                            <span className="text-sm text-slate-600">Mã học phần *</span>
+                            <span className="text-sm text-slate-600">Mật khẩu *</span>
                             <div className="mt-2 relative truncate mb-6">
                                 <Input
-                                    id="courseId"
-                                    name="courseId"
+                                    id="password"
+                                    name="password"
                                     type="text"
-                                    autoComplete="courseId"
-                                    // defaultValue={classDetail.courseId}
-                                    onChange={handleChangeClassDetail}
-                                    className={cn('authInput', error.courseId && 'redBorder')}
-                                    placeholder="Nhập mã học phần"
+                                    autoComplete="password"
+                                    defaultValue={teacherDetails.password}
+                                    onChange={handleChangeteacherDetails}
+                                    className={cn('authInput', error.password && 'redBorder')}
+                                    placeholder="Nhập mật khẩu"
                                 />
                                 <CustomTooltip
-                                    isHidden={!error.courseId}
+                                    isHidden={!error.password}
                                     triggerElement={
                                         <div className="w-8 h-8 bg-white flex items-center justify-center">
                                             <Info className="text-red-500" size={18} />
                                         </div>
                                     }
-                                    message="Mã học phần không được để trống"
+                                    message="Mật khẩu không được để trống"
+                                />
+                            </div>
+                        </div>
+                        <div className="w-full">
+                            <span className="text-sm text-slate-600">Địa chỉ *</span>
+                            <div className="mt-2 relative truncate mb-6">
+                                <Input
+                                    id="address"
+                                    name="address"
+                                    type="text"
+                                    autoComplete="address"
+                                    defaultValue={teacherDetails.address}
+                                    onChange={handleChangeteacherDetails}
+                                    className={cn('authInput', error.address && 'redBorder')}
+                                    placeholder="Nhập địa chỉ"
+                                />
+                                <CustomTooltip
+                                    isHidden={!error.address}
+                                    triggerElement={
+                                        <div className="w-8 h-8 bg-white flex items-center justify-center">
+                                            <Info className="text-red-500" size={18} />
+                                        </div>
+                                    }
+                                    message="Địa chỉ không được để trống"
+                                />
+                            </div>
+                        </div>
+                        <div className="w-full">
+                            <span className="text-sm text-slate-600">Email *</span>
+                            <div className="mt-2 relative truncate mb-6">
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    type="text"
+                                    autoComplete="email"
+                                    defaultValue={teacherDetails.email}
+                                    onChange={handleChangeteacherDetails}
+                                    className={cn('authInput', error.email && 'redBorder')}
+                                    placeholder="Nhập email"
+                                />
+                                <CustomTooltip
+                                    isHidden={!error.email}
+                                    triggerElement={
+                                        <div className="w-8 h-8 bg-white flex items-center justify-center">
+                                            <Info className="text-red-500" size={18} />
+                                        </div>
+                                    }
+                                    message="Địa chỉ không được để trống"
+                                />
+                            </div>
+                        </div>
+                        <div className="w-full">
+                            <span className="text-sm text-slate-600">Số điện thoại *</span>
+                            <div className="mt-2 relative truncate mb-6">
+                                <Input
+                                    id="phoneNumber"
+                                    name="phoneNumber"
+                                    type="text"
+                                    autoComplete="phoneNumber"
+                                    defaultValue={teacherDetails.phoneNumber}
+                                    onChange={handleChangeteacherDetails}
+                                    className={cn('authInput', error.phoneNumber && 'redBorder')}
+                                    placeholder="Nhập số điện tho"
+                                />
+                                <CustomTooltip
+                                    isHidden={!error.phoneNumber}
+                                    triggerElement={
+                                        <div className="w-8 h-8 bg-white flex items-center justify-center">
+                                            <Info className="text-red-500" size={18} />
+                                        </div>
+                                    }
+                                    message="Địa chỉ không được để trống"
                                 />
                             </div>
                         </div>
 
-                        <div className="w-full">
+                        {/* <div className="w-full">
                             <span className="text-sm text-slate-600">Mô tả học phần *</span>
                             <div className="mt-2 relative truncate mb-6">
                                 <Textarea
-                                    // defaultValue={classDetail.description}
+                                    defaultValue={teacherDetails.email}
                                     rows={4}
                                     id="description"
                                     name="description"
-                                    onFocus={() => setError((prev) => ({ ...prev, description: false }))}
+                                    onFocus={() => setError((prev) => ({ ...prev, email: false }))}
                                     autoComplete="description"
-                                    onChange={handleChangeClassDetail}
+                                    onChange={handleChangeteacherDetails}
                                     className={cn('authInput')}
                                     placeholder="Nhập vào mô tả học phần"
                                 />
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className='flex justify-end'>
                             <Button>Xác nhận</Button>

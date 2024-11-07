@@ -76,21 +76,21 @@ const CreateFormTeacherManagement = ({
     return (
         <Dialog open={isOpen}>
             <DialogTrigger className={className}>{triggerElement}</DialogTrigger>
-            <DialogContent className="bg-white border-none max-w-lg text-black rounded-[20px] z-[9995]">
+            <DialogContent className="bg-white border-none max-w-1g text-black rounded-[20px] z-[9995]">
                 <div className='flex justify-end w-full cursor-pointer'>
                     <X onClick={close} />
                 </div>
 
                 <DialogHeader className="w-full mx-auto">
                     <DialogTitle className="text-left text-[28px] font-medium">
-                        Thêm giảng viên
+                        Thêm học phần
                     </DialogTitle>
                     <DialogDescription className="text-lg text-left">
-                        Tạo thông tin giảng viên
+                        Tạo thông tin học phần
                     </DialogDescription>
                 </DialogHeader>
                 <div className='w-full'>
-                    <form onSubmit={(handleSubmit)} className="w-full grid grid-cols-1 gap-2 gap-x-10 h-fit p-0 px-0" action="#" method="POST">
+                    <form onSubmit={(handleSubmit)} className="w-full grid grid-cols-1 gap-2 gap-x-10  p-0 px-0" action="#" method="POST">
                         <div className="w-full">
                             <span className="text-sm text-slate-600">Tên học phần *</span>
                             <div className="mt-2 relative truncate mb-6">

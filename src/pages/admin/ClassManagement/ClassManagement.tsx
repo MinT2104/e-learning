@@ -162,7 +162,7 @@ const ClassManagement = () => {
 
 
             </div>
-            <CustomTable columns={columns} data={courses || []} loading={false} />
+            <CustomTable columns={columns} data={courses || []} loading={isLoading} />
             <CustomFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
             <CreateFormClassManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
 

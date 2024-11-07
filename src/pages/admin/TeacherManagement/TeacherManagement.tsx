@@ -25,7 +25,7 @@ const TeacherManagement = () => {
 
 
     const handleGetData = async () => {
-        await dispatch(globalThis.$action.loadUsers({ page: 1, limit: 10, query: { role: 'teacher' } }));
+        await dispatch(globalThis.$action.loadUsers({ page: 1, limit: 100, query: { role: 'teacher' } }));
     };
 
 
@@ -38,7 +38,7 @@ const TeacherManagement = () => {
             header: 'STT',
             accessorKey: 'stt',
             cell: ({ row }) => (
-                <div className="cursor-pointer flex justify-center items-center h-[40px]">
+                <div className="cursor-pointer flex justify-start items-center h-[40px]">
                     {row.index + 1}
                 </div>
             ),
@@ -46,10 +46,12 @@ const TeacherManagement = () => {
         {
             header: 'Họ tên',
             accessorKey: 'userName',
+
         },
         {
             header: 'Email',
             accessorKey: 'email',
+
         },
         {
             id: "actions",
@@ -83,7 +85,6 @@ const TeacherManagement = () => {
                     </div>
                 );
             },
-            size: 200,
         },
     ];
 
