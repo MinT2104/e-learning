@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { FileDown, Import, MoreHorizontal, Plus, Search, Settings } from "lucide-react";
+import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomFormClassManagement from "@/components/application/admin/ClassManagement/CustomFormClassManagement";
@@ -162,7 +162,7 @@ const ClassManagement = () => {
 
 
             </div>
-            <CustomTable columns={columns} data={courses || []} loading={false} />
+            <CustomTable columns={columns} data={courses || []} loading={isLoading} />
             <CustomFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
             <CreateFormClassManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
 

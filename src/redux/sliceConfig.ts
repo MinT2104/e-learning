@@ -165,6 +165,22 @@ export const sliceConfig: SliceConfig[] = [
                 },
             },
             {
+                type: 'createUsers',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.users = action.payload.records.rows;
+                    state.total = action.payload.total
+                },
+            },
+            {
+                type: 'updateUsers',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.users = action.payload.records.rows;
+                    state.total = action.payload.total
+                },
+            },
+            {
                 type: 'register',
                 endpoint: 'register',
                 customAction: (state, action) => {
