@@ -9,8 +9,6 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import CourseCard from './CourseCard';
-import { CourseType } from '@/redux/StoreType';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const CourseView = () => {
@@ -89,9 +87,9 @@ const CourseView = () => {
 
             <h1 className="text-[24px] font-bold mb-6">Khóa học miễn phí</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {courses.map((course: CourseType) => (
+                {/* {courses.map((course: CourseType) => (
                     <CourseCard {...course} key={course._id} />
-                ))}
+                ))} */}
             </div>
         </div>
     );

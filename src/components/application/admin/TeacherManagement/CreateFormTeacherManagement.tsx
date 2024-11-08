@@ -10,7 +10,6 @@ import {
     DialogTrigger
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { Info, X } from 'lucide-react'
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
@@ -46,7 +45,7 @@ const CreateFormClassManagement = ({
         setteacherDetails((prev) => ({ ...prev, [name]: value }));
     };
 
-    const [error, setError] = useState({
+    const [error] = useState({
         userName: false,
         password: false,
         phoneNumber: false,

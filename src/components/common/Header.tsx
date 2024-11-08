@@ -31,7 +31,15 @@ export const Header = () => {
         await dispatch(globalThis.$action.logOut())
         navigate("/login")
     }
-
+    const handleTranslateRole = (value: string) => {
+        if (value == 'student') {
+            return 'Học viên'
+        }
+        if (value == 'teacher') {
+            return 'Giáo viên'
+        }
+        return 'Quản trị viên'
+    }
     return (
         <header
             className="w-full h-20 bg-white px-4 flex items-center fixed top-0 left-0 z-50 p-2 pr-12 pl-[300px] shadow-[0_2px_10px_rgba(0,0,0,0.1)]">
@@ -84,8 +92,10 @@ export const Header = () => {
                                     <DropdownMenuContent align="end" className="border-border/20 w-60">
                                         <DropdownMenuLabel>
                                             <div className="py-2">
-                                                <span className="text-normal">{authUser.email}</span>
-                                                <p className="font-light text-[12px] text-slate-500/80">@{authUser.userName}</p>
+                                                <span className="text-normal">{authUser.userName}</span>
+                                                <p className="font-light text-[12px] text-slate-500/80">
+                                                    {handleTranslateRole(authUser.role)}
+                                                </p>
                                             </div>
                                         </DropdownMenuLabel>
                                         <DropdownMenuSeparator />

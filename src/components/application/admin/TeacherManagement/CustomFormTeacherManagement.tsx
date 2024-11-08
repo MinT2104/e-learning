@@ -1,4 +1,3 @@
-import CustomAlertDialog from '@/components/common/CustomAlertDialog'
 import CustomTooltip from '@/components/common/CustomTooltip'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,11 +11,10 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
-import { RootState } from '@/redux/store'
 import { UserType } from '@/redux/StoreType'
 import { Info, X } from 'lucide-react'
 import { ReactNode, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const CustomFormTeacherManagement = ({
     triggerElement,

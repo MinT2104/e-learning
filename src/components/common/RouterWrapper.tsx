@@ -19,13 +19,9 @@ const RouterWrapper = () => {
                     path={route.path}
                     element={
                         <AuthRoute role={authUser?.role} allowedRoles={route.allowedRoles}>
-                            route.isUsedLayout ? (
                             <AuthLayout>
                                 {<route.element />}
                             </AuthLayout>
-                            ) : (
-                            <route.element />
-                            )
                         </AuthRoute>
                     }
                 />

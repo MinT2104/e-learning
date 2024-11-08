@@ -1,53 +1,54 @@
+import CreateFormTeacherManagement from "@/components/application/admin/TeacherManagement/CreateFormTeacherManagement";
+import CustomFormTeacherManagement from "@/components/application/admin/TeacherManagement/CustomFormTeacherManagement";
+import CustomPagination from "@/components/common/CustomPagination";
 import CustomTable from "@/components/common/CustomTable";
 import Heading from "@/components/common/Heading";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
+import { UserType } from "@/redux/StoreType";
 import { ColumnDef } from "@tanstack/react-table";
 import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CustomFormClassManagement from "@/components/application/admin/ClassManagement/CustomFormClassManagement";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { CourseType } from "@/redux/StoreType";
-import CreateFormClassManagement from "@/components/application/admin/ClassManagement/CreateFormClassManagement";
-import CustomPagination from "@/components/common/CustomPagination";
 
-const ClassManagement = () => {
-
-    const [search, setSearch] = useState<string>('')
-    const [query, setQuery] = useState({
-        page: 1, limit: 5
-    })
-
+const StudentManagement = () => {
     const dispatch = useDispatch();
 
-    const { courses, isLoading, total } = useSelector((state: RootState) => state.course);
-
-    const handleGetData: any = async () => {
-        dispatch(globalThis.$action.loadCourses(query));
-    };
-
-    const [activeData, setActiveData] = useState<CourseType>()
-
+    const [search, setSearch] = useState<string>('');
+    const { isLoading, users, total } = useSelector((state: RootState) => state.user);
+    const [activeUser, setActiveUser] = useState<UserType>();
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenCreation, setIsOpenCreation] = useState(false)
 
-    const [activeId, setActiveId] = useState('')
 
-    const handleLoadGroup = async () => {
-        const query = {
-            page: 1,
-            limit: 100,
-            query: {
-                'courseData.courseId': activeData?.courseId
+    const [query, setQuery] = useState({
+        page: 1,
+        limit: 5,
+        query: { role: 'student' }
+    })
+
+
+    const handleGetData = async () => {
+        await dispatch(globalThis.$action.loadUsers(query));
+    };
+
+    const handleChangePage = (value: string) => {
+        setQuery((prev: any) => {
+            return {
+                ...prev,
+                page: prev.page + value
             }
-        }
-        await dispatch(globalThis.$action.loadGroups(query))
+        })
     }
 
-    const columns: ColumnDef<typeof courses[0]>[] = [
+    useEffect(() => {
+        handleGetData();
+    }, [query]);
+
+    const columns: ColumnDef<typeof users[0], string>[] = [
         {
             header: 'STT',
             accessorKey: 'stt',
@@ -58,22 +59,43 @@ const ClassManagement = () => {
             ),
         },
         {
-            header: "Mã học phần",
-            accessorKey: "courseId",
-        },
-        {
-            header: "Tên học phần",
-            accessorKey: "title",
-        },
+            header: 'Ảnh cá nhân',
+            accessorKey: 'image',
+            cell: ({ row }) => {
+                const image: string = row.getValue('image')
+                const userName: string = row.getValue('userName')
+                return (
 
+
+                    <div className="w-10 h-10 rounded-full bg-secondary text-xl flex items-center justify-center border relative cursor-pointer">
+                        {
+                            image ?
+                                <img src={image} className="w-10 h-10 rounded-full" alt="" />
+                                : <p className="font-semibold text-primary uppercase border-none">{userName?.slice(0, 1)}</p>
+                        }
+                    </div>
+                )
+            },
+
+        },
         {
-            header: "Mô tả",
-            accessorKey: "description",
+            header: 'MSSV',
+            accessorKey: 'ID',
+
+        },
+        {
+            header: 'Họ tên',
+            accessorKey: 'userName',
+
+        },
+        {
+            header: 'Email',
+            accessorKey: 'email',
+
         },
         {
             id: "actions",
             cell: ({ row }) => {
-                const id = row.original._id
                 return (
                     <div className="cursor-pointer flex justify-center items-center h-[40px]">
 
@@ -87,11 +109,11 @@ const ClassManagement = () => {
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                 <DropdownMenuItem
                                     onClick={() => {
-                                        setIsOpen(true)
-                                        setActiveData(row.original)
-                                        handleGetData()
-                                        setActiveId(id)
+                                        setIsOpen(true);
+                                        setActiveUser(row.original);
+                                        handleGetData();
                                     }}
+
                                 >
                                     <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
                                         <span>Chỉnh sửa</span>
@@ -102,48 +124,15 @@ const ClassManagement = () => {
                     </div>
                 );
             },
-            size: 200,
         },
     ];
 
     const handleClose = () => setIsOpen(false)
     const handleCloseCreation = () => setIsOpenCreation(false)
-
-    const handleReload = () => {
-        handleLoadGroup()
-    }
-
-    const handleGetCourseDetail: any = async (id: string) => {
-        await dispatch(globalThis.$action.getCourse(id));
-    };
-
-    const handleChangePage = (value: string) => {
-        setQuery((prev: any) => {
-            return {
-                ...prev,
-                page: prev.page + value
-            }
-        })
-    }
-
-    useEffect(() => {
-        if (activeId) {
-            handleGetCourseDetail(activeId)
-        }
-    }, [activeId])
-
-    useEffect(() => {
-        handleGetData();
-    }, [query, isOpen]);
-
-    useEffect(() => {
-        handleLoadGroup()
-    }, [activeData])
-
     return (
         <div>
-            <Heading title='Quản lý lớp học phần' />
-            <div className='flex h-[56px] w-full justify-between mt-10'>
+            <Heading title="Quản lý Giảng viên" />
+            <div className="flex h-[56px] w-full justify-between mt-10">
                 <div className="w-1/3 border border-border rounded-lg truncate flex h-[48px] items-center">
                     <Input
                         id="search"
@@ -156,8 +145,7 @@ const ClassManagement = () => {
                         className={cn('border-none rounded-none h-[48px]')}
                         placeholder="Tìm kiếm sinh viên"
                     />
-
-                    <div className='border-l border-slate-200 aspect-square h-[56px] flex items-center justify-center text-slate-500'>
+                    <div className="border-l border-slate-200 aspect-square h-[56px] flex items-center justify-center text-slate-500">
                         <Search size={20} />
                     </div>
                 </div>
@@ -166,7 +154,7 @@ const ClassManagement = () => {
                         <FileDown />
                         <span>Xuất danh sách</span>
                     </Button>
-                    <Button onClick={() => setIsOpenCreation(true)} className="h-[48px]">
+                    <Button className="h-[48px]" onClick={() => setIsOpenCreation(true)}>
                         <Plus />
                         <span>Tạo mới</span>
                     </Button>
@@ -175,16 +163,23 @@ const ClassManagement = () => {
                         <span>Nhập dữ liệu</span>
                     </Button>
                 </div>
-
-
             </div>
-            <CustomTable columns={columns} data={courses || []} loading={isLoading} />
+            <CustomTable columns={columns} data={users} loading={isLoading} />
+
+            <CustomFormTeacherManagement
+                triggerElement={null}
+                className="custom-form"
+                isOpen={isOpen}
+                close={handleClose}
+                activeData={activeUser}
+                reload={handleGetData}
+            />
+            <CreateFormTeacherManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
             <CustomPagination onChange={handleChangePage} total={total} currentPage={query.page} pageSize={query.limit} />
-            <CustomFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
-            <CreateFormClassManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
 
         </div>
-    )
+    );
 };
 
-export default ClassManagement;
+
+export default StudentManagement;

@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { UserType } from "@/redux/StoreType";
 import { ColumnDef } from "@tanstack/react-table";
-import { FileDown, Import, MoreHorizontal, Pen, Plus, Search } from "lucide-react";
+import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,6 +22,7 @@ const TeacherManagement = () => {
     const [activeUser, setActiveUser] = useState<UserType>();
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenCreation, setIsOpenCreation] = useState(false)
+
 
     const [query, setQuery] = useState({
         page: 1,
@@ -53,9 +54,29 @@ const TeacherManagement = () => {
             accessorKey: 'stt',
             cell: ({ row }) => (
                 <div className="cursor-pointer flex justify-start items-center h-[40px]">
-                    {row.index + 1}
+                    {(query.page - 1) * query.limit + row.index + 1}
                 </div>
             ),
+        },
+        {
+            header: 'Avatar',
+            accessorKey: 'image',
+            cell: ({ row }) => {
+                const image: string = row.getValue('image')
+                const userName: string = row.getValue('userName')
+                return (
+
+
+                    <div className="w-10 h-10 rounded-full bg-secondary text-xl flex items-center justify-center border relative cursor-pointer">
+                        {
+                            image ?
+                                <img src={image} className="w-10 h-10 rounded-full" alt="" />
+                                : <p className="font-semibold text-primary uppercase border-none">{userName?.slice(0, 1)}</p>
+                        }
+                    </div>
+                )
+            },
+
         },
         {
             header: 'Họ tên',
@@ -70,7 +91,6 @@ const TeacherManagement = () => {
         {
             id: "actions",
             cell: ({ row }) => {
-                const id = row.original._id
                 return (
                     <div className="cursor-pointer flex justify-center items-center h-[40px]">
 

@@ -43,39 +43,37 @@ function CustomTable<TData, TValue>({
   });
 
   const navigate = useNavigate()
-
   return (
+
     <div className={cn("rounded-md border overflow-hidden", className)}>
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id} className={cn(isBorderInner && 'border')}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {loading ? (
-            <TableRow>
-              <TableCell colSpan={24} className="h-[326px]">
-                <span className="w-full flex items-center justify-center">
-                  <Loader2 className="ml-2 h-6 w-6 animate-spin" />
-                </span>
-              </TableCell>
-            </TableRow>
-          ) : (
-            <>
+      {
+        loading ? (
+          <div className="flex justify-center items-center w-full h-[326px]">
+            <span className="flex items-center justify-center">
+              <Loader2 className="ml-2 h-6 w-6 animate-spin" />
+            </span>
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id} className={cn(isBorderInner && 'border')}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                      </TableHead>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
@@ -94,6 +92,7 @@ function CustomTable<TData, TValue>({
                     ))}
                   </TableRow>
                 ))
+
               ) : (
                 <TableRow>
                   <TableCell
@@ -107,10 +106,9 @@ function CustomTable<TData, TValue>({
                   </TableCell>
                 </TableRow>
               )}
-            </>
-          )}
-        </TableBody>
-      </Table>
+            </TableBody>
+          </Table>
+        )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { CourseType, GroupType } from '@/redux/StoreType';
+import { GroupType } from '@/redux/StoreType';
 import { useNavigate } from 'react-router-dom';
 import CourseImage from '@/assets/images/courseImage.png'
 
