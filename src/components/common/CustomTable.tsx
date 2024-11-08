@@ -68,7 +68,7 @@ function CustomTable<TData, TValue>({
         <TableBody>
           {loading ? (
             <TableRow>
-              <TableCell colSpan={24} className="h-24">
+              <TableCell colSpan={24} className="h-[326px]">
                 <span className="w-full flex items-center justify-center">
                   <Loader2 className="ml-2 h-6 w-6 animate-spin" />
                 </span>

@@ -2,10 +2,10 @@
 import BaseService from "../services/base.service";
 
 class AssignmentService extends BaseService {
-    constructor(state: any) {
-        super(state);
-        this.name = "assignment";
-        // this.model = {};
+    name: any
+    constructor(name: string) {
+        super(null);
+        this.name = name
     }
 }
 

@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const MyCourseView = () => {
-    const { authUser } = useSelector((state: RootState) => state.user)
+    const { authUser } = useSelector((state: RootState) => state.auth)
 
     const dispatch = useDispatch();
 
@@ -141,16 +141,12 @@ const MyCourseView = () => {
                             className={cn('border-none rounded-none')}
                             placeholder="Tìm kiếm lớp học phần"
                         />
-                        {/* 
-                        <div className='border-l border-slate-200 aspect-square h-[56px] flex items-center justify-center text-slate-500'>
-                            <Search />
-                        </div> */}
                     </div>
 
                 </div>
             </div>
             {
-                authUser.role === 'teacher' ? (
+                authUser && authUser.role === 'teacher' ? (
                     coursess.map((groupItem: GroupType[]) => {
                         return (
                             < div className='flex flex-col gap-4'>

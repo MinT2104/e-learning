@@ -1,5 +1,6 @@
 import CreateFormTeacherManagement from "@/components/application/admin/TeacherManagement/CreateFormTeacherManagement";
 import CustomFormTeacherManagement from "@/components/application/admin/TeacherManagement/CustomFormTeacherManagement";
+import CustomPagination from "@/components/common/CustomPagination";
 import CustomTable from "@/components/common/CustomTable";
 import Heading from "@/components/common/Heading";
 import { Button } from "@/components/ui/button";
@@ -17,21 +18,34 @@ const TeacherManagement = () => {
     const dispatch = useDispatch();
 
     const [search, setSearch] = useState<string>('');
-    const { isLoading, users } = useSelector((state: RootState) => state.user);
+    const { isLoading, users, total } = useSelector((state: RootState) => state.user);
     const [activeUser, setActiveUser] = useState<UserType>();
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenCreation, setIsOpenCreation] = useState(false)
 
+    const [query, setQuery] = useState({
+        page: 1,
+        limit: 5,
+        query: { role: 'teacher' }
+    })
 
 
     const handleGetData = async () => {
-        await dispatch(globalThis.$action.loadUsers({ page: 1, limit: 100, query: { role: 'teacher' } }));
+        await dispatch(globalThis.$action.loadUsers(query));
     };
 
+    const handleChangePage = (value: string) => {
+        setQuery((prev: any) => {
+            return {
+                ...prev,
+                page: prev.page + value
+            }
+        })
+    }
 
     useEffect(() => {
         handleGetData();
-    }, []);
+    }, [query]);
 
     const columns: ColumnDef<typeof users[0], string>[] = [
         {
@@ -136,6 +150,7 @@ const TeacherManagement = () => {
                 reload={handleGetData}
             />
             <CreateFormTeacherManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
+            <CustomPagination onChange={handleChangePage} total={total} currentPage={query.page} pageSize={query.limit} />
 
         </div>
     );

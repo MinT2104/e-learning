@@ -11,7 +11,7 @@ type HeadingProps = {
 
 const Heading = ({ title, className, rightIcon }: HeadingProps) => {
     // Retrieve authUser from Redux store
-    const { authUser } = useSelector((state: RootState) => state.user);
+    const { authUser } = useSelector((state: RootState) => state.auth);
 
     const [currentPath, setCurrentPath] = useState<string | undefined>("");
 

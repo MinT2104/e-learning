@@ -17,9 +17,6 @@ const CourseStudy = ({ group }: CourseStudyType) => {
 
     const navigate = useNavigate();
 
-    // const { authUser } = useSelector((state: RootState) => state.user);
-
-
     const param = useParams();
     // const dispatch = useDispatch();
     const [search, setSearch] = useState<string>('')

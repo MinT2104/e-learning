@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 
 const CourseContent = () => {
 
-    const { authUser } = useSelector((state: RootState) => state.user);
+    const { authUser } = useSelector((state: RootState) => state.auth);
     const { group, isLoading } = useSelector((state: RootState) => state.group);
 
     const { id } = useParams()

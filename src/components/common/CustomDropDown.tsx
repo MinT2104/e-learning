@@ -29,7 +29,6 @@ const CustomDropDown = ({ customIcon, dropDownList, onChange, placeholder, width
 
     const [item, setItem] = useState<DropDownItem | null>(null);
     const [open, setIsOpen] = useState(false);
-    console.log(open)
     const [searchValue, setSearchValue] = useState<string>('');
     const [dropdownFilterList, setDropdownFilterList] = useState<DropDownItem[]>(dropDownList || []);
     const handleChangeItem = (data: DropDownItem) => {
@@ -63,8 +62,6 @@ const CustomDropDown = ({ customIcon, dropDownList, onChange, placeholder, width
             setDropdownFilterList(dropDownList || []);
         }
     };
-
-
     return (
         <Popover onOpenChange={handlePopoverChange}>
             <PopoverTrigger className="py-0" asChild>

@@ -3,29 +3,29 @@ import TeacherManagement from "@/pages/admin/TeacherManagement/TeacherManagement
 import CourseDetailView from "@/pages/Course/CourseDetailView";
 import CourseVideo from "@/pages/Course/CourseVideo";
 import CourseView from "@/pages/Course/CourseView";
+import HomeView from "@/pages/Home/HomeView";
 import InstructorForm from "@/pages/Instructors/InstructorForm";
 import InstructorsView from "@/pages/Instructors/InstructorsView";
 import LoginView from "@/pages/Login/LoginView";
 import MyCourseView from "@/pages/MyCourse/MyCourseView";
 import ProfileView from "@/pages/Profile/ProfileView";
 import SignUpView from "@/pages/Signup/SignUpView";
-import TaskDetailView from "@/pages/Tasks/TaskDetailView";
-import TasksView from "@/pages/Tasks/TasksView";
 import { FC } from "react";
 
 
 export const routes: MappedAuthRouteType[] = [
-    // {
-    //     path: "/",
-    //     element: HomeView,
-    //     allowedRoles: ["guest", "student", "teacher", "admin"],
-    // },
     {
         path: "/",
-        element: CourseView,
+        element: HomeView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
-        isUsedLayout: true
+        isUsedLayout: false
     },
+    // {
+    //     path: "/",
+    //     element: CourseView,
+    //     allowedRoles: ["guest", "student", "teacher", "admin"],
+    //     isUsedLayout: true
+    // },
     {
         path: "/courses",
         element: MyCourseView,

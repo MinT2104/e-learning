@@ -13,56 +13,29 @@ function SideBar() {
     const [isOpen, setIsOpen] = useState(true);
     const navigate = useNavigate(); // Initialize useNavigate
 
-    const { authUser } = useSelector((state: RootState) => state.user)
+    const { authUser } = useSelector((state: RootState) => state.auth)
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
 
     const mockDataSidebar = [
-
-        // {
-        //     id: 1,
-        //     label: "Trang chủ",
-        //     icon: faBook,
-        //     path: "/", // Add path for navigation
-        //     allowRoles: ['admin', 'student', 'teacher']
-        // },
         {
-            id: 2,
+            id: 1,
             label: "Lớp học phần",
             icon: faLayerGroup,
             path: "/courses", // Add path for navigation
             allowRoles: ['admin', 'teacher', 'student']
         },
-        // {
-        //     id: 3,
-        //     label: "Bài tập của bạn",
-        //     icon: faTasks,
-        //     path: "/tasks", // Add path for navigation
-        //     allowRoles: ['admin']
-        // },
-        // {
-        //     id: 4,
-        //     label: "Khóa học của tôi",
-        //     icon: faTasks,
-        //     path: "/my-course", // Add path for navigation
-        // },
-        // {
-        //     id: 5, // Changed from 5 to 4 for sequential ID
-        //     label: "Người hướng dẫn",
-        //     icon: faUserTie,
-        //     path: "/instructors", // Add path for navigation
-        // },
         {
-            id: 5, // Changed from 5 to 4 for sequential ID
+            id: 2, // Changed from 5 to 4 for sequential ID
             label: "Quản lý lớp học phần",
             icon: faClipboardList,
             path: "/class-management", // Add path for navigation
             allowRoles: ['admin']
         },
         {
-            id: 5, // Changed from 5 to 4 for sequential ID
+            id: 3, // Changed from 5 to 4 for sequential ID
             label: "Quản lý Giảng viên",
             icon: faUserTie,
             path: "/teacher-management", // Add path for navigation
