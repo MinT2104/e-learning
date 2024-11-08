@@ -12,12 +12,12 @@ type authType = {
     userName: string,
     phoneNumber: string,
     email: string,
-    image: string,
+    image?: string,
 }
 
 const ProfileView = () => {
 
-    const { authUser } = useSelector((state: RootState) => state.user)
+    const { authUser } = useSelector((state: RootState) => state.auth)
     const [auth, setAuth] = useState<authType>()
     const dispatch = useDispatch()
 

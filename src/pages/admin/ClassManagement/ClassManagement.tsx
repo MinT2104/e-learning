@@ -12,17 +12,21 @@ import CustomFormClassManagement from "@/components/application/admin/ClassManag
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CourseType } from "@/redux/StoreType";
 import CreateFormClassManagement from "@/components/application/admin/ClassManagement/CreateFormClassManagement";
+import CustomPagination from "@/components/common/CustomPagination";
 
 const ClassManagement = () => {
 
     const [search, setSearch] = useState<string>('')
+    const [query, setQuery] = useState({
+        page: 1, limit: 5
+    })
 
     const dispatch = useDispatch();
 
-    const { courses, isLoading } = useSelector((state: RootState) => state.course);
+    const { courses, isLoading, total } = useSelector((state: RootState) => state.course);
 
     const handleGetData: any = async () => {
-        dispatch(globalThis.$action.loadCourses({ page: 1, limit: 10 }));
+        dispatch(globalThis.$action.loadCourses(query));
     };
 
     const [activeData, setActiveData] = useState<CourseType>()
@@ -110,6 +114,15 @@ const ClassManagement = () => {
         await dispatch(globalThis.$action.getCourse(id));
     };
 
+    const handleChangePage = (value: string) => {
+        setQuery((prev: any) => {
+            return {
+                ...prev,
+                page: prev.page + value
+            }
+        })
+    }
+
     useEffect(() => {
         if (activeId) {
             handleGetCourseDetail(activeId)
@@ -118,7 +131,7 @@ const ClassManagement = () => {
 
     useEffect(() => {
         handleGetData();
-    }, []);
+    }, [query]);
 
     useEffect(() => {
         handleLoadGroup()
@@ -163,6 +176,7 @@ const ClassManagement = () => {
 
             </div>
             <CustomTable columns={columns} data={courses || []} loading={isLoading} />
+            <CustomPagination onChange={handleChangePage} total={total} currentPage={query.page} pageSize={query.limit} />
             <CustomFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
             <CreateFormClassManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
 

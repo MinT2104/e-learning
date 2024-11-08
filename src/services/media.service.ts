@@ -2,7 +2,10 @@ import { ApiClient } from "@/customFetch/ApiClient"
 
 class MediaService {
 
-    name: string = 'media'
+    name: any
+    constructor(name: string) {
+        this.name = name
+    }
 
     async uploadImage(form: any) {
         const url = `/${this.name}/upload`
@@ -15,7 +18,7 @@ class MediaService {
         })
 
     }
-    
+
 }
 
 export default MediaService;

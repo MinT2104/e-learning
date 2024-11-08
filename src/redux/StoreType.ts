@@ -1,14 +1,18 @@
 export interface StoreType {
+    auth: {
+        authUser: UserType
+        isLoading: boolean;
+        isLoggedIn: boolean
+    };
     user: {
         users: UserType[]
         user: UserType
-        authUser: UserType
-        role: string,
+        total: number,
+        error: string | null;
         isLoading: boolean
     };
     course: {
         courses: CourseType[];
-        userCourses: CourseType[];
         course: CourseType;
         isLoading: boolean;
         error: string | null;

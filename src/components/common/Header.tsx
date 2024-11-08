@@ -23,11 +23,9 @@ export const Header = () => {
 
     const navigate = useNavigate()
 
-    const { authUser } = useSelector((state: RootState) => state.user)
+    const { authUser } = useSelector((state: RootState) => state.auth)
 
     const dispatch = useDispatch();
-
-    const { isLoading } = useSelector((state: RootState) => state.course);
 
     const handleLogout = async () => {
         await dispatch(globalThis.$action.logOut())
