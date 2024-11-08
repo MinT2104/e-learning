@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { RootState } from '@/redux/store'
-import { CourseType, GroupType, UserType } from '@/redux/StoreType'
+import { CourseType, UserType } from '@/redux/StoreType'
 import { Inbox, Info, Loader, Plus, X } from 'lucide-react'
 import { ReactNode, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -102,7 +102,7 @@ const CustomFormClassManagement = ({
 
 
     const handleCreateGroup = async () => {
-        const res = await dispatch(globalThis.$action.createGroup(groupData))
+        await dispatch(globalThis.$action.createGroup(groupData))
         handleOpenConfirm(false)
         reload()
     }

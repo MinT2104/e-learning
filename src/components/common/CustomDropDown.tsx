@@ -28,7 +28,7 @@ type CustomDropDownProps = {
 const CustomDropDown = ({ customIcon, dropDownList, onChange, placeholder, width, className, isNotUseAuthInputClass = false, isHiddenSearch = false }: CustomDropDownProps) => {
 
     const [item, setItem] = useState<DropDownItem | null>(null);
-    const [open, setIsOpen] = useState(false);
+    const [_, setIsOpen] = useState(false);
     const [searchValue, setSearchValue] = useState<string>('');
     const [dropdownFilterList, setDropdownFilterList] = useState<DropDownItem[]>(dropDownList || []);
     const handleChangeItem = (data: DropDownItem) => {

@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { CourseType, GroupType } from '@/redux/StoreType';
 import CourseCard from '../Course/CourseCard';
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -10,6 +9,7 @@ import { Plus } from 'lucide-react';
 import Heading from '@/components/common/Heading';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { GroupType } from '@/redux/StoreType';
 
 const MyCourseView = () => {
     const { authUser } = useSelector((state: RootState) => state.auth)
@@ -19,7 +19,7 @@ const MyCourseView = () => {
     const [search, setSearch] = useState<string>('')
 
     const [coursess, setCoursess] = useState<GroupType[][]>([])
-    const [loadingState, setLoadingState] = useState<boolean>(false);
+    const [loadingState] = useState<boolean>(false);
 
 
     const handleLoadGroup = async () => {

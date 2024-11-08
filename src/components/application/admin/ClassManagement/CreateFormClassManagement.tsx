@@ -52,7 +52,7 @@ const CreateFormTeacherManagement = ({
     const dispatch = useDispatch();
 
     const handleGetData: any = async () => {
-        dispatch(globalThis.$action.loadCourses({ page: 1, limit: 10 }));
+        dispatch(globalThis.$action.loadCourses({ page: 1, limit: 5 }));
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
