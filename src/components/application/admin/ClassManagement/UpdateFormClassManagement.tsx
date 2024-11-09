@@ -14,12 +14,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { RootState } from '@/redux/store'
-import { CourseType, UserType } from '@/redux/StoreType'
-import { Inbox, Info, Loader, Plus, X } from 'lucide-react'
+import { CourseType, GroupType, UserType } from '@/redux/StoreType'
+import { Inbox, Info, Loader, Pen, Plus, Trash, X } from 'lucide-react'
 import { ReactNode, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import UpdateFormGroup from './UpdateFormGroup'
 
-const CustomFormClassManagement = ({
+const UpdateFormClassManagement = ({
     triggerElement,
     className,
     isOpen,
@@ -83,8 +84,8 @@ const CustomFormClassManagement = ({
 
     const [isOpenConfirm, setIsOpenConfirm] = useState(false)
     const dispatch = useDispatch();
-    const [searchValue] = useState('')
-    const { users } = useSelector((state: RootState) => state.user)
+    const [isOpenEditGroup, setIsOpenEditGroup] = useState(false)
+    const [activeGroup, setActiveGroup] = useState<GroupType>()
 
 
     const handleSubmit = () => {
@@ -106,22 +107,6 @@ const CustomFormClassManagement = ({
         handleOpenConfirm(false)
         reload()
     }
-
-
-    const handleLoadUsers = async () => {
-        const query = {
-            page: 1,
-            limit: 1000,
-            query: {
-                role: 'teacher'
-            }
-        }
-        await dispatch(globalThis.$action.loadUsers(query))
-    }
-
-    useEffect(() => {
-        handleLoadUsers()
-    }, [])
 
     useEffect(() => {
         setGroupData((prev) => {
@@ -147,32 +132,44 @@ const CustomFormClassManagement = ({
         }
     }, [course])
 
-    const handleSearch = () => {
 
-    }
 
-    const handleChangeItem = async (item: UserType, groupId: string) => {
-        const userData = {
-            email: item.email,
-            userName: item.userName,
-            image: item.image
-        }
-        console.log(groupId, userData)
-
-        await dispatch(globalThis.$action.updateGroup({ _id: groupId, teacherData: userData }))
+    const handleDeleteGroup = async (_id: string) => {
+        await dispatch(globalThis.$action.deleteGroup({ _id }))
         reload()
     }
+
+    const handleOpenEditGroup = (item: GroupType) => {
+        setActiveGroup(item)
+        setIsOpenEditGroup(true)
+    }
+    const handleCloseGroupForm = () => {
+        setIsOpenEditGroup(false)
+    }
+
+    console.log(activeGroup)
+
 
     return (
         <Dialog open={isOpen}>
             <DialogTrigger className={className}>{triggerElement}</DialogTrigger>
             <DialogContent className="bg-white border-none max-w-3xl text-black rounded-[20px] z-[9995]">
+                {
+                    isOpenEditGroup ?
+                        <UpdateFormGroup
+                            activeData={activeGroup}
+                            close={handleCloseGroupForm}
+                            isOpen={isOpenEditGroup}
+                            reload={reload}
+                            triggerElement={<></>} />
+                        :
+                        null
+                }
                 <div className='flex justify-end w-full cursor-pointer'>
                     <X onClick={close} />
                 </div>
-
                 <DialogHeader className="w-full mx-auto">
-                    <DialogTitle className="text-left text-[28px] font-medium">
+                    <DialogTitle className="text-left text-[24px] font-medium">
                         Chỉnh sửa học phần
                     </DialogTitle>
                     <DialogDescription className="text-lg text-left">
@@ -228,52 +225,22 @@ const CustomFormClassManagement = ({
                                         )
                                             :
                                             (
-                                                <div className='w-full h-[325px] max-h-full overflow-auto rounded-sm border border-border flex justify-start items-center flex-col gap-2 mt-2'>
+                                                <div className='w-full h-[325px] max-h-full overflow-auto rounded-sm border border-border flex justify-start items-center flex-col gap-2 mt-2 bg-slate-200'>
                                                     <ul className='w-full h-fit p-2 flex flex-col gap-2'>
                                                         {(groups && groups.length > 0 && groups.map((item, index) => {
                                                             return (
-                                                                <li key={index} className='h-[56px] p-2 px-4 flex bg-secondary text-black items-center justify-between relative'>
-                                                                    <span className='text-sm'>{item.title}</span>
-                                                                    {!item.teacherData ?
-                                                                        <Popover>
-                                                                            <PopoverTrigger className="py-0" asChild>
-                                                                                <Button type='button' className='h-[32px]'>Giảng viên</Button>
-                                                                            </PopoverTrigger>
-                                                                            <PopoverContent align="end" className={cn('max-w-80 p-0 z-[9999]')}>
-                                                                                <div className={cn("p-2")}>
-                                                                                    <Input
-                                                                                        className="w-full h-[48px]"
-                                                                                        onChange={handleSearch}
-                                                                                        value={searchValue}
-                                                                                    />
-                                                                                </div>
-                                                                                <div className="min-h-[48px] max-h-[242px] h-fit p-0 overflow-y-auto z-[9999]">
-                                                                                    <ul>
-                                                                                        {users && users.length > 0 && users.map((dropdownItem) => (
-                                                                                            <li
-                                                                                                onClick={() => handleChangeItem(dropdownItem, item._id)}
-                                                                                                key={dropdownItem._id}
-                                                                                                className="h-fit flex flex-col text-[#21272A] hover:bg-secondary p-4 items-start text-sm cursor-pointer"
-                                                                                            >
-                                                                                                <span>{dropdownItem.userName}</span>
-                                                                                                <span>{dropdownItem.email}</span>
-                                                                                            </li>
-                                                                                        ))}
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </PopoverContent>
-                                                                        </Popover>
-                                                                        :
-                                                                        (
-                                                                            <CustomTooltip className='right-4' isHidden={false} message={<div className='flex flex-col items-start'>
-                                                                                <span>{item.teacherData.userName}</span>
-                                                                                <span>{item.teacherData.email}</span>
-                                                                            </div>} triggerElement={
-                                                                                <div className='w-[40px] h-[40px] rounded-full border border-primary cursor-pointer' />
-                                                                            } />
-                                                                        )
+                                                                <li key={index} className='h-[56px] p-2 px-4 flex bg-white rounded-sm text-black items-center justify-start gap-2 relative'>
 
-                                                                    }
+                                                                    <span className='text-sm flex-1'>{item.title}</span>
+                                                                    <Button
+                                                                        type='button'
+                                                                        onClick={() => handleOpenEditGroup(item)}
+                                                                        className='h-[32px]'>sửa</Button>
+                                                                    <Button
+                                                                        type='button'
+                                                                        onClick={() => handleDeleteGroup(item._id)}
+                                                                        className='h-[32px]' variant={'destructive'}>xóa</Button>
+
                                                                 </li>
                                                             )
                                                         }))
@@ -344,4 +311,4 @@ const CustomFormClassManagement = ({
     )
 }
 
-export default CustomFormClassManagement
+export default UpdateFormClassManagement

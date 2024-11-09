@@ -9,14 +9,13 @@ import {
     DialogTrigger
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { UserType } from '@/redux/StoreType'
 import { Info, X } from 'lucide-react'
 import { ReactNode, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-const CustomFormTeacherManagement = ({
+const UpdateFormStudentManagement = ({
     triggerElement,
     className,
     isOpen,
@@ -45,9 +44,7 @@ const CustomFormTeacherManagement = ({
     const [teacherDetails, setTeacherDetails] = useState<Partial<UserType>>(initValue);
     const [error, setError] = useState({
         userName: false,
-        phoneNumber: false,
         email: false,
-        address: false,
     });
 
     const handleTeacherChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -57,15 +54,14 @@ const CustomFormTeacherManagement = ({
 
     const handleUpdateTeacher = async () => {
         const updatedTeacherData = {
+            _id: activeData?._id,
             userName: teacherDetails.userName,
             email: teacherDetails.email,
             phoneNumber: teacherDetails.phoneNumber,
             address: teacherDetails.address,
         };
 
-        console.log(updatedTeacherData);
-
-        await dispatch(globalThis.$action.updateTeacher({ teacherData: updatedTeacherData }));
+        await dispatch(globalThis.$action.updateUser({ ...updatedTeacherData }));
         reload();
     };
 
@@ -90,11 +86,11 @@ const CustomFormTeacherManagement = ({
                     <X onClick={close} />
                 </div>
                 <DialogHeader className="w-full mx-auto">
-                    <DialogTitle className="text-left text-[28px] font-medium">
+                    <DialogTitle className="text-left text-[24px] font-medium">
                         Chỉnh sửa thông tin giáo viên
                     </DialogTitle>
                     <DialogDescription className="text-lg text-left">
-                        Cập nhật thông tin giáo viên
+                        Vui lòng điền đầy đủ những trường bắt buộc
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="w-full rid grid-cols-1 gap-2 gap-x-10 p-4">
@@ -118,19 +114,14 @@ const CustomFormTeacherManagement = ({
                     </div>
 
                     <div className="w-full">
-                        <span className="text-sm text-slate-600">Số điện thoại *</span>
+                        <span className="text-sm text-slate-600">Số điện thoại</span>
                         <div className="mt-2 relative truncate mb-6">
                             <Input
                                 name="phoneNumber"
                                 value={teacherDetails.phoneNumber || ''}
                                 onChange={handleTeacherChange}
                                 placeholder="Nhập số điện thoại"
-                                className={cn(error.phoneNumber && 'redBorder')}
-                            />
-                            <CustomTooltip
-                                isHidden={!error.phoneNumber}
-                                triggerElement={<Info className="text-red-500" size={18} />}
-                                message="Số điện thoại không được để trống"
+                                className={cn('')}
                             />
                         </div>
                     </div>
@@ -143,6 +134,7 @@ const CustomFormTeacherManagement = ({
                                 value={teacherDetails.email || ''}
                                 onChange={handleTeacherChange}
                                 placeholder="Nhập email"
+                                onFocus={() => setError((prev) => ({ ...prev, email: false }))}
                                 className={cn(error.email && 'redBorder')}
                             />
                             <CustomTooltip
@@ -154,19 +146,14 @@ const CustomFormTeacherManagement = ({
                     </div>
 
                     <div className="w-full">
-                        <span className="text-sm text-slate-600">Địa chỉ *</span>
+                        <span className="text-sm text-slate-600">Địa chỉ</span>
                         <div className="mt-2 relative truncate mb-6">
-                            <Textarea
+                            <Input
                                 name="address"
                                 value={teacherDetails.address || ''}
                                 onChange={handleTeacherChange}
                                 placeholder="Nhập địa chỉ"
-                                className={cn(error.address && 'redBorder')}
-                            />
-                            <CustomTooltip
-                                isHidden={!error.address}
-                                triggerElement={<Info className="text-red-500" size={18} />}
-                                message="Địa chỉ không được để trống"
+                                className={cn('')}
                             />
                         </div>
                     </div>
@@ -180,5 +167,5 @@ const CustomFormTeacherManagement = ({
     );
 };
 
-export default CustomFormTeacherManagement;
+export default UpdateFormStudentManagement;
 

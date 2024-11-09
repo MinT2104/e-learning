@@ -1,161 +1,150 @@
 import CustomTable from "@/components/common/CustomTable";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
+import { GroupType, UserType } from "@/redux/StoreType";
+import UserService from "@/services/user.service";
 import { ColumnDef } from "@tanstack/react-table";
-import { FileDown, Pen, Plus, Search, Settings } from "lucide-react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { FileDown, MoreHorizontal, Plus, Search, Settings } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import AddStudentToGroupForm from "./AddStudentToGroupForm";
 
-const CourseMember = () => {
+type CourseMemberType = {
+    group: GroupType
+}
 
+const CourseMember = ({ group }: CourseMemberType) => {
+    const userService = new UserService('user')
+    const { id } = useParams();
+
+    const [isLoading, setIsLoading] = useState(false)
+    const [isAddStudentFormOpen, setIsAddStudentFormOpen] = useState(false)
+    const [studentData, setStudentData] = useState<
+        {
+            students: UserType[],
+            total: number
+        }
+    >({
+        students: [],
+        total: 0
+    })
     const [search, setSearch] = useState<string>('')
 
-    const { isLoading } = useSelector((state: RootState) => state.course);
+    const [query, setQuery] = useState({
+        page: 1,
+        limit: 5,
+        query: {
+            role: 'student', courseIds: {
+                $in: [id]
+            }
+        }
+    })
 
-    const columns: ColumnDef<typeof mockDataTable[0]>[] = [
+
+    const handleGetData = async () => {
+        setIsLoading(true)
+        try {
+            const res: any = await userService.loadAllWithPaging((query));
+            if (res.records) {
+                setStudentData({
+                    students: res.records.rows,
+                    total: res.records.total
+                })
+            }
+            setIsLoading(false)
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false)
+        }
+    };
+
+    useEffect(() => {
+        handleGetData();
+    }, [query]);
+
+    const handleOpenAddStudentForm = () => setIsAddStudentFormOpen(true)
+
+    const handleCloseAddStudentForm = () => setIsAddStudentFormOpen(false)
+
+    const columns: ColumnDef<UserType, string>[] = [
         {
             header: 'STT',
-            accessorKey: "stt",
+            accessorKey: 'stt',
+            cell: ({ row }) => (
+                <div className="cursor-pointer flex justify-start items-center h-[40px]">
+                    {(query.page - 1) * query.limit + row.index + 1}
+                </div>
+            ),
         },
         {
-            header: "Họ tên",
-            accessorKey: "name",
+            header: 'Ảnh cá nhân',
+            accessorKey: 'image',
+            cell: ({ row }) => {
+                const image: string = row.getValue('image')
+                const userName: string = row.getValue('userName')
+                return (
+
+
+                    <div className="w-10 h-10 rounded-full bg-secondary text-xl flex items-center justify-center border relative cursor-pointer">
+                        {
+                            image ?
+                                <img src={image} className="w-10 h-10 rounded-full" alt="" />
+                                : <p className="font-semibold text-primary uppercase border-none">{userName?.slice(0, 1)}</p>
+                        }
+                    </div>
+                )
+            },
+
         },
         {
-            header: "Mã số sinh viên",
-            accessorKey: "studentID",
+            header: 'Họ tên',
+            accessorKey: 'userName',
+
         },
         {
-            header: "Giới tính",
-            accessorKey: "gender",
+            header: 'ID',
+            accessorKey: 'ID',
+
         },
         {
-            header: "Ngày sinh",
-            accessorKey: "birth",
+            header: 'Email',
+            accessorKey: 'email',
+
+        },
+        {
+            header: 'Số điện thoại',
+            accessorKey: 'phoneNumber',
+
         },
         {
             id: "actions",
-            cell: () => {
+            cell: ({ row }) => {
                 return (
                     <div className="cursor-pointer flex justify-center items-center h-[40px]">
-                        <Pen size={16} />
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="w-8 h-8 p-0">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuItem>
+                                    <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
+                                        <span>Chỉnh sửa</span>
+                                    </div>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 );
             },
-            size: 200,
         },
     ];
-
-    const mockDataTable = [
-        {
-            stt: 1,
-            name: "Nguyễn Văn A",
-            studentID: "SV001",
-            gender: "Nam",
-            birth: "2000-01-01",
-        },
-        {
-            stt: 2,
-            name: "Trần Thị B",
-            studentID: "SV002",
-            gender: "Nữ",
-            birth: "2000-02-01",
-        },
-        {
-            stt: 3,
-            name: "Lê Văn C",
-            studentID: "SV003",
-            gender: "Nam",
-            birth: "2000-03-01",
-        },
-        {
-            stt: 4,
-            name: "Phạm Thị D",
-            studentID: "SV004",
-            gender: "Nữ",
-            birth: "2000-04-01",
-        },
-        {
-            stt: 5,
-            name: "Hoàng Văn E",
-            studentID: "SV005",
-            gender: "Nam",
-            birth: "2000-05-01",
-        },
-        {
-            stt: 6,
-            name: "Vũ Thị F",
-            studentID: "SV006",
-            gender: "Nữ",
-            birth: "2000-06-01",
-        },
-        {
-            stt: 7,
-            name: "Ngô Văn G",
-            studentID: "SV007",
-            gender: "Nam",
-            birth: "2000-07-01",
-        },
-        {
-            stt: 8,
-            name: "Đặng Thị H",
-            studentID: "SV008",
-            gender: "Nữ",
-            birth: "2000-08-01",
-        },
-        {
-            stt: 9,
-            name: "Bùi Văn I",
-            studentID: "SV009",
-            gender: "Nam",
-            birth: "2000-09-01",
-        },
-        {
-            stt: 10,
-            name: "Phan Thị K",
-            studentID: "SV010",
-            gender: "Nữ",
-            birth: "2000-10-01",
-        },
-        {
-            stt: 11,
-            name: "Đinh Văn L",
-            studentID: "SV011",
-            gender: "Nam",
-            birth: "2000-11-01",
-        },
-        {
-            stt: 12,
-            name: "Lý Thị M",
-            studentID: "SV012",
-            gender: "Nữ",
-            birth: "2000-12-01",
-        },
-        {
-            stt: 13,
-            name: "Hà Văn N",
-            studentID: "SV013",
-            gender: "Nam",
-            birth: "2001-01-01",
-        },
-        {
-            stt: 14,
-            name: "Vương Thị O",
-            studentID: "SV014",
-            gender: "Nữ",
-            birth: "2001-02-01",
-        },
-        {
-            stt: 15,
-            name: "Tô Văn P",
-            studentID: "SV015",
-            gender: "Nam",
-            birth: "2001-03-01",
-        },
-    ];
-
 
 
     return (
@@ -185,7 +174,9 @@ const CourseMember = () => {
                             <FileDown />
                             <span>Xuất danh sách sinh viên</span>
                         </Button>
-                        <Button className="h-[48px]">
+                        <Button
+                            onClick={handleOpenAddStudentForm}
+                            className="h-[48px]">
                             <Plus />
                             <span>Thêm sinh viên</span>
                         </Button>
@@ -196,7 +187,17 @@ const CourseMember = () => {
 
 
                 </div>
-                <CustomTable columns={columns} data={mockDataTable} loading={false} />
+                <CustomTable columns={columns} data={studentData.students} loading={false} />
+                {
+                    isAddStudentFormOpen ?
+                        <AddStudentToGroupForm
+                            close={handleCloseAddStudentForm}
+                            isOpen={isAddStudentFormOpen}
+                            triggerElement={<></>}
+                        />
+                        :
+                        null
+                }
             </div>
         </div >
     )

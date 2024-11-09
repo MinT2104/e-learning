@@ -33,7 +33,7 @@ const CourseContent = () => {
             {isLoading ?
                 <div className='h-10 w-2/3 bg-slate-200' />
                 :
-                <Heading title={`${group.courseData.courseId} - ${group.courseData.title} - ${group.title}`} />
+                <Heading title={`${group.courseData?.courseId} - ${group.courseData?.title} - ${group.title}`} />
             }
             <div className='flex gap-4'>
                 <Button onClick={() => setActiveKey('course')} variant={activeKey === 'course' ? 'default' : 'outline'} className={cn('w-40 h-[48px]',)}>Bài giảng</Button>
@@ -56,7 +56,7 @@ const CourseContent = () => {
             <div className={cn('w-full',
                 activeKey !== 'member' && 'hidden'
             )}>
-                <CourseMember />
+                <CourseMember group={group || []} />
             </div>
 
         </div>

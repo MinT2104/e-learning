@@ -1,5 +1,5 @@
 import CreateFormTeacherManagement from "@/components/application/admin/TeacherManagement/CreateFormTeacherManagement";
-import CustomFormTeacherManagement from "@/components/application/admin/TeacherManagement/CustomFormTeacherManagement";
+import CustomFormTeacherManagement from "@/components/application/admin/TeacherManagement/UpdateFormTeacherManagement";
 import CustomPagination from "@/components/common/CustomPagination";
 import CustomTable from "@/components/common/CustomTable";
 import Heading from "@/components/common/Heading";
@@ -7,18 +7,27 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { RootState } from "@/redux/store";
 import { UserType } from "@/redux/StoreType";
+import UserService from "@/services/user.service";
 import { ColumnDef } from "@tanstack/react-table";
 import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 const TeacherManagement = () => {
-    const dispatch = useDispatch();
+    const userService = new UserService('user')
 
     const [search, setSearch] = useState<string>('');
-    const { isLoading, users, total } = useSelector((state: RootState) => state.user);
+    const [isLoading, setIsLoading] = useState(false)
+    // const { isLoading, users, total } = useSelector((state: RootState) => state.user);
+    const [teacherData, setTeacherData] = useState<
+        {
+            teachers: UserType[],
+            total: number
+        }
+    >({
+        teachers: [],
+        total: 0
+    })
     const [activeUser, setActiveUser] = useState<UserType>();
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenCreation, setIsOpenCreation] = useState(false)
@@ -32,7 +41,20 @@ const TeacherManagement = () => {
 
 
     const handleGetData = async () => {
-        await dispatch(globalThis.$action.loadUsers(query));
+        setIsLoading(true)
+        try {
+            const res: any = await userService.loadAllWithPaging((query));
+            if (res.records) {
+                setTeacherData({
+                    teachers: res.records.rows,
+                    total: res.records.total
+                })
+            }
+            setIsLoading(false)
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false)
+        }
     };
 
     const handleChangePage = (value: string) => {
@@ -48,7 +70,7 @@ const TeacherManagement = () => {
         handleGetData();
     }, [query]);
 
-    const columns: ColumnDef<typeof users[0], string>[] = [
+    const columns: ColumnDef<UserType, string>[] = [
         {
             header: 'STT',
             accessorKey: 'stt',
@@ -59,7 +81,7 @@ const TeacherManagement = () => {
             ),
         },
         {
-            header: 'Avatar',
+            header: 'Ảnh cá nhân',
             accessorKey: 'image',
             cell: ({ row }) => {
                 const image: string = row.getValue('image')
@@ -84,8 +106,18 @@ const TeacherManagement = () => {
 
         },
         {
+            header: 'ID',
+            accessorKey: 'ID',
+
+        },
+        {
             header: 'Email',
             accessorKey: 'email',
+
+        },
+        {
+            header: 'Số điện thoại',
+            accessorKey: 'phoneNumber',
 
         },
         {
@@ -159,7 +191,7 @@ const TeacherManagement = () => {
                     </Button>
                 </div>
             </div>
-            <CustomTable columns={columns} data={users} loading={isLoading} />
+            <CustomTable columns={columns} data={teacherData.teachers} loading={isLoading} />
 
             <CustomFormTeacherManagement
                 triggerElement={null}
@@ -169,8 +201,8 @@ const TeacherManagement = () => {
                 activeData={activeUser}
                 reload={handleGetData}
             />
-            <CreateFormTeacherManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
-            <CustomPagination onChange={handleChangePage} total={total} currentPage={query.page} pageSize={query.limit} />
+            <CreateFormTeacherManagement reload={handleGetData} close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
+            <CustomPagination onChange={handleChangePage} total={teacherData.total} currentPage={query.page} pageSize={query.limit} />
 
         </div>
     );
