@@ -27,7 +27,7 @@ const MyCourseView = () => {
             page: 1,
             limit: 100,
             query: {
-                'teacherData.email': authUser.email
+                'teacherData.userId': authUser?._id
             }
         }
         await dispatch(globalThis.$action.loadGroups(query))
@@ -39,7 +39,7 @@ const MyCourseView = () => {
         const uniqueCourseIds = [...new Set(groups.map(item => item.courseData.courseId))]; // Lấy các courseId duy nhất
 
         uniqueCourseIds.forEach(courseId => {
-            const group = groups.filter(item => item.courseData.courseId === courseId);
+            const group = groups.filter(item => item.courseData?.courseId === courseId);
             groupedByCourseId.push(group);
         });
         setCoursess(groupedByCourseId)

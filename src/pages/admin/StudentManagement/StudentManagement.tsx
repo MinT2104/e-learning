@@ -1,5 +1,5 @@
-import CreateFormTeacherManagement from "@/components/application/admin/TeacherManagement/CreateFormTeacherManagement";
-import CustomFormTeacherManagement from "@/components/application/admin/TeacherManagement/CustomFormTeacherManagement";
+import CreateFormStudentManagement from "@/components/application/admin/StudentManagement/CreateFormStudentManagement";
+import UpdateFormStudentManagement from "@/components/application/admin/StudentManagement/UpdateFormStudentManagement";
 import CustomPagination from "@/components/common/CustomPagination";
 import CustomTable from "@/components/common/CustomTable";
 import Heading from "@/components/common/Heading";
@@ -7,18 +7,27 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { RootState } from "@/redux/store";
 import { UserType } from "@/redux/StoreType";
+import UserService from "@/services/user.service";
 import { ColumnDef } from "@tanstack/react-table";
 import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 const StudentManagement = () => {
-    const dispatch = useDispatch();
+    const userService = new UserService('user')
 
     const [search, setSearch] = useState<string>('');
-    const { isLoading, users, total } = useSelector((state: RootState) => state.user);
+    const [isLoading, setIsLoading] = useState(false)
+    // const { isLoading, users, total } = useSelector((state: RootState) => state.user);
+    const [studentData, setStudentData] = useState<
+        {
+            students: UserType[],
+            total: number
+        }
+    >({
+        students: [],
+        total: 0
+    })
     const [activeUser, setActiveUser] = useState<UserType>();
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenCreation, setIsOpenCreation] = useState(false)
@@ -32,7 +41,20 @@ const StudentManagement = () => {
 
 
     const handleGetData = async () => {
-        await dispatch(globalThis.$action.loadUsers(query));
+        setIsLoading(true)
+        try {
+            const res: any = await userService.loadAllWithPaging((query));
+            if (res.records) {
+                setStudentData({
+                    students: res.records.rows,
+                    total: res.records.total
+                })
+            }
+            setIsLoading(false)
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false)
+        }
     };
 
     const handleChangePage = (value: string) => {
@@ -48,7 +70,7 @@ const StudentManagement = () => {
         handleGetData();
     }, [query]);
 
-    const columns: ColumnDef<typeof users[0], string>[] = [
+    const columns: ColumnDef<UserType, string>[] = [
         {
             header: 'STT',
             accessorKey: 'stt',
@@ -79,18 +101,23 @@ const StudentManagement = () => {
 
         },
         {
-            header: 'MSSV',
-            accessorKey: 'ID',
-
-        },
-        {
             header: 'Họ tên',
             accessorKey: 'userName',
 
         },
         {
+            header: 'ID',
+            accessorKey: 'ID',
+
+        },
+        {
             header: 'Email',
             accessorKey: 'email',
+
+        },
+        {
+            header: 'Số điện thoại',
+            accessorKey: 'phoneNumber',
 
         },
         {
@@ -131,7 +158,7 @@ const StudentManagement = () => {
     const handleCloseCreation = () => setIsOpenCreation(false)
     return (
         <div>
-            <Heading title="Quản lý Giảng viên" />
+            <Heading title="Quản lý sinh viên" />
             <div className="flex h-[56px] w-full justify-between mt-10">
                 <div className="w-1/3 border border-border rounded-lg truncate flex h-[48px] items-center">
                     <Input
@@ -164,9 +191,9 @@ const StudentManagement = () => {
                     </Button>
                 </div>
             </div>
-            <CustomTable columns={columns} data={users} loading={isLoading} />
+            <CustomTable columns={columns} data={studentData.students} loading={isLoading} />
 
-            <CustomFormTeacherManagement
+            <UpdateFormStudentManagement
                 triggerElement={null}
                 className="custom-form"
                 isOpen={isOpen}
@@ -174,8 +201,8 @@ const StudentManagement = () => {
                 activeData={activeUser}
                 reload={handleGetData}
             />
-            <CreateFormTeacherManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
-            <CustomPagination onChange={handleChangePage} total={total} currentPage={query.page} pageSize={query.limit} />
+            <CreateFormStudentManagement reload={handleGetData} close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
+            <CustomPagination onChange={handleChangePage} total={studentData.total} currentPage={query.page} pageSize={query.limit} />
 
         </div>
     );

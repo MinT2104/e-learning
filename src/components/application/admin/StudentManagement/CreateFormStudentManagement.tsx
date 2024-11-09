@@ -15,7 +15,7 @@ import { Info, X } from 'lucide-react'
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-const CreateFormTeacherManagement = ({
+const CreateFormStudentManagement = ({
     triggerElement,
     className,
     isOpen,
@@ -35,7 +35,7 @@ const CreateFormTeacherManagement = ({
         phoneNumber: '',
         email: '',
         address: '',
-        role: 'teacher',
+        role: 'student',
         ID: ''
     };
 
@@ -50,7 +50,6 @@ const CreateFormTeacherManagement = ({
     const [error, setError] = useState({
         userName: false,
         password: false,
-        phoneNumber: false,
         email: false,
         ID: false
     });
@@ -83,7 +82,7 @@ const CreateFormTeacherManagement = ({
 
                 <DialogHeader className="w-full mx-auto">
                     <DialogTitle className="text-left text-[24px] font-medium">
-                        Tạo giảng viên
+                        Tạo Học viên
                     </DialogTitle>
                     <DialogDescription className="text-lg text-left">
                         Vui lòng điền đầy đủ những trường bắt buộc
@@ -190,19 +189,9 @@ const CreateFormTeacherManagement = ({
                                     type="text"
                                     autoComplete="phoneNumber"
                                     defaultValue={teacherDetails.phoneNumber}
-                                    onFocus={() => setError((prev) => ({ ...prev, phoneNumber: false }))}
                                     onChange={handleChangeteacherDetails}
-                                    className={cn('authInput', error.phoneNumber && 'redBorder')}
+                                    className={cn('authInput')}
                                     placeholder="Nhập số điện thoại"
-                                />
-                                <CustomTooltip
-                                    isHidden={!error.phoneNumber}
-                                    triggerElement={
-                                        <div className="w-8 h-8 bg-white flex items-center justify-center">
-                                            <Info className="text-red-500" size={18} />
-                                        </div>
-                                    }
-                                    message="Số điện thoại không được để trống"
                                 />
                             </div>
                         </div>
@@ -259,4 +248,4 @@ const CreateFormTeacherManagement = ({
     )
 }
 
-export default CreateFormTeacherManagement
+export default CreateFormStudentManagement

@@ -41,9 +41,8 @@ export type GroupType = {
     title: string;
     courseData: CourseType
     teacherData?: {
-        email: string;
-        image: string;
-        userName: string;
+        userId: string,
+        _id: string
     };
     description: string;
     chapters: Chapter[];

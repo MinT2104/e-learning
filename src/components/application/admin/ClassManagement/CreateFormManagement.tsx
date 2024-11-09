@@ -16,7 +16,7 @@ import { Info, X } from 'lucide-react'
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-const CreateFormTeacherManagement = ({
+const CreateFormClassManagement = ({
     triggerElement,
     className,
     isOpen,
@@ -82,7 +82,7 @@ const CreateFormTeacherManagement = ({
                 </div>
 
                 <DialogHeader className="w-full mx-auto">
-                    <DialogTitle className="text-left text-[28px] font-medium">
+                    <DialogTitle className="text-left text-[24px] font-medium">
                         Thêm học phần
                     </DialogTitle>
                     <DialogDescription className="text-lg text-left">
@@ -168,4 +168,4 @@ const CreateFormTeacherManagement = ({
     )
 }
 
-export default CreateFormTeacherManagement
+export default CreateFormClassManagement

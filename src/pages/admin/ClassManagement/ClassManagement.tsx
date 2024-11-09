@@ -8,10 +8,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CustomFormClassManagement from "@/components/application/admin/ClassManagement/CustomFormClassManagement";
+import UpdateFormClassManagement from "@/components/application/admin/ClassManagement/UpdateFormClassManagement";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CourseType } from "@/redux/StoreType";
-import CreateFormClassManagement from "@/components/application/admin/ClassManagement/CreateFormClassManagement";
+import CreateFormClassManagement from "@/components/application/admin/ClassManagement/CreateFormManagement";
 import CustomPagination from "@/components/common/CustomPagination";
 
 const ClassManagement = () => {
@@ -180,7 +180,7 @@ const ClassManagement = () => {
             </div>
             <CustomTable columns={columns} data={courses || []} loading={isLoading} />
             <CustomPagination onChange={handleChangePage} total={total} currentPage={query.page} pageSize={query.limit} />
-            <CustomFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
+            <UpdateFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
             <CreateFormClassManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
 
         </div>

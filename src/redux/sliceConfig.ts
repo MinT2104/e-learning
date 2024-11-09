@@ -137,6 +137,10 @@ export const sliceConfig: SliceConfig[] = [
                     state.group = action.payload;
                 },
             },
+            {
+                type: 'deleteGroup',
+                endpoint: 'remove',
+            },
         ],
     },
     {
@@ -228,16 +232,17 @@ export const sliceConfig: SliceConfig[] = [
                 type: 'createUsers',
                 endpoint: 'save',
                 customAction: (state, action) => {
-                    state.users = action.payload.records.rows;
+                    state.user = action.payload.records;
                 },
             },
             {
-                type: 'updateUsers',
+                type: 'updateUser',
                 endpoint: 'update',
                 customAction: (state, action) => {
-                    state.users = action.payload.records.rows;
+                    state.user = action.payload.records;
                 },
             },
+
         ]
     },
     {
