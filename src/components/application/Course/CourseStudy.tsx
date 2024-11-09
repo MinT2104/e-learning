@@ -3,29 +3,26 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { FileVideo, Layers3, Plus, Search } from "lucide-react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { GroupType } from "@/redux/StoreType";
+import { ChapterType } from "@/redux/StoreType";
+import AddFormChapter from "./AddFormChapter";
+import AddFormLesson from "./AddFormLesson";
 
-type CourseStudyType = {
-    group: GroupType
-}
 
-const CourseStudy = ({ group }: CourseStudyType) => {
-
+const CourseStudy = () => {
+    const { chapters } = useSelector((state: RootState) => state.chapter)
     const navigate = useNavigate();
 
     const param = useParams();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const [search, setSearch] = useState<string>('')
 
 
     const { isLoading } = useSelector((state: RootState) => state.group);
-
-
-    const [activeChapter, setActiveChapter] = useState<number | null>(0); // Mặc định chọn chương 1
+    const [activeChapter, setActiveChapter] = useState<number | null>(0);
 
     const handleVideoClick = (c: number, l: number) => {
         navigate(`/course/${param.id}/watch?c=${c}&l=${l}`)
@@ -35,6 +32,31 @@ const CourseStudy = ({ group }: CourseStudyType) => {
         setActiveChapter(index);
     };
 
+    const [isAddFormChapter, setIsAddFormChapter] = useState(false)
+    const [isAddFormLesson, setIsAddFormLesson] = useState(false)
+
+    const handleCloseAddChapter = () => setIsAddFormChapter(false)
+    const handleCloseAddLesson = () => setIsAddFormLesson(false)
+
+    const handleGetData = async () => {
+        await dispatch(globalThis.$action.loadChapters({
+            query: {
+                groupId: param.id,
+
+            }
+        }))
+
+    }
+    const handleOpenFormChapter = () => {
+        setIsAddFormChapter(true)
+    }
+    const handleOpenFormLesson = () => {
+        setIsAddFormLesson(true)
+    }
+
+    useEffect(() => {
+        handleGetData()
+    }, [])
     return (
         <div className="flex flex-col gap-4">
             <div className='flex h-[56px] w-full justify-between'>
@@ -57,7 +79,13 @@ const CourseStudy = ({ group }: CourseStudyType) => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button className="h-[48px]">
+                    <Button className="h-[48px]"
+                        onClick={handleOpenFormChapter}>
+                        <Plus />
+                        <span>Thêm chương</span>
+                    </Button>
+                    <Button className="h-[48px]"
+                        onClick={handleOpenFormLesson}>
                         <Plus />
                         <span>Thêm bài giảng</span>
                     </Button>
@@ -69,12 +97,12 @@ const CourseStudy = ({ group }: CourseStudyType) => {
             <div className='flex gap-2'>
                 {
                     isLoading ? <div className='w-full h-[500px] bg-slate-200 animate-pulse rounded-sm' /> :
-                        group && group.chapters && group.chapters?.length > 0 ?
+                        chapters && chapters.length > 0 ?
                             (
                                 <div className='w-full flex border border-primary/20 rounded-sm truncate'>
                                     <div className="w-[100px]  truncate h-full" >
                                         <ul className="overflow-hidden block h-full">
-                                            {group.chapters && group.chapters.map((chapter, index) => (
+                                            {chapters.map((chapter, index) => (
                                                 <li
                                                     key={index}
                                                     onClick={() => handleChapterClick(index)}
@@ -91,15 +119,15 @@ const CourseStudy = ({ group }: CourseStudyType) => {
                                         {activeChapter !== null && (
                                             <div className=''>
                                                 <div className='h-[85px] flex flex-col justify-center px-4 border-b border-gray-200/80'>
-                                                    <h2 className="text-lg font-semibold ">{group?.chapters && group?.chapters[activeChapter]?.title}</h2>
-                                                    <p className="text-gray-500 ">{group.chapters && group.chapters[activeChapter]?.lessons && group?.chapters[activeChapter]?.lessons.length} bài lập trình</p>
+                                                    <h2 className="text-lg font-semibold ">{chapters?.[activeChapter]?.title}</h2>
+                                                    <p className="text-gray-500 ">{chapters[activeChapter]?.lessons && chapters[activeChapter]?.lessons.length} bài lập trình</p>
                                                 </div>
                                                 <ul>
-                                                    {group.chapters && group.chapters[activeChapter]?.lessons && group.chapters[activeChapter]?.lessons?.map((lesson, idx) => (
+                                                    {chapters[activeChapter]?.lessons && chapters[activeChapter]?.lessons?.map((lesson, idx) => (
                                                         <li key={idx} className={cn(`h-[85px] flex flex-row items-center gap-4 px-8 border-b border-gray-200/80
                                         cursor-pointer hover:text-primary
                                         `,
-                                                            idx === (group.chapters && group.chapters[activeChapter]?.lessons && group.chapters[activeChapter]?.lessons.length - 1) ? 'border-b-0' : '',
+                                                            idx === (chapters[activeChapter]?.lessons && chapters[activeChapter]?.lessons.length - 1) ? 'border-b-0' : '',
 
                                                         )}>
                                                             <FileVideo className='text-slate-500/80' />
@@ -127,6 +155,24 @@ const CourseStudy = ({ group }: CourseStudyType) => {
                             )
                 }
             </div>
+            {
+                isAddFormChapter ?
+                    <AddFormChapter
+                        reload={handleGetData}
+                        close={handleCloseAddChapter}
+                        isOpen={isAddFormChapter}
+                        triggerElement={<></>}
+                    /> : null
+            }
+            {
+                isAddFormLesson ?
+                    <AddFormLesson
+                        reload={handleGetData}
+                        close={handleCloseAddLesson}
+                        isOpen={isAddFormLesson}
+                        triggerElement={<></>}
+                    /> : null
+            }
         </div>
     )
 };

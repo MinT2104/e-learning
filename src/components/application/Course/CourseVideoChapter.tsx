@@ -1,4 +1,4 @@
-import { Chapter, Lesson } from "@/redux/StoreType";
+import { ChapterType, Lesson } from "@/redux/StoreType";
 import {
     Accordion,
     AccordionContent,
@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { AudioLines } from "lucide-react";
 
 type CourseVideoChapterProps = {
-    chapter: Chapter;
+    chapter: ChapterType;
     chapterIndex: number;
     activeIndex: number[];
     handleLessonClick: (chapterIndex: number, lessonIndex: number, lesson: Lesson) => void

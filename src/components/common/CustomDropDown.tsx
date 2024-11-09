@@ -9,13 +9,13 @@ import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { Input } from '../ui/input';
 
-type DropDownItem = {
-    key: string;
-    label: string;
-};
+// type DropDownItem = {
+//     key: string;
+//     label: string;
+// };
 
 type CustomDropDownProps = {
-    dropDownList: DropDownItem[] | null;
+    dropDownList: any | null;
     onChange?: any;
     placeholder?: string;
     width?: string;
@@ -23,15 +23,20 @@ type CustomDropDownProps = {
     isNotUseAuthInputClass?: boolean;
     isHiddenSearch?: boolean;
     customIcon?: ReactNode;
+    mappedKey?: string;
+    mappedLabel?: string;
 };
 
-const CustomDropDown = ({ customIcon, dropDownList, onChange, placeholder, width, className, isNotUseAuthInputClass = false, isHiddenSearch = false }: CustomDropDownProps) => {
+const CustomDropDown = ({
+    customIcon, dropDownList, onChange, placeholder, width, className, isNotUseAuthInputClass = false, isHiddenSearch = false
+    , mappedKey = 'key', mappedLabel = 'label'
+}: CustomDropDownProps) => {
 
-    const [item, setItem] = useState<DropDownItem | null>(null);
+    const [item, setItem] = useState<any | null>(null);
     const [_, setIsOpen] = useState(false);
     const [searchValue, setSearchValue] = useState<string>('');
-    const [dropdownFilterList, setDropdownFilterList] = useState<DropDownItem[]>(dropDownList || []);
-    const handleChangeItem = (data: DropDownItem) => {
+    const [dropdownFilterList, setDropdownFilterList] = useState<any[]>(dropDownList || []);
+    const handleChangeItem = (data: any) => {
         if (typeof onChange === 'function') {
             onChange(data);
         } else {
@@ -48,8 +53,8 @@ const CustomDropDown = ({ customIcon, dropDownList, onChange, placeholder, width
 
     useEffect(() => {
         const filteredItems = dropDownList
-            ? dropDownList.filter((item) =>
-                item.label.toLowerCase().startsWith(searchValue.toLowerCase())
+            ? dropDownList.filter((item: any) =>
+                item[mappedLabel].toLowerCase().startsWith(searchValue.toLowerCase())
             )
             : [];
         setDropdownFilterList(filteredItems.length ? filteredItems : dropDownList || []);
@@ -67,7 +72,7 @@ const CustomDropDown = ({ customIcon, dropDownList, onChange, placeholder, width
             <PopoverTrigger className="py-0" asChild>
                 {customIcon ? customIcon :
                     <Button className={cn('bg-transparent justify-between items-center hover:bg-transparent text-black', !isNotUseAuthInputClass && 'authInput', className, width)}>
-                        <span className="">{item ? item.label : placeholder}</span>
+                        <span className="">{item ? item[mappedLabel] : placeholder}</span>
                         <ChevronDown className="" />
                     </Button>
                 }
@@ -85,10 +90,10 @@ const CustomDropDown = ({ customIcon, dropDownList, onChange, placeholder, width
                         {dropdownFilterList && dropdownFilterList.length > 0 && dropdownFilterList.map((dropdownItem) => (
                             <li
                                 onClick={() => handleChangeItem(dropdownItem)}
-                                key={dropdownItem.key}
+                                key={dropdownItem[mappedKey]}
                                 className="h-[48px] text-[#21272A] hover:bg-secondary p-4 flex items-center text-sm cursor-pointer"
                             >
-                                <span>{dropdownItem.label}</span>
+                                <span>{dropdownItem[mappedLabel]}</span>
                             </li>
                         ))}
                     </ul>

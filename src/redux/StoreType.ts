@@ -25,6 +25,13 @@ export interface StoreType {
         error: string | null;
         total: number
     };
+    chapter: {
+        chapters: ChapterType[],
+        chapter: ChapterType;
+        isLoading: boolean;
+        error: string | null;
+        total: number
+    };
     group: {
         groups: GroupType[],
         group: GroupType;
@@ -45,7 +52,6 @@ export type GroupType = {
         _id: string
     };
     description: string;
-    chapters: Chapter[];
     createdAt: Date;
     updatedAt: Date;
     _id: string
@@ -79,6 +85,7 @@ export type CourseType = {
 }
 
 
+
 // Define Rating interface
 
 
@@ -91,11 +98,12 @@ export interface Lesson {
 }
 
 // Define Chapter interface
-export interface Chapter {
+export interface ChapterType {
     name: string;
-    title?: string;
+    title: string;
     lessons?: Lesson[];
     _id: string;
+    groupId: string;
 }
 
 
