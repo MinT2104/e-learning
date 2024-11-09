@@ -32,6 +32,20 @@ const MyCourseView = () => {
         }
         await dispatch(globalThis.$action.loadGroups(query))
     }
+
+    const handleLoadGroupStudent = async () => {
+        const query = {
+            page: 1,
+            limit: 100,
+            query: {
+                _id: {
+                    $in: authUser.courseIds
+                }
+            }
+        }
+        await dispatch(globalThis.$action.loadGroups(query))
+    }
+
     const { groups } = useSelector((state: RootState) => state.group)
 
     const handleSplit = () => {
@@ -47,7 +61,14 @@ const MyCourseView = () => {
     }
 
     useEffect(() => {
-        handleLoadGroup()
+        if (authUser.role === 'teacher') {
+            handleLoadGroup()
+        } else {
+            if (!authUser.courseIds || authUser.courseIds.length === 0) {
+                return
+            }
+            handleLoadGroupStudent()
+        }
     }, [])
     useEffect(() => {
         if (groups.length > 0) {
@@ -170,15 +191,15 @@ const MyCourseView = () => {
             }
 
             {
-                // authUser.role === 'student' ? (
-                //     <div className="container mx-auto pb-8 h-fit">
-                //         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                //             {coursess.map((course: CourseType) => (
-                //                 <CourseCard {...course} key={course._id} />
-                //             ))}
-                //         </div>
-                //     </div>
-                // ) : null
+                authUser.role === 'student' ? (
+                    <div className="container mx-auto pb-8 h-fit">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            {groups.map((item: GroupType) => (
+                                <CourseCard {...item} key={item._id} />
+                            ))}
+                        </div>
+                    </div>
+                ) : null
             }
 
         </div >

@@ -10,10 +10,12 @@ import {
     DialogTrigger
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input';
+import { toast } from '@/hooks/use-toast';
 import { RootState } from '@/redux/store';
+import { UserType } from '@/redux/StoreType';
 import UserService from '@/services/user.service';
 import { X } from 'lucide-react';
-import { ReactNode, useEffect, useState } from 'react';
+import { EventHandler, FormEvent, ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -22,22 +24,25 @@ const AddStudentToGroupForm = ({
     className,
     isOpen,
     close,
+    reload,
 }: {
     triggerElement: ReactNode
     className?: string;
     isOpen: boolean;
     close: () => void;
+    reload: () => void
 }) => {
     const { id: groupId } = useParams()
-    const userService = new UserService('user')
-    const [searchValue] = useState('')
+    const [searchValue, setSearchValue] = useState('')
     const { users } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch()
-    const handleSearch = () => {
 
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchValue(e.target.value)
     }
 
     const [checkedStudent, setCheckedStudent] = useState<string[]>([])
+    const [filteredData, setFilterData] = useState<UserType[]>([])
 
     const handleLoadUsers = async () => {
         const query = {
@@ -63,8 +68,23 @@ const AddStudentToGroupForm = ({
         }
     }
 
-    const handleOk = () => {
-        console.log(checkedStudent)
+    const handleOk = async () => {
+        if (checkedStudent.length === 0) return
+
+        const requestData = {
+            courseId: groupId,
+            ids: checkedStudent
+        }
+
+        const res = await dispatch(globalThis.$action.signCourse(requestData))
+        if (res.payload) {
+            toast({
+                variant: 'success',
+                description: 'Thêm sinh viên thành công',
+            })
+            reload()
+            handleLoadUsers()
+        }
     }
 
     const handleClose = () => {
@@ -74,6 +94,12 @@ const AddStudentToGroupForm = ({
     useEffect(() => {
         handleLoadUsers()
     }, [])
+
+    useEffect(() => {
+        if (!users) return
+        const filterData = users.filter((item) => item.userName.toLowerCase().includes(searchValue.toLowerCase()))
+        setFilterData(filterData ? filterData : users)
+    }, [searchValue, users])
 
     return (
         <Dialog open={isOpen}>
@@ -93,15 +119,16 @@ const AddStudentToGroupForm = ({
                 <div className='w-full flex flex-col gap-2'>
                     <div >
                         <Input
+                            type='text'
+                            defaultValue={searchValue}
                             className="w-full h-[56px]"
                             onChange={handleSearch}
-                            placeholder='Nhập vào tên giảng viên'
-                            value={searchValue}
+                            placeholder='Nhập vào tên học viên'
                         />
                     </div>
                     <div className="min-h-[290px] max-h-[290px] h-fit p-0 overflow-y-auto z-[9999] bg-slate-200 rounded-sm">
                         <ul className='p-2 flex flex-col gap-2'>
-                            {users && users.length > 0 && users.map((dropdownItem) => (
+                            {users && users.length > 0 && filteredData.map((dropdownItem) => (
                                 <li
                                     onClick={(undefined)}
                                     key={dropdownItem._id}
@@ -127,7 +154,7 @@ const AddStudentToGroupForm = ({
                     </div>
                 </div>
                 <div className='flex justify-end'>
-                    <Button onClick={handleOk}>
+                    <Button disabled={checkedStudent.length === 0} onClick={handleOk}>
                         Hoàn tất
                     </Button>
                 </div>

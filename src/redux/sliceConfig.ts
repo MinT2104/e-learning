@@ -242,7 +242,10 @@ export const sliceConfig: SliceConfig[] = [
                     state.user = action.payload.records;
                 },
             },
-
+            {
+                type: 'signCourse',
+                endpoint: 'signCourse'
+            },
         ]
     },
     {
