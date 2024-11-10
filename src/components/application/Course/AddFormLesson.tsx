@@ -53,8 +53,17 @@ const AddFormLesson = ({
     }
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        let cloneData = { ...chapterDetails } as any
+        delete cloneData._id
+        let dataRequest = {
+            _id: chapterDetails._id,
+            $addToSet: {
+                lessons: cloneData
+            }
+        }
+
         e.preventDefault()
-        const res = await dispatch(globalThis.$action.updateChapter(setchapterDetails))
+        const res = await dispatch(globalThis.$action.updateChapter(dataRequest))
         if (res.payload) {
             reload()
             close()
@@ -92,8 +101,8 @@ const AddFormLesson = ({
                 <form onSubmit={(handleSubmit)} className="w-full flex flex-col gap-2 gap-x-10 h-fit p-0 px-0" action="#" method="POST">
                     <div className="w-full">
                         <span className="text-sm text-slate-600">Chọn chương *</span>
-                        <div className="mt-2 relative truncate mb-6">
-                            <CustomDropDown dropDownList={chapters} mappedKey='_id' mappedLabel='name' placeholder="Select your chapter"
+                        <div className="mt-2 relative truncate mb-2">
+                            <CustomDropDown dropDownList={chapters} mappedKey='_id' mappedLabel='name' placeholder="Chọn chương"
                                 onChange={handleChangeChapterDropDown}
                             />
 
@@ -110,7 +119,7 @@ const AddFormLesson = ({
                     </div>
                     <div className="w-full">
                         <span className="text-sm text-slate-600">Tên chương *</span>
-                        <div className="mt-2 relative truncate mb-6">
+                        <div className="mt-2 relative truncate mb-2">
                             <Input
                                 id="title"
                                 name="title"
@@ -135,7 +144,7 @@ const AddFormLesson = ({
                     </div>
                     <div className="w-full">
                         <span className="text-sm text-slate-600">Mô tả chương *</span>
-                        <div className="mt-2 relative truncate mb-6">
+                        <div className="mt-2 relative truncate mb-2">
                             <Input
                                 id="duration"
                                 name="duration"
@@ -160,7 +169,7 @@ const AddFormLesson = ({
                     </div>
                     <div className="w-full">
                         <span className="text-sm text-slate-600">Mô tả chương *</span>
-                        <div className="mt-2 relative truncate mb-6">
+                        <div className="mt-2 relative truncate mb-2">
                             <Input
                                 id="url"
                                 name="url"
