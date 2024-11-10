@@ -3,6 +3,7 @@ import CourseService from '../services/course.service';
 import AuthService from '@/services/auth.service';
 import MediaService from '@/services/media.service';
 import { deleteCookie } from '@/lib/utils';
+import Cookie from 'js-cookie'
 import GroupService from '@/services/group.service';
 import UserService from '@/services/user.service';
 import ChapterService from '@/services/chapter.service';
@@ -229,7 +230,7 @@ export const sliceConfig: SliceConfig[] = [
                 type: 'logOut',
                 endpoint: 'logOut',
                 customAction: (state, _) => {
-                    deleteCookie('_at')
+                    Cookie.remove('_at')
                     state.authUser = null
                     state.isLoggedIn = false
                 },
