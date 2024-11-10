@@ -8,11 +8,12 @@ import { GroupType, UserType } from "@/redux/StoreType";
 import UserService from "@/services/user.service";
 import { ColumnDef } from "@tanstack/react-table";
 import { FileDown, MoreHorizontal, Plus, Search, Settings } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import AddStudentToGroupForm from "./AddStudentToGroupForm";
 import CustomPagination from "@/components/common/CustomPagination";
 import { useSelector } from "react-redux";
+
 
 type CourseMemberType = {
     group: GroupType
@@ -45,27 +46,68 @@ const CourseMember = ({ group }: CourseMemberType) => {
         }
     })
 
+    const timeoutId = useRef<any>()
 
+    const debounce = (func: any, delay: number) => {
+        return (...args: any) => {
+            if (timeoutId.current) {
+                clearTimeout(timeoutId.current)
+            }
+            timeoutId.current = setTimeout(() => {
+                func.apply(this, args)
+            }, delay)
+        }
+    }
+    // const handleGetData = async () => {
+    //     setIsLoading(true)
+    //     try {
+    //         const res: any = await userService.loadAllWithPaging((query));
+    //         if (res.records) {
+    //             setStudentData({
+    //                 students: res.records.rows,
+    //                 total: res.records.total
+    //             })
+    //         }
+    //         setIsLoading(false)
+    //     } catch (error) {
+    //         console.log(error)
+    //         setIsLoading(false)
+    //     }
+    // };
     const handleGetData = async () => {
-        setIsLoading(true)
+        setIsLoading(true);
         try {
-            const res: any = await userService.loadAllWithPaging((query));
+            const queryWithSearch = {
+                ...query,
+                query: {
+                    ...query.query,
+                    ...(search ? { userName: { $regex: search, $options: "i" } } : {}),
+                },
+            };
+            const res: any = await userService.loadAllWithPaging(queryWithSearch);
             if (res.records) {
                 setStudentData({
                     students: res.records.rows,
-                    total: res.records.total
-                })
+                    total: res.records.total,
+                });
             }
-            setIsLoading(false)
+            setIsLoading(false);
         } catch (error) {
-            console.log(error)
-            setIsLoading(false)
+            console.error(error);
+            setIsLoading(false);
         }
     };
 
+    const debouncedSearch = useCallback(
+        debounce((value: string) => {
+            setSearch(value);
+        }, 700),
+        []
+    );
+
     useEffect(() => {
         handleGetData();
-    }, [query]);
+    }, [query, search]);
 
     const handleOpenAddStudentForm = () => setIsAddStudentFormOpen(true)
 
@@ -160,14 +202,12 @@ const CourseMember = ({ group }: CourseMemberType) => {
                 <div className='flex h-[56px] w-full justify-between'>
                     <div className="w-1/3 border border-border rounded-lg truncate flex h-[48px] items-center">
                         <Input
-                            id="youtube"
-                            name="youtube"
+                            id="search"
                             type="text"
                             disabled={isLoading}
-                            autoComplete="youtube"
                             defaultValue={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            className={cn('border-none rounded-none h-[48px]')}
+                            onChange={(e) => debouncedSearch(e.target.value)}
+                            className={cn("border-none rounded-none h-[48px]")}
                             placeholder="Tìm kiếm sinh viên"
                         />
 

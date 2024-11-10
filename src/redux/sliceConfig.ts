@@ -5,10 +5,12 @@ import MediaService from '@/services/media.service';
 import { deleteCookie } from '@/lib/utils';
 import GroupService from '@/services/group.service';
 import UserService from '@/services/user.service';
+import ChapterService from '@/services/chapter.service';
 
 export const serviceMapping: any = {
     course: new CourseService('course'),
     assginment: new AssignmentService('assignment'),
+    chapter: new ChapterService('chapter'),
     auth: new AuthService('auth'),
     media: new MediaService('media'),
     group: new GroupService('group'),
@@ -96,6 +98,48 @@ export const sliceConfig: SliceConfig[] = [
                     state.assginment = action.payload;
                 },
             },
+        ],
+    },
+    {
+        name: 'chapter',
+        initialState: {
+            chapters: [],        //loadallwithpaging
+            chapter: {},         //getbyid
+            isLoading: false,       //load xong false
+            error: {},              //bao loi
+            total: 0                //tong mang fruit
+        },
+        thunk: [
+            {
+                type: 'loadChapters',
+                endpoint: 'loadAllWithPaging',
+                customAction: (state, action) => {
+                    state.chapters = action.payload.records.rows;
+                    state.total = action.payload.total
+                },
+            },
+            {
+                type: 'getChapter',
+                endpoint: 'getById',
+                customAction: (state, action) => {
+                    state.chapter = action.payload;
+                },
+            },
+            {
+                type: 'createChapter',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.chapter = action.payload;
+                },
+            },
+            {
+                type: 'updateChapter',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.chapter = action.payload;
+                },
+            },
+
         ],
     },
     {
