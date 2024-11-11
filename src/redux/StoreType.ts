@@ -128,10 +128,9 @@ interface Author {
 
 export interface AssignmentType {
     _id: string,
-    courseId: string;
-    author: Author;
     title: string;
     description: string;
     image: string;
+    groupId: string;
     sections?: Section[]; // Mảng sections, không bắt buộc
 }
