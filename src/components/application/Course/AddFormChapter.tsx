@@ -35,6 +35,7 @@ const AddFormChapter = ({
         title: '',
         lessons: [],
         groupId: id,
+
     };
 
     const [error, setError] = useState({

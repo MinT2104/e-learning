@@ -1,5 +1,5 @@
 import { RootState } from "@/redux/store";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     Accordion,
@@ -14,11 +14,15 @@ import RatingTask from "@/components/common/RatingTask";
 import { File as FileType, Section } from "@/redux/StoreType";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
+import AddFormFile from "./AddFormFile";
 
 const CourseMaterial = () => {
     const param = useParams();
     const dispatch = useDispatch();
     const { assginments, isLoading } = useSelector((state: RootState) => state.assginment);
+    const [isAddFormFile, setIsAddFormFile] = useState(false)
+    const handleCloseAddFile = () => setIsAddFormFile(false)
+
 
     const handleGetData = async () => {
         await dispatch(globalThis.$action.loadAssginments({
@@ -28,6 +32,9 @@ const CourseMaterial = () => {
         }));
     };
 
+    const handleOpenFormFile = () => {
+        setIsAddFormFile(true)
+    }
     useEffect(() => {
         handleGetData();
     }, []);
@@ -91,12 +98,22 @@ const CourseMaterial = () => {
             </Accordion>
 
             <div className="h-fit w-1/3 rounded-[12px] bg-white shadow-sm flex flex-col gap-4">
-                <Button className="h-[48px] w-full">
+                <Button className="h-[48px] w-full"
+                    onClick={handleOpenFormFile}>
                     <Plus />
                     <span>Thêm tài liệu</span>
                 </Button>
                 <RatingTask />
             </div>
+            {
+                isAddFormFile ?
+                    <AddFormFile
+                        reload={handleGetData}
+                        close={handleCloseAddFile}
+                        isOpen={isAddFormFile}
+                        triggerElement={<></>}
+                    /> : null
+            }
         </div>
     );
 };

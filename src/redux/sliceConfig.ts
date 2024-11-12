@@ -99,6 +99,20 @@ export const sliceConfig: SliceConfig[] = [
                     state.assginment = action.payload;
                 },
             },
+            {
+                type: 'createAssginment',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.assginment = action.payload;
+                },
+            },
+            {
+                type: 'updateAssginment',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.assginment = action.payload;
+                },
+            },
         ],
     },
     {
