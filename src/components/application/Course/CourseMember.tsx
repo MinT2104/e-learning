@@ -53,22 +53,7 @@ const CourseMember = () => {
             }, delay)
         }
     }
-    // const handleGetData = async () => {
-    //     setIsLoading(true)
-    //     try {
-    //         const res: any = await userService.loadAllWithPaging((query));
-    //         if (res.records) {
-    //             setStudentData({
-    //                 students: res.records.rows,
-    //                 total: res.records.total
-    //             })
-    //         }
-    //         setIsLoading(false)
-    //     } catch (error) {
-    //         console.log(error)
-    //         setIsLoading(false)
-    //     }
-    // };
+
     const handleGetData = async () => {
         setIsLoading(true);
         try {
