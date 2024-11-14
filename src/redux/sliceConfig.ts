@@ -2,7 +2,6 @@ import AssignmentService from '@/services/assginment.service';
 import CourseService from '../services/course.service';
 import AuthService from '@/services/auth.service';
 import MediaService from '@/services/media.service';
-import { deleteCookie } from '@/lib/utils';
 import Cookie from 'js-cookie'
 import GroupService from '@/services/group.service';
 import UserService from '@/services/user.service';
@@ -10,7 +9,7 @@ import ChapterService from '@/services/chapter.service';
 
 export const serviceMapping: any = {
     course: new CourseService('course'),
-    assginment: new AssignmentService('assignment'),
+    assignment: new AssignmentService('assignment'),
     chapter: new ChapterService('chapter'),
     auth: new AuthService('auth'),
     media: new MediaService('media'),
@@ -75,42 +74,42 @@ export const sliceConfig: SliceConfig[] = [
         ],
     },
     {
-        name: 'assginment',
+        name: 'assignment',
         initialState: {
-            assginments: [],        //loadallwithpaging
-            assginment: {},         //getbyid
+            assignments: [],        //loadallwithpaging
+            assignment: {},         //getbyid
             isLoading: false,       //load xong false
             error: {},              //bao loi
             total: 0                //tong mang fruit
         },
         thunk: [
             {
-                type: 'loadAssginments',
+                type: 'loadAssignments',
                 endpoint: 'loadAllWithPaging',
                 customAction: (state, action) => {
-                    state.assginments = action.payload.records.rows;
+                    state.assignments = action.payload.records.rows;
                     state.total = action.payload.total
                 },
             },
             {
-                type: 'getAssginment',
+                type: 'getAssignment',
                 endpoint: 'getById',
                 customAction: (state, action) => {
-                    state.assginment = action.payload;
+                    state.assignment = action.payload;
                 },
             },
             {
-                type: 'createAssginment',
+                type: 'createAssignment',
                 endpoint: 'save',
                 customAction: (state, action) => {
-                    state.assginment = action.payload;
+                    state.assignment = action.payload;
                 },
             },
             {
-                type: 'updateAssginment',
+                type: 'updateAssignment',
                 endpoint: 'update',
                 customAction: (state, action) => {
-                    state.assginment = action.payload;
+                    state.assignment = action.payload;
                 },
             },
         ],

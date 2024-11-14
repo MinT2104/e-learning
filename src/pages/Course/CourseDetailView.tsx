@@ -56,7 +56,7 @@ const CourseContent = () => {
             <div className={cn('w-full',
                 activeKey !== 'member' && 'hidden'
             )}>
-                <CourseMember group={group || []} />
+                <CourseMember />
             </div>
 
         </div>

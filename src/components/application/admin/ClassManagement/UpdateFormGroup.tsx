@@ -21,14 +21,14 @@ const UpdateFormGroup = ({
     isOpen,
     close,
     activeData,
-    reload
+
 }: {
     triggerElement: ReactNode
     className?: string;
     isOpen: boolean;
     close: () => void;
     activeData: GroupType | undefined;
-    reload: () => void
+    reload?: () => void
 
 }) => {
     const userService = new UserService('user')

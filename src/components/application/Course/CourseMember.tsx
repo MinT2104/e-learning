@@ -4,7 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
-import { GroupType, UserType } from "@/redux/StoreType";
+import { UserType } from "@/redux/StoreType";
 import UserService from "@/services/user.service";
 import { ColumnDef } from "@tanstack/react-table";
 import { FileDown, MoreHorizontal, Plus, Search, Settings } from "lucide-react";
@@ -14,12 +14,7 @@ import AddStudentToGroupForm from "./AddStudentToGroupForm";
 import CustomPagination from "@/components/common/CustomPagination";
 import { useSelector } from "react-redux";
 
-
-type CourseMemberType = {
-    group: GroupType
-}
-
-const CourseMember = ({ group }: CourseMemberType) => {
+const CourseMember = () => {
     const userService = new UserService('user')
     const { id } = useParams();
     const { authUser } = useSelector((state: RootState) => state.auth)

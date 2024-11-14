@@ -18,9 +18,9 @@ export interface StoreType {
         error: string | null;
         total: number
     };
-    assginment: {
-        assginments: AssignmentType[],
-        assginment: AssignmentType;
+    assignment: {
+        assignments: AssignmentType[],
+        assignment: AssignmentType;
         isLoading: boolean;
         error: string | null;
         total: number
@@ -120,17 +120,11 @@ export interface Section {
     files?: File[]; // Mảng file, không bắt buộc
 }
 
-interface Author {
-    name: string;
-    image: string;
-    authorId: string;
-}
-
 export interface AssignmentType {
     _id: string,
     title: string;
     description: string;
     image: string;
     groupId: string;
-    sections?: Section[]; // Mảng sections, không bắt buộc
+    files?: File[];
 }

@@ -5,7 +5,6 @@ import {
     DialogContent,
     DialogDescription,
     DialogHeader,
-    DialogOverlay,
     DialogTitle,
     DialogTrigger
 } from '@/components/ui/dialog'
@@ -13,9 +12,8 @@ import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
 import { RootState } from '@/redux/store';
 import { UserType } from '@/redux/StoreType';
-import UserService from '@/services/user.service';
 import { X } from 'lucide-react';
-import { EventHandler, FormEvent, ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 

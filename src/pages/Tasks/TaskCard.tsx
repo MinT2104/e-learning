@@ -27,9 +27,7 @@ const TaskCard = ({
                 <h3 className="text-lg font-semibold hover:text-primary cursor-pointer"
                     onClick={() => handleTask()}
                 >{props.title}</h3>
-                <div className="flex items-center text-gray-500 mt-2 ">
-                    <span>{props.author.name}</span>
-                </div>
+
             </div>
         </div>
     );

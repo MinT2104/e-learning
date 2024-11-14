@@ -1,10 +1,5 @@
+import CustomDropDown from '@/components/common/CustomDropDown';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
-import { RootState } from '@/redux/store';
-import { X } from 'lucide-react';
-import { FormEvent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
     Dialog,
     DialogContent,
@@ -13,11 +8,12 @@ import {
     DialogTitle,
     DialogTrigger
 } from '@/components/ui/dialog';
-import CustomDropDown from '@/components/common/CustomDropDown';
-interface FileType {
-    name?: string;
-    url?: string;
-}
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { RootState } from '@/redux/store';
+import { X } from 'lucide-react';
+import { FormEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const AddFormFile = ({
     triggerElement,
@@ -32,54 +28,51 @@ const AddFormFile = ({
     close: () => void;
     reload: () => void;
 }) => {
-    const { assginments } = useSelector((state: RootState) => state.assginment); // Adjust based on your Redux structure
-    const dispatch = useDispatch();
-
+    const { assignments } = useSelector((state: RootState) => state.assignment);
     const initValue = {
         name: '',
-        files: [] as FileType[],
+        url: '',
         _id: '',
     };
 
     const [fileDetails, setFileDetails] = useState(initValue);
-    const [error, setError] = useState({
+    const [error] = useState({
         name: false,
-        files: false,
+        url: false,
     });
+
+    const dispatch = useDispatch();
 
     const handleClose = () => {
         close();
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        const dataRequest = {
+        let cloneData = { ...fileDetails } as any
+        delete cloneData._id
+        let dataRequest = {
             _id: fileDetails._id,
             $addToSet: {
-                sections: {
-                    name: fileDetails.name,
-                    files: fileDetails.files
-                }
-            }
+                files: { name: fileDetails.name, url: fileDetails.url },
+            },
         };
+        e.preventDefault();
 
-        const res = await dispatch(globalThis.$action.updateAssginment(dataRequest));
+        const res = await dispatch(globalThis.$action.updateAssignment(dataRequest));
         if (res.payload) {
             reload();
             close();
             setFileDetails(initValue);
         }
+
     };
 
-    const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index?: number) => {
-        const name = e.target.name;
-        const value = e.target.value;
+    const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
         setFileDetails((prev) => ({ ...prev, [name]: value }));
-
-
     };
-    const handleChangeFileDropDown = (data: { name: string, _id: string }) => {
+
+    const handleSelectAssignment = (data: { title: string, _id: string }) => {
         setFileDetails((prev) => ({ ...prev, _id: data._id }));
     };
 
@@ -99,60 +92,46 @@ const AddFormFile = ({
                     </DialogDescription>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="w-full flex flex-col gap-2 gap-x-10 h-fit p-0 px-0">
+                <form onSubmit={handleSubmit} className="w-full flex flex-col gap-2">
                     <div className="w-full">
-                        <span className="text-sm text-slate-600">Chọn chương *</span>
-                        <div className="mt-2 relative truncate mb-2">
-                            <CustomDropDown dropDownList={assginments} mappedKey='_id' mappedLabel='title' placeholder="Chọn chương"
-                                onChange={handleChangeFileDropDown}
-                            />
-                        </div>
+                        <span className="text-sm text-slate-600">Chọn Assignment *</span>
+                        <CustomDropDown
+                            dropDownList={assignments}
+                            mappedKey="_id"
+                            mappedLabel="title"
+                            placeholder="Chọn Assignment"
+                            onChange={handleSelectAssignment}
+                        />
                     </div>
 
                     <div className="w-full">
-                        <span className="text-sm text-slate-600">Tên tài liệu *</span>
+                        <span className="text-sm text-slate-600">Tên File *</span>
                         <Input
                             id="name"
                             name="name"
                             type="text"
                             value={fileDetails.name}
-                            onChange={(e) => handleChangeFile(e)}
+                            onChange={handleChangeFile}
                             className={cn('authInput', error.name && 'redBorder')}
-                            placeholder="Nhập tên tài liệu"
+                            placeholder="Nhập tên file"
                         />
                     </div>
-                    {fileDetails.files.length > 0 ? (
-                        fileDetails.files.map((file, index) => (
-                            <div key={index} className="w-full">
-                                <span className="text-sm text-slate-600">Tên File {index + 1}</span>
-                                <Input
-                                    name="fileName"
-                                    type="text"
-                                    value={file.name || ''}
-                                    onChange={(e) => handleChangeFile(e, index)}
-                                    onFocus={() => setError((prev) => ({ ...prev, name: false }))}
 
-                                    className="mt-2"
-                                    placeholder="Nhập tên file"
-                                />
-                                <span className="text-sm text-slate-600">URL File {index + 1}</span>
-                                <Input
-                                    name="fileUrl"
-                                    type="text"
-                                    value={file.url || ''}
-                                    onChange={(e) => handleChangeFile(e, index)}
-                                    onFocus={() => setError((prev) => ({ ...prev, title: false }))}
-                                    className="mt-2 mb-4"
-                                    placeholder="Nhập URL file"
-                                />
-                            </div>
-                        ))
-                    ) : (
-                        <div className="w-full">No files available</div>
-                    )}
+                    <div className="w-full">
+                        <span className="text-sm text-slate-600">URL File *</span>
+                        <Input
+                            id="url"
+                            name="url"
+                            type="text"
+                            value={fileDetails.url}
+                            onChange={handleChangeFile}
+                            className={cn('authInput', error.url && 'redBorder')}
+                            placeholder="Nhập URL file"
+                        />
+                    </div>
 
                     <div className="flex justify-end">
-                        <Button type="submit">Xác nhận</Button>
+                        <Button >Xác nhận</Button>
                     </div>
                 </form>
             </DialogContent>

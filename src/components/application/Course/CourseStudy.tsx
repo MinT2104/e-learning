@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { ChapterType } from "@/redux/StoreType";
 import AddFormChapter from "./AddFormChapter";
 import AddFormLesson from "./AddFormLesson";
 
