@@ -84,7 +84,7 @@ class BaseService {
 
     remove(reqObj: { _id: string; }) {
         const { _id } = reqObj;
-        const url = `/api/${this.name}/${_id}`;
+        const url = `/${this.name}/${_id}`;
         return new Promise((resolve, reject) => {
             ApiClient.delete(url)
                 .then((response: { data: {}; }) => {

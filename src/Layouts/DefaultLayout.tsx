@@ -1,10 +1,12 @@
 import { Header } from '@/components/common/Header';
 import Sidebar from '../components/common/SideBar';
 import React from 'react';
+import { Toaster } from '@/components/ui/toaster';
 
 const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <div className="flex h-screen relative">
+            <Toaster />
             <Sidebar />
             <div className="flex-grow pl-64 h-screen relative pt-20 scrollbar scroll-smooth">
                 <Header />

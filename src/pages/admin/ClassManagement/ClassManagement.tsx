@@ -5,53 +5,67 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { FileDown, MoreHorizontal, Plus, Search, Settings } from "lucide-react";
+import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CustomFormClassManagement from "@/components/application/admin/ClassManagement/CustomFormClassManagement";
-import { useNavigate } from "react-router-dom";
+import UpdateFormClassManagement from "@/components/application/admin/ClassManagement/UpdateFormClassManagement";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CourseType } from "@/redux/StoreType";
+import CreateFormClassManagement from "@/components/application/admin/ClassManagement/CreateFormManagement";
+import CustomPagination from "@/components/common/CustomPagination";
 
 const ClassManagement = () => {
 
     const [search, setSearch] = useState<string>('')
+    const [query, setQuery] = useState({
+        page: 1, limit: 5
+    })
 
     const dispatch = useDispatch();
-    const { courses, isLoading } = useSelector((state: RootState) => state.course);
+
+    const { courses, isLoading, total } = useSelector((state: RootState) => state.course);
 
     const handleGetData: any = async () => {
-        dispatch(globalThis.$action.loadCourses({ page: 1, limit: 10 }));
+        dispatch(globalThis.$action.loadCourses(query));
     };
 
-    const [activeId, setActiveId] = useState('')
     const [activeData, setActiveData] = useState<CourseType>()
 
     const [isOpen, setIsOpen] = useState(false)
+    const [isOpenCreation, setIsOpenCreation] = useState(false)
 
-    useEffect(() => {
-        handleGetData();
-    }, []);
+    const [activeId, setActiveId] = useState('')
 
-
-    const navigate = useNavigate()
+    const handleLoadGroup = async () => {
+        const query = {
+            page: 1,
+            limit: 100,
+            query: {
+                'courseData.courseId': activeData?.courseId
+            }
+        }
+        await dispatch(globalThis.$action.loadGroups(query))
+    }
 
     const columns: ColumnDef<typeof courses[0]>[] = [
         {
             header: 'STT',
-            accessorKey: "stt",
-            cell: ({ row }) => {
-                return row.index + 1
-            }
-        },
-        {
-            header: "Tên học phần",
-            accessorKey: "title",
+            accessorKey: 'stt',
+            cell: ({ row }) => (
+                <div className="cursor-pointer flex justify-start items-center h-[40px]">
+                    {(query.page - 1) * query.limit + row.index + 1}
+                </div>
+            ),
         },
         {
             header: "Mã học phần",
             accessorKey: "courseId",
         },
+        {
+            header: "Tên học phần",
+            accessorKey: "title",
+        },
+
         {
             header: "Mô tả",
             accessorKey: "description",
@@ -73,9 +87,10 @@ const ClassManagement = () => {
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                 <DropdownMenuItem
                                     onClick={() => {
-                                        setActiveId(id)
                                         setIsOpen(true)
                                         setActiveData(row.original)
+                                        handleGetData()
+                                        setActiveId(id)
                                     }}
                                 >
                                     <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
@@ -92,48 +107,38 @@ const ClassManagement = () => {
     ];
 
     const handleClose = () => setIsOpen(false)
-    const regex = /[?&]id=([^&]+)/;
-    const handleGetIndex = (str: string) => {
-        const result = str.match(regex);
-        return result && result[1]
-    };
+    const handleCloseCreation = () => setIsOpenCreation(false)
+
+    const handleReload = () => {
+        handleLoadGroup()
+    }
 
     const handleGetCourseDetail: any = async (id: string) => {
-        const res = await dispatch(globalThis.$action.getCourse(id));
-        if (res.payload) {
-            // const { title, groupIds, courseId, description } = res.payload
-            // setClassDetail({ title, groupIds, courseId, description })
-            console.log(res.payload)
-        }
-
+        await dispatch(globalThis.$action.getCourse(id));
     };
 
-    useEffect(() => {
-        if (activeId) {
-            setTimeout(() => {
-                navigate(`/class-management?id=${activeId}`)
-            }, 200)
-        }
-    }, [activeId])
-
-    useEffect(() => {
-        if (!isOpen) {
-            navigate('/class-management')
-        }
-    }, [isOpen])
-
-    useEffect(() => {
-        const id = handleGetIndex(window.location.search)
-        if (id) {
-            setActiveId(id)
-        }
-    }, [window.location.search])
+    const handleChangePage = (value: string) => {
+        setQuery((prev: any) => {
+            return {
+                ...prev,
+                page: prev.page + value
+            }
+        })
+    }
 
     useEffect(() => {
         if (activeId) {
             handleGetCourseDetail(activeId)
         }
     }, [activeId])
+
+    useEffect(() => {
+        handleGetData();
+    }, [query, isOpen]);
+
+    useEffect(() => {
+        handleLoadGroup()
+    }, [activeData])
 
     return (
         <div>
@@ -156,25 +161,27 @@ const ClassManagement = () => {
                         <Search size={20} />
                     </div>
                 </div>
-
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3 mb-2">
                     <Button className="h-[48px]">
                         <FileDown />
-                        <span>Xuất danh sách sinh viên</span>
+                        <span>Xuất danh sách</span>
+                    </Button>
+                    <Button onClick={() => setIsOpenCreation(true)} className="h-[48px]">
+                        <Plus />
+                        <span>Tạo mới</span>
                     </Button>
                     <Button className="h-[48px]">
-                        <Plus />
-                        <span>Thêm sinh viên</span>
-                    </Button>
-                    <Button className="h-[48px] w-[48px]">
-                        <Settings />
+                        <Import />
+                        <span>Nhập dữ liệu</span>
                     </Button>
                 </div>
 
 
             </div>
-            <CustomTable columns={columns} data={courses || []} loading={false} />
-            <CustomFormClassManagement close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
+            <CustomTable columns={columns} data={courses || []} loading={isLoading} />
+            <CustomPagination onChange={handleChangePage} total={total} currentPage={query.page} pageSize={query.limit} />
+            <UpdateFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
+            <CreateFormClassManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
 
         </div>
     )

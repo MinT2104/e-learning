@@ -2,15 +2,19 @@ import AssignmentService from '@/services/assginment.service';
 import CourseService from '../services/course.service';
 import AuthService from '@/services/auth.service';
 import MediaService from '@/services/media.service';
-import { deleteCookie } from '@/lib/utils';
+import Cookie from 'js-cookie'
 import GroupService from '@/services/group.service';
+import UserService from '@/services/user.service';
+import ChapterService from '@/services/chapter.service';
 
 export const serviceMapping: any = {
-    course: new CourseService(undefined),
-    assginment: new AssignmentService(undefined),
-    user: new AuthService('user'),
-    media: new MediaService(),
-    group: new GroupService(undefined)
+    course: new CourseService('course'),
+    assignment: new AssignmentService('assignment'),
+    chapter: new ChapterService('chapter'),
+    auth: new AuthService('auth'),
+    media: new MediaService('media'),
+    group: new GroupService('group'),
+    user: new UserService('user')
 }
 
 interface ActionConfig {
@@ -31,7 +35,6 @@ export const sliceConfig: SliceConfig[] = [
         name: 'course',
         initialState: {
             courses: [],         //loadallwithpaging
-            userCourses: [],     //loadallwithpaging
             course: {},          //getbyid
             isLoading: false,    //load xong false
             error: {},           //bao loi
@@ -43,15 +46,8 @@ export const sliceConfig: SliceConfig[] = [
                 endpoint: 'loadAllWithPaging',
                 customAction: (state, action) => {
                     state.courses = action.payload.records.rows;
-                    state.total = action.payload.total
-                },
-            },
-            {
-                type: 'loadUserCourses',
-                endpoint: 'loadAllCoursesWithPaging',
-                customAction: (state, action) => {
-                    state.userCourses = action.payload.records.rows;
-                    state.total = action.payload.total
+                    console.log(action.payload)
+                    state.total = action.payload.records.total
                 },
             },
             {
@@ -68,33 +64,96 @@ export const sliceConfig: SliceConfig[] = [
                     state.course = action.payload;
                 },
             },
+            {
+                type: 'createCourse',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.course = action.payload;
+                },
+            },
         ],
     },
     {
-        name: 'assginment',
+        name: 'assignment',
         initialState: {
-            assginments: [],        //loadallwithpaging
-            assginment: {},         //getbyid
+            assignments: [],        //loadallwithpaging
+            assignment: {},         //getbyid
             isLoading: false,       //load xong false
             error: {},              //bao loi
             total: 0                //tong mang fruit
         },
         thunk: [
             {
-                type: 'loadAssginments',
+                type: 'loadAssignments',
                 endpoint: 'loadAllWithPaging',
                 customAction: (state, action) => {
-                    state.assginments = action.payload.records.rows;
+                    state.assignments = action.payload.records.rows;
                     state.total = action.payload.total
                 },
             },
             {
-                type: 'getAssginment',
+                type: 'getAssignment',
                 endpoint: 'getById',
                 customAction: (state, action) => {
-                    state.assginment = action.payload;
+                    state.assignment = action.payload;
                 },
             },
+            {
+                type: 'createAssignment',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.assignment = action.payload;
+                },
+            },
+            {
+                type: 'updateAssignment',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.assignment = action.payload;
+                },
+            },
+        ],
+    },
+    {
+        name: 'chapter',
+        initialState: {
+            chapters: [],        //loadallwithpaging
+            chapter: {},         //getbyid
+            isLoading: false,       //load xong false
+            error: {},              //bao loi
+            total: 0                //tong mang fruit
+        },
+        thunk: [
+            {
+                type: 'loadChapters',
+                endpoint: 'loadAllWithPaging',
+                customAction: (state, action) => {
+                    state.chapters = action.payload.records.rows;
+                    state.total = action.payload.total
+                },
+            },
+            {
+                type: 'getChapter',
+                endpoint: 'getById',
+                customAction: (state, action) => {
+                    state.chapter = action.payload;
+                },
+            },
+            {
+                type: 'createChapter',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.chapter = action.payload;
+                },
+            },
+            {
+                type: 'updateChapter',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.chapter = action.payload;
+                },
+            },
+
         ],
     },
     {
@@ -129,14 +188,25 @@ export const sliceConfig: SliceConfig[] = [
                     state.group = action.payload;
                 },
             },
+            {
+                type: 'updateGroup',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.group = action.payload;
+                },
+            },
+            {
+                type: 'deleteGroup',
+                endpoint: 'remove',
+            },
         ],
     },
     {
-        name: 'user',
+        name: 'auth',
         initialState: {
             authUser: null,
-            role: 'guest',
-            isLoading: false
+            isLoading: false,
+            isLoggedIn: false
         },
         thunk: [
             {
@@ -146,16 +216,7 @@ export const sliceConfig: SliceConfig[] = [
                     const { token, newUser } = action.payload.data
                     document.cookie = `_at=${token}`
                     state.authUser = newUser
-                    state.role = newUser.role
-                },
-            },
-            {
-                type: 'completeRegisteration',
-                endpoint: 'completeRegisteration',
-                customAction: (state, action) => {
-                    const user = action.payload.data
-                    state.authUser = user
-                    state.role = user.role
+                    state.isLoggedIn = true
                 },
             },
             {
@@ -166,7 +227,7 @@ export const sliceConfig: SliceConfig[] = [
                         const { token, user } = action.payload.data
                         document.cookie = `_at=${token}`
                         state.authUser = user
-                        state.role = user.role
+                        state.isLoggedIn = true
                     }
                 },
             },
@@ -182,9 +243,9 @@ export const sliceConfig: SliceConfig[] = [
                 type: 'logOut',
                 endpoint: 'logOut',
                 customAction: (state, _) => {
-                    deleteCookie('_at')
+                    Cookie.remove('_at')
                     state.authUser = null
-                    state.role = 'guest'
+                    state.isLoggedIn = false
                 },
             },
             {
@@ -194,7 +255,6 @@ export const sliceConfig: SliceConfig[] = [
                     if (action.payload.data) {
                         const { data } = action.payload
                         state.authUser = data
-                        state.role = data.role
                     }
                 },
             },
@@ -206,6 +266,44 @@ export const sliceConfig: SliceConfig[] = [
                 type: 'uploadUserImage',
                 endpoint: 'uploadUserImage'
             }
+        ]
+    },
+    {
+        name: 'user',
+        initialState: {
+            users: null,
+            user: null,
+            isLoading: false,
+            error: null,
+            total: 0
+        },
+        thunk: [
+            {
+                type: 'loadUsers',
+                endpoint: 'loadAllWithPaging',
+                customAction: (state, action) => {
+                    state.users = action.payload.records.rows;
+                    state.total = action.payload.records.total
+                },
+            },
+            {
+                type: 'createUsers',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.user = action.payload.records;
+                },
+            },
+            {
+                type: 'updateUser',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.user = action.payload.records;
+                },
+            },
+            {
+                type: 'signCourse',
+                endpoint: 'signCourse'
+            },
         ]
     },
     {

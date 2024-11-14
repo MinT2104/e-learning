@@ -1,40 +1,77 @@
 export interface StoreType {
+    auth: {
+        authUser: UserType
+        isLoading: boolean;
+        isLoggedIn: boolean
+    };
     user: {
-        authUser: {
-            _id: string;
-            address: string;
-            email: string;
-            phoneNumber: string;
-            userName: string;
-            courseIds: string[];
-            image: string;
-            role: string;
-            createdAt: string;
-            updatedAt: string;
-            status: string
-        };
-        role: string,
+        users: UserType[]
+        user: UserType
+        total: number,
+        error: string | null;
         isLoading: boolean
     };
     course: {
         courses: CourseType[];
-        userCourses: CourseType[];
         course: CourseType;
         isLoading: boolean;
         error: string | null;
         total: number
     };
-    assginment: {
-        assginments: AssignmentType[],
-        assginment: AssignmentType;
+    assignment: {
+        assignments: AssignmentType[],
+        assignment: AssignmentType;
         isLoading: boolean;
         error: string | null;
         total: number
+    };
+    chapter: {
+        chapters: ChapterType[],
+        chapter: ChapterType;
+        isLoading: boolean;
+        error: string | null;
+        total: number
+    };
+    group: {
+        groups: GroupType[],
+        group: GroupType;
+        isLoading: boolean;
+        error: string | null;
+        total: number;
     };
     media: {
         images: { url: string }[];
     };
 }
+
+export type GroupType = {
+    title: string;
+    courseData: CourseType
+    teacherData?: {
+        userId: string,
+        _id: string
+    };
+    description: string;
+    createdAt: Date;
+    updatedAt: Date;
+    _id: string
+
+}
+
+export type UserType =
+    {
+        _id?: string;
+        address: string;
+        email: string;
+        phoneNumber: string;
+        userName: string;
+        courseIds?: string[];
+        image?: string;
+        role: string;
+        createdAt?: string;
+        updatedAt?: string;
+        status?: string
+    };
 
 
 export type CourseType = {
@@ -46,16 +83,11 @@ export type CourseType = {
     createdAt?: string;
     updatedAt?: string;
 }
-export interface Instructor {
-    name: string;
-    avatar: string;
-}
+
+
 
 // Define Rating interface
-export interface Rating {
-    value: number;
-    max: number;
-}
+
 
 // Define Lesson interface
 export interface Lesson {
@@ -66,11 +98,12 @@ export interface Lesson {
 }
 
 // Define Chapter interface
-export interface Chapter {
+export interface ChapterType {
     name: string;
-    title?: string;
+    title: string;
     lessons?: Lesson[];
     _id: string;
+    groupId: string;
 }
 
 
@@ -87,18 +120,11 @@ export interface Section {
     files?: File[]; // Mảng file, không bắt buộc
 }
 
-interface Author {
-    name: string;
-    image: string;
-    authorId: string;
-}
-
 export interface AssignmentType {
     _id: string,
-    courseId: string;
-    author: Author;
     title: string;
     description: string;
     image: string;
-    sections?: Section[]; // Mảng sections, không bắt buộc
+    groupId: string;
+    files?: File[];
 }

@@ -9,7 +9,7 @@ import ProtectedRoute from "@/middleware/ProtectedRoute";
 import NotFound from "@/pages/NotFound/NotFound";
 
 const RouterWrapper = () => {
-    const { role } = useSelector((state: RootState) => state.user);
+    const { authUser } = useSelector((state: RootState) => state.auth);
 
     return (
         <Routes>
@@ -18,14 +18,10 @@ const RouterWrapper = () => {
                     key={index}
                     path={route.path}
                     element={
-                        <AuthRoute role={role} allowedRoles={route.allowedRoles}>
-                            {route.isUsedLayout ? (
-                                <AuthLayout>
-                                    {<route.element />}
-                                </AuthLayout>
-                            ) : (
-                                <route.element />
-                            )}
+                        <AuthRoute role={authUser?.role} allowedRoles={route.allowedRoles}>
+                            <AuthLayout>
+                                {<route.element />}
+                            </AuthLayout>
                         </AuthRoute>
                     }
                 />
@@ -35,7 +31,7 @@ const RouterWrapper = () => {
                     key={index}
                     path={route.path}
                     element={
-                        <ProtectedRoute role={role} allowedRoles={route.allowedRoles}>
+                        <ProtectedRoute role={authUser?.role} allowedRoles={route.allowedRoles}>
                             {route.isUsedLayout ? (
                                 <DefaultLayout>
                                     {<route.element />}
@@ -47,7 +43,7 @@ const RouterWrapper = () => {
                     }
                 />
             ))}
-            <Route path="*" element={<NotFound />} /> {/* Route Not Found */}
+            <Route path="*" element={<NotFound />} />
         </Routes>
     );
 };

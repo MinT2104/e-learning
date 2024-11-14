@@ -6,23 +6,35 @@ import Heading from '@/components/common/Heading';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { RootState } from '@/redux/store';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 const CourseContent = () => {
 
-    const { authUser } = useSelector((state: RootState) => state.user);
+    const { authUser } = useSelector((state: RootState) => state.auth);
+    const { group, isLoading } = useSelector((state: RootState) => state.group);
 
-
+    const { id } = useParams()
+    const dispatch = useDispatch()
 
     const [activeKey, setActiveKey] = useState('course')
 
+    const handleGetGroupDetail = async () => {
+        await dispatch(globalThis.$action.getGroup(id))
+    }
 
-
+    useEffect(() => {
+        handleGetGroupDetail()
+    }, [])
 
     return (
         <div className="flex flex-col mt-2 mx-auto p-2 h-fit gap-10">
-            <Heading title='21AB4B4 - Lịch sử đảng - nhóm 02' />
+            {isLoading ?
+                <div className='h-10 w-2/3 bg-slate-200' />
+                :
+                <Heading title={`${group.courseData?.courseId} - ${group.courseData?.title} - ${group.title}`} />
+            }
             <div className='flex gap-4'>
                 <Button onClick={() => setActiveKey('course')} variant={activeKey === 'course' ? 'default' : 'outline'} className={cn('w-40 h-[48px]',)}>Bài giảng</Button>
                 <Button onClick={() => setActiveKey('material')} variant={activeKey === 'material' ? 'default' : 'outline'} className={cn('w-40 h-[48px]',)}>Tài liệu</Button>

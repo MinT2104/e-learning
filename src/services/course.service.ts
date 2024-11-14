@@ -2,10 +2,10 @@ import { ApiClient } from "@/customFetch/ApiClient";
 import BaseService from "../services/base.service";
 
 class CourseService extends BaseService {
-    constructor(state: any) {
-        super(state);
-        this.name = "course";
-        // this.model = {};
+    name: any
+    constructor(name: string) {
+        super(null);
+        this.name = name
     }
     loadAllCoursesWithPaging(reqObj: any) {
         const {

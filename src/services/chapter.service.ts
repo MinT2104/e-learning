@@ -1,7 +1,7 @@
 // import { ApiClient } from "@/customFetch/ApiClient";
 import BaseService from "../services/base.service";
 
-class GroupService extends BaseService {
+class ChapterService extends BaseService {
     name: any
     constructor(name: string) {
         super(null);
@@ -9,4 +9,4 @@ class GroupService extends BaseService {
     }
 }
 
-export default GroupService;
+export default ChapterService;

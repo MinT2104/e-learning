@@ -67,17 +67,17 @@ const LoginView = () => {
   };
 
   return (
-    <div className="h-screen p-10 py-10 flex flex-col gap-6 items-center justify-start w-full">
+    <div className="h-screen p-10 py-10 flex flex-col gap-6 items-center justify-center w-full">
       <img className="w-20 h-auto" src={Logo} alt="" />
       <h1 className="font-bold text-3xl">Đăng nhập vào EL</h1>
-      <div>
+      {/* <div>
         <p className="font-light text-slate-600 text-md text-center text-wrap">
           Khám phá hành trình học tiếng Anh tuyệt vời nơi bạn có thể tự tin giao tiếp
         </p>
         <p className="font-light text-slate-600 text-md text-center text-wrap">
           Mở ra cơ hội và xây dựng một tương lai tươi sáng hơn.
         </p>
-      </div>
+      </div> */}
       <form onSubmit={handleSubmit} className="w-96 h-fit m-4 p-0" action="#" method="POST">
         <span className="text-sm text-slate-600">Email của bạn</span>
         <div className="mt-2 relative truncate mb-6">
@@ -90,7 +90,7 @@ const LoginView = () => {
             autoComplete="email"
             defaultValue={auth.email}
             onChange={handleChangeAuth}
-            className={cn('authInput', error.email && 'redBorder')}
+            className={cn('authInput h-[56px]', error.email && 'redBorder')}
             placeholder="Nhập tên tài khoản của bạn"
           />
           <CustomTooltip
@@ -115,7 +115,7 @@ const LoginView = () => {
             autoComplete="password"
             defaultValue={auth.password}
             onChange={handleChangeAuth}
-            className={cn('authInput', error.password && 'redBorder')}
+            className={cn('authInput h-[56px]', error.password && 'redBorder')}
             placeholder="Mật khẩu"
           />
           <CustomTooltip
@@ -134,12 +134,12 @@ const LoginView = () => {
           </Button>
         </div>
       </form>
-      <div className="flex items-center justify-center w-full mt-4 text-sm">
+      {/* <div className="flex items-center justify-center w-full mt-4 text-sm">
         <span>Nếu bạn chưa có tài khoản?</span>
-        <Button type="button" variant="link" onClick={() => navigate('/register')} className="cursor-pointer no-underline hover:no-underline pl-1">
+        <Button type="button" variant="link" onClick={() => navigate('/register')} className="cursor-pointer no-underline hover:no-underline pl-1 h-[56px]">
           Đăng ký
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faBook, faTasks, faUserTie, faBars, faLayerGroup
+    faUserTie, faBars, faLayerGroup, faClipboardList,
+    faGraduationCap
 } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
@@ -13,52 +14,39 @@ function SideBar() {
     const [isOpen, setIsOpen] = useState(true);
     const navigate = useNavigate(); // Initialize useNavigate
 
-    const { authUser } = useSelector((state: RootState) => state.user)
+    const { authUser } = useSelector((state: RootState) => state.auth)
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
 
     const mockDataSidebar = [
-
         {
             id: 1,
-            label: "Trang chủ",
-            icon: faBook,
-            path: "/", // Add path for navigation
-            allowRoles: ['admin', 'student', 'teacher']
-        },
-        {
-            id: 2,
             label: "Lớp học phần",
             icon: faLayerGroup,
             path: "/courses", // Add path for navigation
             allowRoles: ['admin', 'teacher', 'student']
         },
         {
-            id: 3,
-            label: "Bài tập của bạn",
-            icon: faTasks,
-            path: "/tasks", // Add path for navigation
+            id: 2, // Changed from 5 to 4 for sequential ID
+            label: "Quản lý lớp học phần",
+            icon: faClipboardList,
+            path: "/class-management", // Add path for navigation
             allowRoles: ['admin']
         },
-        // {
-        //     id: 4,
-        //     label: "Khóa học của tôi",
-        //     icon: faTasks,
-        //     path: "/my-course", // Add path for navigation
-        // },
-        // {
-        //     id: 5, // Changed from 5 to 4 for sequential ID
-        //     label: "Người hướng dẫn",
-        //     icon: faUserTie,
-        //     path: "/instructors", // Add path for navigation
-        // },
         {
-            id: 5, // Changed from 5 to 4 for sequential ID
-            label: "Quản lý lớp học phần",
+            id: 3, // Changed from 5 to 4 for sequential ID
+            label: "Quản lý Giảng viên",
             icon: faUserTie,
-            path: "/class-management", // Add path for navigation
+            path: "/teacher-management", // Add path for navigation
+            allowRoles: ['admin']
+        },
+        {
+            id: 4, // Changed from 5 to 4 for sequential ID
+            label: "Quản lý Sinh viên",
+            icon: faGraduationCap,
+            path: "/student-management", // Add path for navigation
             allowRoles: ['admin']
         },
     ];
@@ -84,12 +72,12 @@ function SideBar() {
 
                 <nav className="mt-6 mx-4">
                     <ul>
-                        {mockDataSidebar.map((menuItem) => {
-                            return menuItem.allowRoles.includes(authUser.role) && (
+                        {authUser && mockDataSidebar.map((menuItem) => {
+                            return menuItem.allowRoles.includes(authUser?.role) && (
                                 <li
                                     key={menuItem.id}
                                     className={cn("flex items-center p-4 text-gray-700 rounded-lg mb-2 cursor-pointer hover:bg-slate-100",
-                                        menuItem.path === location.pathname && 'bg-primary text-white hover:bg-primary'
+                                        location.pathname.includes(menuItem.path) && 'bg-primary text-white hover:bg-primary'
                                     )}
                                     onClick={() => {
                                         navigate(menuItem.path); // Navigate on click

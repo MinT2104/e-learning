@@ -1,49 +1,49 @@
 import ClassManagement from "@/pages/admin/ClassManagement/ClassManagement";
+import StudentManagement from "@/pages/admin/StudentManagement/StudentManagement";
+import TeacherManagement from "@/pages/admin/TeacherManagement/TeacherManagement";
 import CourseDetailView from "@/pages/Course/CourseDetailView";
 import CourseVideo from "@/pages/Course/CourseVideo";
-import CourseView from "@/pages/Course/CourseView";
-import InstructorForm from "@/pages/Instructors/InstructorForm";
+import HomeView from "@/pages/Home/HomeView";
 import InstructorsView from "@/pages/Instructors/InstructorsView";
 import LoginView from "@/pages/Login/LoginView";
 import MyCourseView from "@/pages/MyCourse/MyCourseView";
 import ProfileView from "@/pages/Profile/ProfileView";
 import SignUpView from "@/pages/Signup/SignUpView";
-import TaskDetailView from "@/pages/Tasks/TaskDetailView";
-import TasksView from "@/pages/Tasks/TasksView";
 import { FC } from "react";
 
 
 export const routes: MappedAuthRouteType[] = [
-    // {
-    //     path: "/",
-    //     element: HomeView,
-    //     allowedRoles: ["guest", "student", "teacher", "admin"],
-    // },
     {
         path: "/",
-        element: CourseView,
+        element: HomeView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
-        isUsedLayout: true
+        isUsedLayout: false
     },
+    // {
+    //     path: "/",
+    //     element: CourseView,
+    //     allowedRoles: ["guest", "student", "teacher", "admin"],
+    //     isUsedLayout: true
+    // },
     {
         path: "/courses",
         element: MyCourseView,
         allowedRoles: ["guest", "student", "teacher", "admin"],
         isUsedLayout: true
     },
-    {
-        path: "/tasks",
-        element: TasksView,
-        allowedRoles: ["guest", "student", "teacher", "admin"],
-        isUsedLayout: true
+    // {
+    //     path: "/tasks",
+    //     element: TasksView,
+    //     allowedRoles: ["guest", "student", "teacher", "admin"],
+    //     isUsedLayout: true
 
-    },
-    {
-        path: "/tasks/:id",
-        element: TaskDetailView,
-        allowedRoles: ["guest", "student", "teacher", "admin"],
-        isUsedLayout: true
-    },
+    // },
+    // {
+    //     path: "/tasks/:id",
+    //     element: TaskDetailView,
+    //     allowedRoles: ["guest", "student", "teacher", "admin"],
+    //     isUsedLayout: true
+    // },
     {
         path: "/instructors",
         element: InstructorsView,
@@ -69,23 +69,24 @@ export const routes: MappedAuthRouteType[] = [
         element: CourseVideo,
         allowedRoles: ["guest", "student", "teacher", "admin"],
         isUsedLayout: true
-
-    },
-    //     {
-    //         path: "/activity",
-    //         element: ActivityView,
-    //         allowedRoles: ["guest", "student", "teacher", "admin"],
-    //     },
-    {
-        path: "/register/complete-registeration",
-        element: InstructorForm,
-        allowedRoles: ["teacher"],
-        isUsedLayout: false
-
     },
     {
         path: "/class-management",
         element: ClassManagement,
+        allowedRoles: ["admin"],
+        isUsedLayout: true
+
+    },
+    {
+        path: "/teacher-management",
+        element: TeacherManagement,
+        allowedRoles: ["admin"],
+        isUsedLayout: true
+
+    },
+    {
+        path: "/student-management",
+        element: StudentManagement,
         allowedRoles: ["admin"],
         isUsedLayout: true
 
@@ -121,3 +122,4 @@ export interface MappedAuthRouteType {
     allowedRoles: string[];
     isUsedLayout: boolean;
 }
+

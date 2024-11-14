@@ -33,7 +33,7 @@ const mockCategories = [
 ]
 
 function InstructorForm() {
-  const { isLoading, authUser } = useSelector((state: RootState) => state.user);
+  const { isLoading, authUser } = useSelector((state: RootState) => state.auth);
 
 
   const [auth, setAuth] = useState({
