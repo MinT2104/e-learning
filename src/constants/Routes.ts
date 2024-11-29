@@ -1,6 +1,7 @@
 import ClassManagement from "@/pages/admin/ClassManagement/ClassManagement";
 import StudentManagement from "@/pages/admin/StudentManagement/StudentManagement";
 import TeacherManagement from "@/pages/admin/TeacherManagement/TeacherManagement";
+import AssignmentView from "@/pages/Assignment/AssignmentView";
 import CourseDetailView from "@/pages/Course/CourseDetailView";
 import CourseVideo from "@/pages/Course/CourseVideo";
 import HomeView from "@/pages/Home/HomeView";
@@ -87,6 +88,13 @@ export const routes: MappedAuthRouteType[] = [
     {
         path: "/student-management",
         element: StudentManagement,
+        allowedRoles: ["admin"],
+        isUsedLayout: true
+
+    },
+    {
+        path: "/assignment-edu",
+        element: AssignmentView,
         allowedRoles: ["admin"],
         isUsedLayout: true
 

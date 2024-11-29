@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faUserTie, faBars, faLayerGroup, faClipboardList,
-    faGraduationCap
+    faGraduationCap,
+    faClipboardQuestion
 } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
@@ -47,6 +48,13 @@ function SideBar() {
             label: "Quản lý Sinh viên",
             icon: faGraduationCap,
             path: "/student-management", // Add path for navigation
+            allowRoles: ['admin']
+        },
+        {
+            id: 5, // Changed from 5 to 4 for sequential ID
+            label: "Câu hỏi",
+            icon: faClipboardQuestion,
+            path: "/assignment-edu", // Add path for navigation
             allowRoles: ['admin']
         },
     ];
