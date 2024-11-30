@@ -6,6 +6,7 @@ import Cookie from 'js-cookie'
 import GroupService from '@/services/group.service';
 import UserService from '@/services/user.service';
 import ChapterService from '@/services/chapter.service';
+import QuestionService from '@/services/question.service';
 
 export const serviceMapping: any = {
     course: new CourseService('course'),
@@ -14,7 +15,8 @@ export const serviceMapping: any = {
     auth: new AuthService('auth'),
     media: new MediaService('media'),
     group: new GroupService('group'),
-    user: new UserService('user')
+    user: new UserService('user'),
+    question: new QuestionService('question')
 }
 
 interface ActionConfig {
@@ -197,6 +199,51 @@ export const sliceConfig: SliceConfig[] = [
             },
             {
                 type: 'deleteGroup',
+                endpoint: 'remove',
+            },
+        ],
+    },
+    {
+        name: 'question',
+        initialState: {
+            questions: [],        //loadallwithpaging
+            question: {},         //getbyid
+            isLoading: false,       //load xong false
+            error: {},              //bao loi
+            total: 0                //tong mang fruit
+        },
+        thunk: [
+            {
+                type: 'loadQuestions',
+                endpoint: 'loadAllWithPaging',
+                customAction: (state, action) => {
+                    state.questions = action.payload.records.rows;
+                    state.total = action.payload.records.total
+                },
+            },
+            {
+                type: 'getQuestion',
+                endpoint: 'getById',
+                customAction: (state, action) => {
+                    state.question = action.payload;
+                },
+            },
+            {
+                type: 'createQuestion',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.question = action.payload;
+                },
+            },
+            {
+                type: 'updateQuestion',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.question = action.payload;
+                },
+            },
+            {
+                type: 'deleteQuestion',
                 endpoint: 'remove',
             },
         ],

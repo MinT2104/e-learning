@@ -95,7 +95,7 @@ export const routes: MappedAuthRouteType[] = [
     {
         path: "/assignment-edu",
         element: AssignmentView,
-        allowedRoles: ["admin"],
+        allowedRoles: ["teacher"],
         isUsedLayout: true
 
     },

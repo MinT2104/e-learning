@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UpdateFormClassManagement from "@/components/application/admin/ClassManagement/UpdateFormClassManagement";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { CourseType } from "@/redux/StoreType";
+import { CourseType, QuestionType } from "@/redux/StoreType";
 import CustomPagination from "@/components/common/CustomPagination";
 import CreateFormAssignmentManagement from "@/components/application/admin/AssignmentManagement/CreateFormAssignmentManagement";
 import UpdateFormAssignmentManagement from "@/components/application/admin/AssignmentManagement/UpdateFormAssignmentManagement";
@@ -23,62 +23,82 @@ const AssignmentView = () => {
     })
 
     const dispatch = useDispatch();
+    const { authUser } = useSelector((state: RootState) => state.auth)
+    const { questions, isLoading, total } = useSelector((state: RootState) => state.question);
 
-    const { courses, isLoading, total } = useSelector((state: RootState) => state.course);
+    // const [activeData, setActiveData] = useState<QuestionType>()
 
-    const handleGetData: any = async () => {
-        dispatch(globalThis.$action.loadCourses(query));
-    };
-
-    const [activeData, setActiveData] = useState<CourseType>()
-
-    const [isOpen, setIsOpen] = useState(false)
+    // const [isOpen, setIsOpen] = useState(false)
     const [isOpenCreation, setIsOpenCreation] = useState(false)
 
-    const [activeId, setActiveId] = useState('')
 
-    const handleLoadGroup = async () => {
-        const query = {
-            page: 1,
-            limit: 100,
-            query: {
-                'courseData.courseId': activeData?.courseId
+
+
+    const handleLoadQuestions = async () => {
+        await dispatch(globalThis.$action.loadQuestions({
+            ...query, query: {
+                'userId': authUser._id
             }
-        }
-        await dispatch(globalThis.$action.loadGroups(query))
+        }))
     }
 
-    const columns: ColumnDef<typeof courses[0]>[] = [
+    const columns: ColumnDef<QuestionType>[] = [
         {
             header: 'STT',
-            accessorKey: 'stt',
+            accessorKey: 'index',
             cell: ({ row }) => (
                 <div className="cursor-pointer flex justify-start items-center h-[40px]">
                     {(query.page - 1) * query.limit + row.index + 1}
                 </div>
             ),
         },
-        {
-            header: "Mã học phần",
-            accessorKey: "courseId",
-        },
-        {
-            header: "Độ khó",
-            accessorKey: "title",
-        },
 
         {
             header: "Nội dung câu hỏi",
-            accessorKey: "description",
+            accessorKey: "content", // Nội dung câu hỏi
+            cell: ({ row }) => (
+                <div dangerouslySetInnerHTML={{ __html: row.original.content || '' }} className="cursor-pointer flex justify-start items-center h-[40px] gap-2">
+                </div>
+            ),
         },
+
+        {
+            header: "Môn học",
+            accessorKey: "courseData.title", // Môn học từ courseData
+            cell: ({ row }) => (
+                <div className="flex items-center h-[40px] truncate max-w-[300px]">
+                    {row.original.courseData.title}
+                </div>
+            ),
+        },
+
+        {
+            header: "Độ khó",
+            accessorKey: "difficulty", // Độ khó của câu hỏi
+            cell: ({ row }) => (
+                <div className="flex items-center h-[40px]">
+                    {row.original.difficulty}
+                </div>
+            ),
+        },
+
+        {
+            header: "Mã khóa học",
+            accessorKey: "courseData.courseId", // Mã khóa học từ courseData
+            cell: ({ row }) => (
+                <div className="flex items-center h-[40px]">
+                    {row.original.courseData.courseId}
+                </div>
+            ),
+        },
+
         {
             id: "actions",
             header: "Hành động",
             cell: ({ row }) => {
-                const id = row.original._id
+                const id = row.original._id;
                 return (
                     <div className="cursor-pointer flex justify-center items-center h-[40px]">
-
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="w-8 h-8 p-0">
@@ -86,17 +106,24 @@ const AssignmentView = () => {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuLabel>Hành động</DropdownMenuLabel>
                                 <DropdownMenuItem
                                     onClick={() => {
-                                        setIsOpen(true)
-                                        setActiveData(row.original)
-                                        handleGetData()
-                                        setActiveId(id)
+                                        // setIsOpen(true);
+                                        // setActiveData(row.original);
+                                        handleLoadQuestions();
+                                        // setActiveId(id);
                                     }}
                                 >
                                     <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
                                         <span>Chỉnh sửa</span>
+                                    </div>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                // onClick={() => handleDelete(id)}
+                                >
+                                    <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
+                                        <span>Xóa</span>
                                     </div>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -108,16 +135,11 @@ const AssignmentView = () => {
         },
     ];
 
-    const handleClose = () => setIsOpen(false)
     const handleCloseCreation = () => setIsOpenCreation(false)
 
     const handleReload = () => {
-        handleLoadGroup()
+        handleLoadQuestions()
     }
-
-    const handleGetCourseDetail: any = async (id: string) => {
-        await dispatch(globalThis.$action.getCourse(id));
-    };
 
     const handleChangePage = (value: string) => {
         setQuery((prev: any) => {
@@ -129,18 +151,8 @@ const AssignmentView = () => {
     }
 
     useEffect(() => {
-        if (activeId) {
-            handleGetCourseDetail(activeId)
-        }
-    }, [activeId])
-
-    useEffect(() => {
-        handleGetData();
-    }, [query, isOpen]);
-
-    useEffect(() => {
-        handleLoadGroup()
-    }, [activeData])
+        handleLoadQuestions();
+    }, [query]);
 
     return (
         <div>
@@ -180,10 +192,13 @@ const AssignmentView = () => {
 
 
             </div>
-            <CustomTable columns={columns} data={courses || []} loading={isLoading} />
+            <CustomTable columns={columns} data={questions || []} loading={isLoading} />
             <CustomPagination onChange={handleChangePage} total={total} currentPage={query.page} pageSize={query.limit} />
-            <UpdateFormAssignmentManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
-            <CreateFormAssignmentManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
+            {/* <UpdateFormAssignmentManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} /> */}
+            {
+                isOpenCreation && <CreateFormAssignmentManagement close={handleCloseCreation} reload={handleReload} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
+            }
+
 
         </div>
     )

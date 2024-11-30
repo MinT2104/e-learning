@@ -55,7 +55,7 @@ function SideBar() {
             label: "Câu hỏi",
             icon: faClipboardQuestion,
             path: "/assignment-edu", // Add path for navigation
-            allowRoles: ['admin']
+            allowRoles: ['teacher']
         },
     ];
 
