@@ -102,7 +102,7 @@ function handleError(): any {
     throw new Error('Function not implemented.');
 }
 
-const parsedQuery = (url: string, reqObj: any) => {
+export const parsedQuery = (url: string, reqObj: any) => {
     const requestUrl = url
 
     const {

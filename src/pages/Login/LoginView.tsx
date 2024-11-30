@@ -85,7 +85,7 @@ const LoginView = () => {
             id="email"
             name="email"
             type="text"
-            disabled={isLoading}
+            // disabled={isLoading}
             onFocus={() => setError((prev) => ({ ...prev, email: false }))}
             autoComplete="email"
             defaultValue={auth.email}
@@ -110,7 +110,7 @@ const LoginView = () => {
             id="password"
             name="password"
             type="password"
-            disabled={isLoading}
+            // disabled={isLoading}
             onFocus={() => setError((prev) => ({ ...prev, password: false }))}
             autoComplete="password"
             defaultValue={auth.password}
@@ -129,7 +129,9 @@ const LoginView = () => {
           />
         </div>
         <div className="mt-6">
-          <Button disabled={isLoading} type="submit" className="w-full">
+          <Button
+            // disabled={isLoading}
+            type="submit" className="w-full">
             {isLoading ? <LoaderCircle className="animate-spin" /> : 'Đăng nhập'}
           </Button>
         </div>

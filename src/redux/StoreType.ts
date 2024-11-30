@@ -39,6 +39,13 @@ export interface StoreType {
         error: string | null;
         total: number;
     };
+    question: {
+        questions: QuestionType[],
+        question: QuestionType;
+        isLoading: boolean;
+        error: string | null;
+        total: number;
+    };
     media: {
         images: { url: string }[];
     };
@@ -128,3 +135,16 @@ export interface AssignmentType {
     groupId: string;
     files?: File[];
 }
+
+//////////////////////////////////////////////
+export interface QuestionType {
+    _id?: string;
+    userId?: string;
+    courseData: { // Đổi từ groupData sang courseData theo schema mới
+        courseId: string;
+        title: string;
+    };
+    difficulty?: "Dễ" | "Trung bình" | "Khó";
+    content?: string;
+    answer?: any
+};
