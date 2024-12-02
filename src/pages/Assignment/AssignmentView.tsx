@@ -26,10 +26,11 @@ const AssignmentView = () => {
     const { authUser } = useSelector((state: RootState) => state.auth)
     const { questions, isLoading, total } = useSelector((state: RootState) => state.question);
 
-    // const [activeData, setActiveData] = useState<QuestionType>()
+    const [activeData, setActiveData] = useState<QuestionType>()
 
     // const [isOpen, setIsOpen] = useState(false)
     const [isOpenCreation, setIsOpenCreation] = useState(false)
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false)
 
 
 
@@ -40,6 +41,17 @@ const AssignmentView = () => {
                 'userId': authUser._id
             }
         }))
+    }
+
+    const handleDelete = (_id: string) => {
+        dispatch(globalThis.$action.deleteQuestion({ _id }))
+        handleLoadQuestions();
+
+    }
+
+    const handleUpdate = () => {
+        setIsOpenUpdate(true)
+
     }
 
     const columns: ColumnDef<QuestionType>[] = [
@@ -96,7 +108,7 @@ const AssignmentView = () => {
             id: "actions",
             header: "Hành động",
             cell: ({ row }) => {
-                const id = row.original._id;
+                const id: string = row.original._id || " ";
                 return (
                     <div className="cursor-pointer flex justify-center items-center h-[40px]">
                         <DropdownMenu>
@@ -110,8 +122,8 @@ const AssignmentView = () => {
                                 <DropdownMenuItem
                                     onClick={() => {
                                         // setIsOpen(true);
-                                        // setActiveData(row.original);
-                                        handleLoadQuestions();
+                                        setActiveData(row.original);
+                                        handleUpdate()
                                         // setActiveId(id);
                                     }}
                                 >
@@ -120,7 +132,7 @@ const AssignmentView = () => {
                                     </div>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
-                                // onClick={() => handleDelete(id)}
+                                    onClick={() => handleDelete(id)}
                                 >
                                     <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
                                         <span>Xóa</span>
@@ -136,6 +148,7 @@ const AssignmentView = () => {
     ];
 
     const handleCloseCreation = () => setIsOpenCreation(false)
+    const handleCloseUpdate = () => setIsOpenUpdate(false)
 
     const handleReload = () => {
         handleLoadQuestions()
@@ -194,7 +207,9 @@ const AssignmentView = () => {
             </div>
             <CustomTable columns={columns} data={questions || []} loading={isLoading} />
             <CustomPagination onChange={handleChangePage} total={total} currentPage={query.page} pageSize={query.limit} />
-            {/* <UpdateFormAssignmentManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} /> */}
+            {
+                isOpenUpdate && <UpdateFormAssignmentManagement reload={handleReload} close={handleCloseUpdate} isOpen={isOpenUpdate} activeData={activeData} className="w-full" triggerElement={<></>} />
+            }
             {
                 isOpenCreation && <CreateFormAssignmentManagement close={handleCloseCreation} reload={handleReload} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
             }

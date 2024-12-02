@@ -25,11 +25,12 @@ type CustomDropDownProps = {
     customIcon?: ReactNode;
     mappedKey?: string;
     mappedLabel?: string;
+    data?: any;
 };
 
 const CustomDropDown = ({
     customIcon, dropDownList, onChange, placeholder, width, className, isNotUseAuthInputClass = false, isHiddenSearch = false
-    , mappedKey = 'key', mappedLabel = 'label'
+    , mappedKey = 'key', mappedLabel = 'label', data
 }: CustomDropDownProps) => {
 
     const [item, setItem] = useState<any | null>(null);
@@ -60,6 +61,13 @@ const CustomDropDown = ({
         setDropdownFilterList(filteredItems.length ? filteredItems : dropDownList || []);
     }, [searchValue, dropDownList]);
 
+    useEffect(() => {
+        if (!data) return
+        const selectedData = dropDownList?.find((item: any) => item[mappedKey] === data)
+        if (!selectedData) return
+        setItem(selectedData)
+    }, [data, dropDownList])
+
     const handlePopoverChange = (isOpen: boolean) => {
         setIsOpen(isOpen);
         if (!isOpen && searchValue) {
@@ -67,6 +75,7 @@ const CustomDropDown = ({
             setDropdownFilterList(dropDownList || []);
         }
     };
+
     return (
         <Popover onOpenChange={handlePopoverChange}>
             <PopoverTrigger className="py-0" asChild>
