@@ -28,7 +28,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { QuestionType } from '@/redux/StoreType'
 import { title } from 'process'
 import { cloneDeep } from 'lodash'
-import UpdateAnswer from './UpdateAnswer'
 
 // const modules = {
 //     toolbar: [
@@ -53,7 +52,7 @@ import UpdateAnswer from './UpdateAnswer'
 //     'link', 'image', 'video'
 // ]
 
-const UpdateFormAssignmentManagement = ({
+const UpdateAnswer = ({
     triggerElement,
     className,
     isOpen,
@@ -111,7 +110,6 @@ const UpdateFormAssignmentManagement = ({
     const [answer, setAnswer] = useState<any>([])
 
     const [answerValue, setAnswerValue] = useState('')
-    const [isOpenUpdate, setIsOpenUpdate] = useState(false)
 
     const handleCheck = (value: string) => {
         if (activeAnswer === value) {
@@ -322,15 +320,8 @@ const UpdateFormAssignmentManagement = ({
     };
 
     const handleModifyQuestions = () => {
-        console.log("here");
-        setIsOpenUpdate(true)
-    };
-    const handleReload = () => {
-
+        console.log("here")
     }
-    const handleCloseUpdate = () => setIsOpenUpdate(false)
-
-
     useEffect(() => {
         if (!activeData) return
         const { answer, content, difficulty, userId, courseData } = activeData
@@ -345,22 +336,22 @@ const UpdateFormAssignmentManagement = ({
     return (
         <Dialog open={isOpen}>
             <DialogTrigger className={className}>{triggerElement}</DialogTrigger>
-            <DialogContent className="bg-white border-none max-w-4xl text-black rounded-[20px] z-[9995] max-h-[80%] overflow-y-scroll">
+            <DialogContent className="bg-white border-none max-w-2xl text-black rounded-[20px] z-[9995] max-h-[80%] overflow-y-scroll">
                 <div className='flex justify-end w-full cursor-pointer'>
                     <X onClick={close} />
                 </div>
 
                 <DialogHeader className="w-full mx-auto">
                     <DialogTitle className="text-left text-[24px] font-medium">
-                        Chỉnh sửa câu hỏi
+                        Chỉnh sửa câu trả lời
                     </DialogTitle>
                     <DialogDescription className="text-lg text-left">
-                        Chỉnh sửa thông tin câu hỏi
+                        Chỉnh sửa thông tin câu tra lời
                     </DialogDescription>
                 </DialogHeader>
                 <div className='w-full'>
                     <form onSubmit={(handleSubmit)} className="w-full grid grid-cols-2 gap-6  p-0 px-0" action="#" method="POST">
-                        <div className="w-full col-span-1">
+                        {/* <div className="w-full col-span-1">
                             <span className="text-sm text-slate-600">Môn học *</span>
                             <CustomDropDown
                                 data={question?.courseData?.courseId || ""}
@@ -372,8 +363,8 @@ const UpdateFormAssignmentManagement = ({
                                 onChange={handleSelectCoure}
                             />
                             {error.courseData && <div className="mt-2 text-sm text-red-500">Vui lòng chọn môn học</div>}
-                        </div>
-                        <div className="col-span-1">
+                        </div> */}
+                        {/* <div className="col-span-1">
                             <span className="text-sm text-slate-600">Chọn độ khó *</span>
                             <CustomDropDown
                                 data={
@@ -387,10 +378,10 @@ const UpdateFormAssignmentManagement = ({
                                 onChange={handleSelectLevel}
                             />
                             {error.difficulty && <div className="mt-2 text-sm text-red-500">Vui lòng chọn độ khó</div>}
-                        </div>
+                        </div> */}
 
                         <div className="col-span-2">
-                            <span className="text-sm text-slate-600">Nội dung câu hỏi *</span>
+                            <span className="text-sm text-slate-600">Nội dung câu trả lời *</span>
                             <ReactQuill
                                 // modules={modules}
                                 // formats={formats}
@@ -428,13 +419,10 @@ const UpdateFormAssignmentManagement = ({
                             <Button>Xác nhận</Button>
                         </div>
                     </form>
-                    {
-                        isOpenUpdate && <UpdateAnswer reload={handleReload} close={handleCloseUpdate} isOpen={isOpenUpdate} activeData={activeData} className="w-full" triggerElement={<></>} />
-                    }
                 </div>
             </DialogContent >
         </Dialog >
     )
 }
 
-export default UpdateFormAssignmentManagement
+export default UpdateAnswer
