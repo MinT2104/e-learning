@@ -1,6 +1,4 @@
 
-import CustomDropDown from '@/components/common/CustomDropDown'
-import CustomTooltip from '@/components/common/CustomTooltip'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
@@ -10,12 +8,9 @@ import {
     DialogTitle,
     DialogTrigger
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { cn } from '@/lib/utils'
 import { RootState } from '@/redux/store'
 import GroupService from '@/services/group.service'
-import { Info, MoreHorizontal, X } from 'lucide-react'
+import { MoreHorizontal, X } from 'lucide-react'
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactQuill from 'react-quill';
@@ -23,10 +18,8 @@ import 'react-quill/dist/quill.snow.css';
 import CustomTable from '@/components/common/CustomTable'
 import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { QuestionType } from '@/redux/StoreType'
-import { title } from 'process'
 import { cloneDeep } from 'lodash'
 
 // const modules = {
@@ -68,28 +61,6 @@ const UpdateAnswer = ({
     activeData: QuestionType | undefined;
 }) => {
 
-    let initValue = {
-        title: '',
-        description: '',
-        courseId: '',
-    }
-
-    const mockDataLevel = [
-        {
-            label: 'Dễ',
-            key: 1
-        },
-        {
-            label: 'Trung bình',
-            key: 2
-        },
-        {
-            label: 'Khó',
-            key: 3
-        }
-    ]
-
-    const [classDetail, setClassDetail] = useState(initValue);
     const { authUser } = useSelector((state: RootState) => state.auth)
     const [userListCourse, setUserListCourse] = useState<any[]>([])
     const [activeAnswer, setActiveAnswer] = useState('')
@@ -98,7 +69,7 @@ const UpdateAnswer = ({
     //     const value = e.target.value;
     //     setClassDetail((prev) => ({ ...prev, [name]: value }));
     // };
-
+    console.log(userListCourse)
     const [question, setQuestion] = useState<any>({
         userId: undefined,
         content: undefined,
@@ -291,24 +262,24 @@ const UpdateAnswer = ({
         handleLoadGroup()
     }, [])
 
-    const handleSelectCoure = (data: { title: string, courseId: string }) => {
-        setQuestion((prev: any) => {
-            return {
-                ...prev,
-                courseData: data
-            }
-        })
-    }
+    // const handleSelectCoure = (data: { title: string, courseId: string }) => {
+    //     setQuestion((prev: any) => {
+    //         return {
+    //             ...prev,
+    //             courseData: data
+    //         }
+    //     })
+    // }
 
 
-    const handleSelectLevel = (data: { label: string, id: string }) => {
-        setQuestion((prev: any) => {
-            return {
-                ...prev,
-                difficulty: data.label
-            }
-        })
-    }
+    // const handleSelectLevel = (data: { label: string, id: string }) => {
+    //     setQuestion((prev: any) => {
+    //         return {
+    //             ...prev,
+    //             difficulty: data.label
+    //         }
+    //     })
+    // }
 
     const handleCancelAddAnswer = () => {
         setIsAddAnswer(false)

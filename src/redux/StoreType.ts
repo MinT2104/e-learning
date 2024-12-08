@@ -148,3 +148,26 @@ export interface QuestionType {
     content?: string;
     answer?: any
 };
+
+export interface ExamType {
+    _id?: string
+    name: string;
+    dateStart: string
+    time: number;
+    dateEnd: string;
+    description: string;
+    isViewPointAfterExam: boolean;
+    isViewTestAfterExam: boolean;
+    courseData: { // Đổi từ groupData sang courseData theo schema mới
+        courseId: string;
+        title: string;
+    };
+    groupData: {
+        groupId: string;
+        title: string;
+    };
+    status: number;
+    studentId: string;
+    userId: string;
+    examData: QuestionType[];
+}

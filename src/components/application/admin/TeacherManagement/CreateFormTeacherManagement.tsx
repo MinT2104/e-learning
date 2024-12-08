@@ -29,7 +29,7 @@ const CreateFormTeacherManagement = ({
     reload: () => void
 }) => {
 
-    let initValue = {
+    const initValue = {
         userName: '',
         password: '',
         phoneNumber: '',

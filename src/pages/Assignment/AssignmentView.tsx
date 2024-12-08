@@ -5,15 +5,14 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
+import { MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import UpdateFormClassManagement from "@/components/application/admin/ClassManagement/UpdateFormClassManagement";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { CourseType, QuestionType } from "@/redux/StoreType";
+import { QuestionType } from "@/redux/StoreType";
 import CustomPagination from "@/components/common/CustomPagination";
-import CreateFormAssignmentManagement from "@/components/application/admin/AssignmentManagement/CreateFormAssignmentManagement";
-import UpdateFormAssignmentManagement from "@/components/application/admin/AssignmentManagement/UpdateFormAssignmentManagement";
+import CreateFormAssignmentManagement from "@/components/application/AssignmentManagement/CreateFormAssignmentManagement";
+import UpdateFormAssignmentManagement from "@/components/application/AssignmentManagement/UpdateFormAssignmentManagement";
 
 const AssignmentView = () => {
 
@@ -189,17 +188,9 @@ const AssignmentView = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-3 mb-2">
-                    <Button className="h-[48px]">
-                        <FileDown />
-                        <span>Xuất danh sách</span>
-                    </Button>
                     <Button onClick={() => setIsOpenCreation(true)} className="h-[48px]">
                         <Plus />
                         <span>Tạo mới</span>
-                    </Button>
-                    <Button className="h-[48px]">
-                        <Import />
-                        <span>Nhập dữ liệu</span>
                     </Button>
                 </div>
 

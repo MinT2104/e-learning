@@ -1,5 +1,5 @@
 import { ApiClient } from "@/customFetch/ApiClient";
-import BaseService, { parsedQuery } from "../services/base.service";
+import BaseService from "../services/base.service";
 
 class GroupService extends BaseService {
     name: any

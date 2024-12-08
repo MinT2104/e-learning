@@ -48,9 +48,9 @@ const AddFormFile = ({
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        let cloneData = { ...fileDetails } as any
+        const cloneData = { ...fileDetails } as any
         delete cloneData._id
-        let dataRequest = {
+        const dataRequest = {
             _id: fileDetails._id,
             $addToSet: {
                 files: { name: fileDetails.name, url: fileDetails.url },

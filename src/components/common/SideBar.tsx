@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faUserTie, faBars, faLayerGroup, faClipboardList,
     faGraduationCap,
-    faClipboardQuestion
+    faClipboardQuestion,
+    faBook
 } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
@@ -55,6 +56,13 @@ function SideBar() {
             label: "Câu hỏi",
             icon: faClipboardQuestion,
             path: "/assignment-edu", // Add path for navigation
+            allowRoles: ['teacher']
+        },
+        {
+            id: 6, // Changed from 5 to 4 for sequential ID
+            label: "Kiểm tra",
+            icon: faBook,
+            path: "/examinations", // Add path for navigation
             allowRoles: ['teacher']
         },
     ];

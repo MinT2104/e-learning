@@ -1,6 +1,5 @@
 
 import CustomDropDown from '@/components/common/CustomDropDown'
-import CustomTooltip from '@/components/common/CustomTooltip'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
@@ -10,12 +9,9 @@ import {
     DialogTitle,
     DialogTrigger
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { cn } from '@/lib/utils'
 import { RootState } from '@/redux/store'
 import GroupService from '@/services/group.service'
-import { Info, MoreHorizontal, X } from 'lucide-react'
+import { MoreHorizontal, X } from 'lucide-react'
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactQuill from 'react-quill';
@@ -23,10 +19,11 @@ import 'react-quill/dist/quill.snow.css';
 import CustomTable from '@/components/common/CustomTable'
 import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { QuestionType } from '@/redux/StoreType'
-import { title } from 'process'
+import { cloneDeep } from 'lodash'
+import UpdateAnswer from './UpdateAnswer'
+import { v4 as uuidv4 } from 'uuid';
 
 // const modules = {
 //     toolbar: [
@@ -51,25 +48,21 @@ import { title } from 'process'
 //     'link', 'image', 'video'
 // ]
 
-const CreateFormAssignmentManagement = ({
+const UpdateFormAssignmentManagement = ({
     triggerElement,
     className,
     isOpen,
     close,
-    reload
+    reload,
+    activeData
 }: {
     triggerElement: ReactNode
     className?: string;
     isOpen: boolean;
     close: () => void;
     reload: () => void;
+    activeData: QuestionType | undefined;
 }) => {
-
-    let initValue = {
-        title: '',
-        description: '',
-        courseId: '',
-    }
 
     const mockDataLevel = [
         {
@@ -86,7 +79,6 @@ const CreateFormAssignmentManagement = ({
         }
     ]
 
-    const [classDetail, setClassDetail] = useState(initValue);
     const { authUser } = useSelector((state: RootState) => state.auth)
     const [userListCourse, setUserListCourse] = useState<any[]>([])
     const [activeAnswer, setActiveAnswer] = useState('')
@@ -107,6 +99,7 @@ const CreateFormAssignmentManagement = ({
     const [answer, setAnswer] = useState<any>([])
 
     const [answerValue, setAnswerValue] = useState('')
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false)
 
     const handleCheck = (value: string) => {
         if (activeAnswer === value) {
@@ -175,7 +168,7 @@ const CreateFormAssignmentManagement = ({
                                     onClick={() => {
                                         // setIsOpen(true);
                                         // setActiveData(row.original);
-                                        // handleLoadQuestions();
+                                        handleModifyQuestions();
                                         // setActiveId(id);
                                     }}
                                 >
@@ -184,7 +177,7 @@ const CreateFormAssignmentManagement = ({
                                     </div>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
-                                // onClick={() => handleDelete(id)}
+                                    onClick={() => handleDelete(row.original.id)}
                                 >
                                     <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
                                         <span>Xóa</span>
@@ -226,8 +219,8 @@ const CreateFormAssignmentManagement = ({
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const cloneAnswers = [...answer]
-        const formatAnswer = cloneAnswers.map((item) => {
+        const cloneAnswers = cloneDeep(answer)
+        const formatAnswer = cloneAnswers.map((item: any) => {
             if (item.id === activeAnswer) {
                 item['isTrue'] = true
                 return item
@@ -240,7 +233,8 @@ const CreateFormAssignmentManagement = ({
             ...question,
             userId: authUser._id,
             content: value ? value : undefined,
-            answer: formatAnswer.length > 0 ? [...formatAnswer] : undefined
+            answer: formatAnswer.length > 0 ? [...formatAnswer] : undefined,
+            _id: activeData?._id || ""
         }
         let flag1 = 0
 
@@ -264,7 +258,7 @@ const CreateFormAssignmentManagement = ({
         })
 
         if (!flag1) {
-            const res = await dispatch(globalThis.$action.createQuestion(dataRequest))
+            const res = await dispatch(globalThis.$action.updateQuestion(dataRequest))
             console.log(res)
             if (res.payload) {
                 close()
@@ -275,7 +269,7 @@ const CreateFormAssignmentManagement = ({
 
     const handleAddAnswer = () => {
         const dataRequest: any = {
-            id: (answer.length + 1).toString(),
+            id: uuidv4(),
             value: answerValue,
             isTrue: false
         }
@@ -311,6 +305,31 @@ const CreateFormAssignmentManagement = ({
         setAnswerValue('')
     }
 
+    const handleDelete = (id: string) => {
+        setAnswer((prev: any) => prev.filter((item: any) => item.id !== id));
+    };
+
+    const handleModifyQuestions = () => {
+        console.log("here");
+        setIsOpenUpdate(true)
+    };
+    const handleReload = () => {
+
+    }
+    const handleCloseUpdate = () => setIsOpenUpdate(false)
+
+
+    useEffect(() => {
+        if (!activeData) return
+        const { answer, content, difficulty, userId, courseData } = activeData
+        setQuestion({ answer, content, difficulty, userId, courseData })
+        setValue(content ? content : '')
+        setAnswer(answer ? answer : [])
+        const activeAnswer = answer.find((item: any) => item.isTrue == true)?.id || ""
+        setActiveAnswer(activeAnswer)
+        console.log(activeData)
+    }, [activeData])
+
     return (
         <Dialog open={isOpen}>
             <DialogTrigger className={className}>{triggerElement}</DialogTrigger>
@@ -321,10 +340,10 @@ const CreateFormAssignmentManagement = ({
 
                 <DialogHeader className="w-full mx-auto">
                     <DialogTitle className="text-left text-[24px] font-medium">
-                        Thêm câu hỏi
+                        Chỉnh sửa câu hỏi
                     </DialogTitle>
                     <DialogDescription className="text-lg text-left">
-                        Tạo thông tin câu hỏi
+                        Chỉnh sửa thông tin câu hỏi
                     </DialogDescription>
                 </DialogHeader>
                 <div className='w-full'>
@@ -332,6 +351,7 @@ const CreateFormAssignmentManagement = ({
                         <div className="w-full col-span-1">
                             <span className="text-sm text-slate-600">Môn học *</span>
                             <CustomDropDown
+                                data={question?.courseData?.courseId || ""}
                                 isHiddenSearch
                                 dropDownList={userListCourse}
                                 mappedKey="courseId"
@@ -344,6 +364,9 @@ const CreateFormAssignmentManagement = ({
                         <div className="col-span-1">
                             <span className="text-sm text-slate-600">Chọn độ khó *</span>
                             <CustomDropDown
+                                data={
+                                    mockDataLevel.find(item => item.label == question?.difficulty)?.key || ""
+                                }
                                 isHiddenSearch
                                 dropDownList={mockDataLevel}
                                 mappedKey="key"
@@ -359,7 +382,10 @@ const CreateFormAssignmentManagement = ({
                             <ReactQuill
                                 // modules={modules}
                                 // formats={formats}
-                                className='rounded-[6px]' theme="snow" value={value} onChange={setValue} />
+                                className='rounded-[6px]'
+                                theme="snow"
+                                value={value}
+                                onChange={setValue} />
                             {error.content && <div className="mt-2 text-sm text-red-500">Vui lòng điền câu hỏi</div>}
 
                         </div>
@@ -390,10 +416,13 @@ const CreateFormAssignmentManagement = ({
                             <Button>Xác nhận</Button>
                         </div>
                     </form>
+                    {
+                        isOpenUpdate && <UpdateAnswer reload={handleReload} close={handleCloseUpdate} isOpen={isOpenUpdate} activeData={activeData} className="w-full" triggerElement={<></>} />
+                    }
                 </div>
             </DialogContent >
         </Dialog >
     )
 }
 
-export default CreateFormAssignmentManagement
+export default UpdateFormAssignmentManagement

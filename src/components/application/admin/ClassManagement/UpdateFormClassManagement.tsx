@@ -36,7 +36,7 @@ const UpdateFormClassManagement = ({
 
 }) => {
 
-    let initValue = {
+    const initValue = {
         title: '',
         description: '',
         courseId: '',
@@ -48,7 +48,7 @@ const UpdateFormClassManagement = ({
     const { groups, isLoading: groupLoading } = useSelector((state: RootState) => state.group);
 
 
-    let initGroup = {
+    const initGroup = {
         "title": "",
         "courseData":
         {

@@ -30,7 +30,7 @@ const AddFormLesson = ({
     reload: () => void
 }) => {
     const { chapters } = useSelector((state: RootState) => state.chapter)
-    let initValue = {
+    const initValue = {
         title: '',
         duration: '',
         url: '',
@@ -52,9 +52,9 @@ const AddFormLesson = ({
     }
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        let cloneData = { ...chapterDetails } as any
+        const cloneData = { ...chapterDetails } as any
         delete cloneData._id
-        let dataRequest = {
+        const dataRequest = {
             _id: chapterDetails._id,
             $addToSet: {
                 lessons: cloneData

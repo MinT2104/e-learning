@@ -29,7 +29,7 @@ const AddFormChapter = ({
     reload: () => void
 }) => {
     const { id } = useParams();
-    let initValue = {
+    const initValue = {
         name: '',
         title: '',
         lessons: [],

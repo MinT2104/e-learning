@@ -28,7 +28,7 @@ const CreateFormClassManagement = ({
     close: () => void;
 }) => {
 
-    let initValue = {
+    const initValue = {
         title: '',
         description: '',
         courseId: '',
