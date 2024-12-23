@@ -4,7 +4,8 @@ import {
     faUserTie, faBars, faLayerGroup, faClipboardList,
     faGraduationCap,
     faClipboardQuestion,
-    faBook
+    faBook,
+    faBell
 } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
@@ -55,7 +56,7 @@ function SideBar() {
             id: 5, // Changed from 5 to 4 for sequential ID
             label: "Câu hỏi",
             icon: faClipboardQuestion,
-            path: "/assignment-edu", // Add path for navigation
+            path: "/questions", // Add path for navigation
             allowRoles: ['teacher']
         },
         {
@@ -63,6 +64,13 @@ function SideBar() {
             label: "Kiểm tra",
             icon: faBook,
             path: "/examinations", // Add path for navigation
+            allowRoles: ['teacher']
+        },
+        {
+            id: 7, // Changed from 5 to 4 for sequential ID
+            label: "Thông báo",
+            icon: faBell,
+            path: "/notifications", // Add path for navigation
             allowRoles: ['teacher']
         },
     ];

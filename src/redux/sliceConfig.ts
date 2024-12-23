@@ -7,6 +7,7 @@ import GroupService from '@/services/group.service';
 import UserService from '@/services/user.service';
 import ChapterService from '@/services/chapter.service';
 import QuestionService from '@/services/question.service';
+import NotificationService from '@/services/notification.service';
 
 export const serviceMapping: any = {
     course: new CourseService('course'),
@@ -16,7 +17,8 @@ export const serviceMapping: any = {
     media: new MediaService('media'),
     group: new GroupService('group'),
     user: new UserService('user'),
-    question: new QuestionService('question')
+    question: new QuestionService('question'),
+    notification: new NotificationService('notification')
 }
 
 interface ActionConfig {
@@ -244,6 +246,51 @@ export const sliceConfig: SliceConfig[] = [
             },
             {
                 type: 'deleteQuestion',
+                endpoint: 'remove',
+            },
+        ],
+    },
+    {
+        name: 'notification',
+        initialState: {
+            notifications: [],        //loadallwithpaging
+            notification: {},         //getbyid
+            isLoading: false,       //load xong false
+            error: {},              //bao loi
+            total: 0                //tong mang fruit
+        },
+        thunk: [
+            {
+                type: 'loadNotifications',
+                endpoint: 'loadAllWithPaging',
+                customAction: (state, action) => {
+                    state.notifications = action.payload.records.rows;
+                    state.total = action.payload.records.total
+                },
+            },
+            {
+                type: 'getNotification',
+                endpoint: 'getById',
+                customAction: (state, action) => {
+                    state.notification = action.payload;
+                },
+            },
+            {
+                type: 'createNotification',
+                endpoint: 'save',
+                customAction: (state, action) => {
+                    state.notification = action.payload;
+                },
+            },
+            {
+                type: 'updateNotification',
+                endpoint: 'update',
+                customAction: (state, action) => {
+                    state.notification = action.payload;
+                },
+            },
+            {
+                type: 'deleteNotification',
                 endpoint: 'remove',
             },
         ],

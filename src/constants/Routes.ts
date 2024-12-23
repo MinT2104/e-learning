@@ -12,6 +12,7 @@ import HomeView from "@/pages/Home/HomeView";
 import InstructorsView from "@/pages/Instructors/InstructorsView";
 import LoginView from "@/pages/Login/LoginView";
 import MyCourseView from "@/pages/MyCourse/MyCourseView";
+import NotificationView from "@/pages/Notification/NotificationView";
 import ProfileView from "@/pages/Profile/ProfileView";
 import SignUpView from "@/pages/Signup/SignUpView";
 import { FC } from "react";
@@ -97,7 +98,7 @@ export const routes: MappedAuthRouteType[] = [
 
     },
     {
-        path: "/assignment-edu",
+        path: "/questions",
         element: AssignmentView,
         allowedRoles: ["teacher"],
         isUsedLayout: true
@@ -124,6 +125,12 @@ export const routes: MappedAuthRouteType[] = [
     {
         path: "/examinations/edit/:id",
         element: EditExamView,
+        allowedRoles: ["teacher"],
+        isUsedLayout: true
+    },
+    {
+        path: "/notifications",
+        element: NotificationView,
         allowedRoles: ["teacher"],
         isUsedLayout: true
     },

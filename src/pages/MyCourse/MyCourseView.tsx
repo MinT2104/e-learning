@@ -2,9 +2,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import CourseCard from '../Course/CourseCard';
 import { useEffect, useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
-import CustomDropDown from '@/components/common/CustomDropDown';
 import { Plus } from 'lucide-react';
 import Heading from '@/components/common/Heading';
 import { Button } from '@/components/ui/button';
@@ -15,8 +12,6 @@ const MyCourseView = () => {
     const { authUser } = useSelector((state: RootState) => state.auth)
 
     const dispatch = useDispatch();
-
-    const [search, setSearch] = useState<string>('')
 
     const [coursess, setCoursess] = useState<GroupType[][]>([])
     const [loadingState] = useState<boolean>(false);
@@ -90,17 +85,6 @@ const MyCourseView = () => {
     //     </div>
     // );
 
-    const mockCategories = [
-        {
-            label: 'Mới nhất',
-            key: "newest"
-        },
-        {
-            label: 'Cũ hơn',
-            key: "oldest"
-        },
-    ]
-
     if (loadingState) {
         return (
             <div className="container mx-auto pb-8 h-fit">
@@ -147,7 +131,7 @@ const MyCourseView = () => {
                     <span>Thêm nhóm mới</span>
                 </Button>
             } />
-            <div className="relative truncate mb-6 w-2/3">
+            {/* <div className="relative truncate mb-6 w-2/3">
                 <div className='flex h-[48px] w-full'>
                     <CustomDropDown isHiddenSearch isNotUseAuthInputClass className='w-fit bg-primary text-white h-full min-w-40 rounded-tr-none rounded-br-none border-r-[0px] shadow-none hover:bg-primary border-primary' dropDownList={mockCategories} placeholder="All" />
                     <div className="flex-1 border border-border border-l-0 rounded-tl-none rounded-bl-none rounded-lg truncate flex">
@@ -165,7 +149,7 @@ const MyCourseView = () => {
                     </div>
 
                 </div>
-            </div>
+            </div> */}
             {
                 authUser && authUser.role === 'teacher' ? (
                     coursess.map((groupItem: GroupType[]) => {

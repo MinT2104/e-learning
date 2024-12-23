@@ -3,19 +3,34 @@ import { cn } from "@/lib/utils";
 import { ExamType } from "@/redux/StoreType";
 import { AlarmClockPlus, Eye, Hourglass, Layers, Pencil, X } from "lucide-react";
 import moment from "moment";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DeleteExamDialog from "./DeleteExamDialog";
 
 type ExamListType = {
     exams: ExamType[]
+    reload: any
 }
 
-const ExamList = ({ exams }: ExamListType) => {
+const ExamList = ({ exams, reload }: ExamListType) => {
 
     const navigate = useNavigate();
+    const [activeData, setActiveData] = useState<ExamType | null>(null)
+    const [isOpenDelete, setIsOpenDelete] = useState(false)
 
     const mappedDate = (date: string) => {
         return moment(date || '').format('DD/MM/YYYY, HH:mm A');
     };
+
+    const handleDeleteExam = (data: ExamType | null) => {
+        if (!data) return
+        setActiveData(data)
+        setIsOpenDelete(true)
+    }
+
+    const handleReload = () => {
+        reload()
+    }
 
     return (
         <div className="w-full my-4 flex flex-col gap-6">
@@ -89,7 +104,9 @@ const ExamList = ({ exams }: ExamListType) => {
                                     <Pencil size={14} />
                                     <span>Chỉnh sửa</span>
                                 </Button>
-                                <Button className="h-[32px] rounded-full bg-red-200 text-red-500 hover:bg-red-200 hover:text-red-500">
+                                <Button
+                                    onClick={() => handleDeleteExam(item)}
+                                    className="h-[32px] rounded-full bg-red-200 text-red-500 hover:bg-red-200 hover:text-red-500">
                                     <X size={14} />
                                     <span>Xóa đề</span>
                                 </Button>
@@ -98,6 +115,7 @@ const ExamList = ({ exams }: ExamListType) => {
                     );
                 })
             }
+            {activeData && isOpenDelete && <DeleteExamDialog data={activeData} reload={handleReload} close={() => { setActiveData(null); setIsOpenDelete(false) }} />}
         </div>
     );
 };

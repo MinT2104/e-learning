@@ -1,5 +1,4 @@
-import { Bell, CircleUserRound, Search } from "lucide-react";
-import { Button } from "../ui/button";
+import { Bell, CircleUserRound } from "lucide-react";
 import {
     Popover,
     PopoverContent,
@@ -18,6 +17,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { Button } from "../ui/button";
 
 export const Header = () => {
 
@@ -43,10 +43,10 @@ export const Header = () => {
     return (
         <header
             className="w-full h-20 bg-white px-4 flex items-center fixed top-0 left-0 z-50 p-2 pr-12 pl-[300px] shadow-[0_2px_10px_rgba(0,0,0,0.1)]">
-            <div className="rounded-full p-1 px-4 border flex items-center gap-2 border-slate-500/20 w-1/3 focus-within:border-primary group">
+            {/* <div className="rounded-full p-1 px-4 border flex items-center gap-2 border-slate-500/20 w-1/3 focus-within:border-primary group">
                 <Search size={18} className="text-slate-400" />
                 <input placeholder="Tìm kiếm khóa học, bài viết, video, ..." className="flex-1 border-none shadow-none outline-none h-9 text-sm text-slate-700" />
-            </div>
+            </div> */}
             <div className="flex-1 flex items-center gap-4 justify-end">
                 {/* <Button variant={'link'} className="font-bold text-sm px-0 underline-0"
                     onClick={() => handleTeacher()}>For teacher</Button> */}

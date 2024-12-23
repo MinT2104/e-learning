@@ -46,6 +46,13 @@ export interface StoreType {
         error: string | null;
         total: number;
     };
+    notification: {
+        notifications: NotificationType[],
+        notification: NotificationType;
+        isLoading: boolean;
+        error: string | null;
+        total: number;
+    };
     media: {
         images: { url: string }[];
     };
@@ -170,4 +177,21 @@ export interface ExamType {
     studentId: string;
     userId: string;
     examData: QuestionType[];
+}
+
+/////////////////////////// notification
+export interface TeacherData {
+    userId: string;
+    userName: string;
+}
+
+export interface NotificationType {
+    _id?: string; // ID của MongoDB (_id)
+    title: string;
+    groupId: string;
+    teacherData: TeacherData;
+    description: string;
+    status: boolean; // true nếu đã publish, false nếu chưa
+    createdAt?: string; // Timestamps từ MongoDB
+    updatedAt?: string; // Timestamps từ MongoDB
 }

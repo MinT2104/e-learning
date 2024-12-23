@@ -1,6 +1,7 @@
 
 import CourseMaterial from '@/components/application/Course/CourseMaterial';
 import CourseMember from '@/components/application/Course/CourseMember';
+import CourseNotification from '@/components/application/Course/CourseNotification';
 import CourseStudy from '@/components/application/Course/CourseStudy';
 import Heading from '@/components/common/Heading';
 import { Button } from '@/components/ui/button';
@@ -59,6 +60,11 @@ const CourseContent = () => {
                 <CourseMember />
             </div>
 
+            <div className={cn('w-full',
+                activeKey !== 'notification' && 'hidden'
+            )}>
+                <CourseNotification />
+            </div>
         </div>
     );
 };
