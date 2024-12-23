@@ -1,35 +1,38 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import CourseCard from '../Course/CourseCard';
 import { useEffect, useState } from 'react';
-import { Plus } from 'lucide-react';
 import Heading from '@/components/common/Heading';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import { GroupType } from '@/redux/StoreType';
+import GroupService from '@/services/group.service';
 
 const MyCourseView = () => {
+    const groupService = new GroupService('group')
     const { authUser } = useSelector((state: RootState) => state.auth)
-
-    const dispatch = useDispatch();
-
+    const [query] = useState({
+        page: 1, limit: 100, query: {}
+    })
+    const [groups, setGroups] = useState<GroupType[]>([])
     const [coursess, setCoursess] = useState<GroupType[][]>([])
-    const [loadingState] = useState<boolean>(false);
-
 
     const handleLoadGroup = async () => {
-        const query = {
+        const loadQuery = {
             page: 1,
             limit: 100,
             query: {
+                ...query.query,
                 'teacherData.userId': authUser?._id
             }
         }
-        await dispatch(globalThis.$action.loadGroups(query))
+        const res: any = await groupService.loadAllWithPaging(loadQuery)
+        if (res?.records) {
+            const group: GroupType[] = res?.records?.rows
+            setGroups(group)
+        }
     }
 
     const handleLoadGroupStudent = async () => {
-        const query = {
+        const loadQuery = {
             page: 1,
             limit: 100,
             query: {
@@ -38,10 +41,12 @@ const MyCourseView = () => {
                 }
             }
         }
-        await dispatch(globalThis.$action.loadGroups(query))
+        const res: any = await groupService.loadAllWithPaging(loadQuery)
+        if (res?.records) {
+            const group: GroupType[] = res?.records?.rows
+            setGroups(group)
+        }
     }
-
-    const { groups } = useSelector((state: RootState) => state.group)
 
     const handleSplit = () => {
         const groupedByCourseId: any = [];
@@ -65,6 +70,7 @@ const MyCourseView = () => {
             handleLoadGroupStudent()
         }
     }, [])
+
     useEffect(() => {
         if (groups.length > 0) {
             handleSplit()
@@ -85,52 +91,9 @@ const MyCourseView = () => {
     //     </div>
     // );
 
-    if (loadingState) {
-        return (
-            <div className="container mx-auto pb-8 h-fit">
-                <div className="flex flex-col">
-                    <div className='grid grid-cols-2 gap-2'>
-                        <Skeleton className="h-[48px] w-[200px] rounded-lg animate-pulse" />
-                        <Skeleton className="h-[48px] w-[160px] rounded-lg animate-pulse ml-auto" />
-                    </div>
-                    <div className='mt-4'>
-                        <Skeleton className="h-[48px] w-[450px] rounded-lg animate-pulse" />
-                        <Skeleton className="mt-10 h-8 w-[200px]" />
-
-                        {Array.isArray(coursess) && coursess.length > 0 ? (
-                            <div className="grid grid-cols-4 gap-6 mt-4">
-                                {coursess.map((_, index) => (
-                                    <div key={index} className="space-y-2">
-                                        <Skeleton className="h-[215px] rounded-lg animate-pulse" />
-                                        {/* <Skeleton className="h-[48px] w-[200px] rounded-lg animate-pulse" /> */}
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-4 gap-6 mt-4">
-                                {Array(8).fill(0).map((_, index) => (
-                                    <div key={index} className="space-y-2">
-                                        <Skeleton className="h-[215px] rounded-lg animate-pulse" />
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                    </div>
-
-                </div>
-            </div>
-        );
-    } else return (
+    return (
         <div className='mx-auto pb-8 h-fit w-full flex flex-col gap-4'>
-            <Heading title='Lớp học phần' rightIcon={
-                <Button
-                    className=''
-                >
-                    <Plus />
-                    <span>Thêm nhóm mới</span>
-                </Button>
-            } />
+            <Heading title='Lớp học phần' />
             {/* <div className="relative truncate mb-6 w-2/3">
                 <div className='flex h-[48px] w-full'>
                     <CustomDropDown isHiddenSearch isNotUseAuthInputClass className='w-fit bg-primary text-white h-full min-w-40 rounded-tr-none rounded-br-none border-r-[0px] shadow-none hover:bg-primary border-primary' dropDownList={mockCategories} placeholder="All" />

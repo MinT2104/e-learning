@@ -90,7 +90,7 @@ function SideBar() {
             <div className={`transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 w-64 h-full bg-white shadow-md`}>
                 <div className="p-6">
                     <h1 className="flex justify-items-center text-2xl font-bold text-gray-800">
-                        <span className="text-primary font-bold">EL</span>earning
+                        <span className="text-primary font-bold">Edu</span>Verse
                     </h1>
                 </div>
 

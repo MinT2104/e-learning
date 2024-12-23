@@ -1,9 +1,4 @@
-import { Bell, CircleUserRound } from "lucide-react";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
+import { CircleUserRound } from "lucide-react";
 
 import {
     DropdownMenu,
@@ -13,11 +8,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Separator } from "@radix-ui/react-separator";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { Button } from "../ui/button";
 
 export const Header = () => {
 
@@ -58,29 +51,6 @@ export const Header = () => {
                     authUser ?
                         (
                             <>
-                                {/* Thông báo */}
-                                <div className="flex items-center gap-10 justify-center border-border/20">
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <Button variant="outline" className="text-slate-500 hover:text-primary shadow-none rounded-full h-10 w-10 ">
-                                                <Bell className="hover:text-primary" />
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent align="end" className="w-[350px] bg-white border-border/20 rounded-md p-4 z-50">
-                                            <div className="grid gap-4 p-2">
-                                                <h4 className="font-medium leading-none">Thông báo</h4>
-                                                <ul className="text-sm text-muted-foreground mr-2">
-                                                    <li className="text-slate-500 py-3 cursor-pointer">Thông báo 1: Bạn đã đăng ký khóa học ABC</li>
-                                                    <Separator className="bg-gray-200 h-[1px] my-2" />
-                                                    <li className="text-slate-500 py-3 cursor-pointer">Thông báo 2: Khoá học XYZ sắp bắt đầu</li>
-                                                    <Separator className="bg-gray-200 h-[1px] my-2" />
-                                                    <li className="text-slate-500 py-3 cursor-pointer">Thông báo 3: Cập nhật tài liệu khóa học DEF</li>
-                                                    <Separator className="bg-gray-200 h-[1px] my-2" />
-                                                </ul>
-                                            </div>
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild className="w-10 h-10 rounded-full bg-secondary text-xl flex items-center justify-center border relative cursor-pointer">
                                         {
@@ -102,10 +72,6 @@ export const Header = () => {
                                         <DropdownMenuItem
                                             onClick={() => navigate('/profile')}
                                             className="text-slate-500 py-3 cursor-pointer">Trang cá nhân</DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem className="text-slate-500 py-3 cursor-pointer">Viết blog</DropdownMenuItem>
-                                        <DropdownMenuItem className="text-slate-500 py-3 cursor-pointer">Bài viết của bạn</DropdownMenuItem>
-                                        <DropdownMenuItem className="text-slate-500 py-3 cursor-pointer">Bài viết đã lưu</DropdownMenuItem>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem
                                             onClick={handleLogout}

@@ -69,7 +69,7 @@ const LoginView = () => {
   return (
     <div className="h-screen p-10 py-10 flex flex-col gap-6 items-center justify-center w-full">
       <img className="w-20 h-auto" src={Logo} alt="" />
-      <h1 className="font-bold text-3xl">Đăng nhập vào EL</h1>
+      <h1 className="font-bold text-3xl">Đăng nhập vào EduVerse</h1>
       {/* <div>
         <p className="font-light text-slate-600 text-md text-center text-wrap">
           Khám phá hành trình học tiếng Anh tuyệt vời nơi bạn có thể tự tin giao tiếp

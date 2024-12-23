@@ -42,15 +42,6 @@ const NotificationDialogView = ({
                         <p className="text-base font-normal text-left">{data.description}</p>
                     </div>
                 </div>
-                {/* <DialogFooter
-                    style={{
-                        boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px'
-                    }}
-                    className='mt-auto w-full bg-white border-t sticky p-4 bottom-0 left-0'>
-                    <Button className='w-full' variant="outline" onClick={handleChangeOpen}>
-                        Đóng
-                    </Button>
-                </DialogFooter> */}
             </DialogContent>
         </Dialog>
     )
