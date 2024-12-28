@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Heading from '@/components/common/Heading';
 import { GroupType } from '@/redux/StoreType';
 import GroupService from '@/services/group.service';
+import { Navigate } from 'react-router-dom';
 
 const MyCourseView = () => {
     const groupService = new GroupService('group')
@@ -78,18 +79,9 @@ const MyCourseView = () => {
     }, [groups])
 
 
-    // const { isLoading } = useSelector((state: RootState) => state.course);
-
-
-    // else return (
-    //     <div className="container mx-auto pb-8 h-fit">
-    //         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-    //             {coursess.map((course: CourseType) => (
-    //                 <CourseCard {...course} key={course._id} />
-    //             ))}
-    //         </div>
-    //     </div>
-    // );
+    if (authUser?.role === 'admin') {
+        return <Navigate to="/class-management" />
+    }
 
     return (
         <div className='mx-auto pb-8 h-fit w-full flex flex-col gap-4'>

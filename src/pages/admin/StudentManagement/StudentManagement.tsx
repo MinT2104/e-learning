@@ -1,5 +1,6 @@
 import CreateFormStudentManagement from "@/components/application/admin/StudentManagement/CreateFormStudentManagement";
 import UpdateFormStudentManagement from "@/components/application/admin/StudentManagement/UpdateFormStudentManagement";
+import UserImportDialog from "@/components/application/admin/StudentManagement/UserImportDialog";
 import CustomPagination from "@/components/common/CustomPagination";
 import CustomTable from "@/components/common/CustomTable";
 import Heading from "@/components/common/Heading";
@@ -10,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { UserType } from "@/redux/StoreType";
 import UserService from "@/services/user.service";
 import { ColumnDef } from "@tanstack/react-table";
-import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
+import { Import, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const StudentManagement = () => {
@@ -39,6 +40,7 @@ const StudentManagement = () => {
         query: { role: 'student' }
     })
 
+    const [isOpenImport, setIsOpenImport] = useState(false)
 
     const handleGetData = async () => {
         setIsLoading(true)
@@ -154,6 +156,8 @@ const StudentManagement = () => {
         },
     ];
 
+    const handleCloseImport = () => setIsOpenImport(false)
+
     const handleClose = () => setIsOpen(false)
     const handleCloseCreation = () => setIsOpenCreation(false)
     return (
@@ -177,15 +181,11 @@ const StudentManagement = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-3 mb-2">
-                    <Button className="h-[48px]">
-                        <FileDown />
-                        <span>Xuất danh sách</span>
-                    </Button>
                     <Button className="h-[48px]" onClick={() => setIsOpenCreation(true)}>
                         <Plus />
                         <span>Tạo mới</span>
                     </Button>
-                    <Button className="h-[48px]">
+                    <Button className="h-[48px]" onClick={() => setIsOpenImport(true)}>
                         <Import />
                         <span>Nhập dữ liệu</span>
                     </Button>
@@ -203,7 +203,7 @@ const StudentManagement = () => {
             />
             <CreateFormStudentManagement reload={handleGetData} close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
             <CustomPagination onChange={handleChangePage} total={studentData.total} currentPage={query.page} pageSize={query.limit} />
-
+            {isOpenImport && <UserImportDialog reload={handleGetData} close={handleCloseImport} data={null} />}
         </div>
     );
 };

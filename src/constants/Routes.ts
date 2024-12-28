@@ -1,4 +1,6 @@
 import DetailExamView from "@/components/application/Exam/DetailExamView";
+import { ExamResult } from "@/components/application/Exam/ExamResult";
+import { TestingExamination } from "@/components/application/Exam/TestingExamination";
 import ClassManagement from "@/pages/admin/ClassManagement/ClassManagement";
 import StudentManagement from "@/pages/admin/StudentManagement/StudentManagement";
 import TeacherManagement from "@/pages/admin/TeacherManagement/TeacherManagement";
@@ -34,7 +36,7 @@ export const routes: MappedAuthRouteType[] = [
     {
         path: "/courses",
         element: MyCourseView,
-        allowedRoles: ["guest", "student", "teacher", "admin"],
+        allowedRoles: ["student", "teacher", "admin"],
         isUsedLayout: true
     },
     // {
@@ -53,27 +55,27 @@ export const routes: MappedAuthRouteType[] = [
     {
         path: "/instructors",
         element: InstructorsView,
-        allowedRoles: ["guest", "student", "teacher", "admin"],
+        allowedRoles: ["student", "teacher", "admin"],
         isUsedLayout: true
 
     },
     {
         path: "/profile",
         element: ProfileView,
-        allowedRoles: ["guest", "student", "teacher", "admin"],
+        allowedRoles: ["student", "teacher", "admin"],
         isUsedLayout: true
 
     },
     {
         path: "/courses/:id",
         element: CourseDetailView,
-        allowedRoles: ["guest", "student", "teacher", "admin"],
+        allowedRoles: ["student", "teacher", "admin"],
         isUsedLayout: true
 
     }, {
         path: "/course/:id/watch",
         element: CourseVideo,
-        allowedRoles: ["guest", "student", "teacher", "admin"],
+        allowedRoles: ["student", "teacher", "admin"],
         isUsedLayout: true
     },
     {
@@ -107,7 +109,7 @@ export const routes: MappedAuthRouteType[] = [
     {
         path: "/examinations",
         element: ExamView,
-        allowedRoles: ["teacher"],
+        allowedRoles: ["teacher", 'student'],
         isUsedLayout: true
     },
     {
@@ -134,6 +136,18 @@ export const routes: MappedAuthRouteType[] = [
         allowedRoles: ["teacher"],
         isUsedLayout: true
     },
+    {
+        path: "/examinations/testing/:id",
+        element: TestingExamination,
+        allowedRoles: ["student"],
+        isUsedLayout: false
+    },
+    {
+        path: "/examinations/result/:id",
+        element: ExamResult,
+        allowedRoles: ["student"],
+        isUsedLayout: false
+    }
 ];
 
 
@@ -150,13 +164,6 @@ export const MappedAuthRoute: MappedAuthRouteType[] = [
         allowedRoles: ["guest"],
         isUsedLayout: true
     },
-    // {
-    //     path: "/teachersignup",
-    //     element: SignUpTeacherView,
-    //     allowedRoles: ["guest"],
-    // },
-
-
 ]
 
 export interface MappedAuthRouteType {

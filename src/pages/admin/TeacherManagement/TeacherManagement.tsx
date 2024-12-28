@@ -1,3 +1,4 @@
+import UserImportDialog from "@/components/application/admin/StudentManagement/UserImportDialog";
 import CreateFormTeacherManagement from "@/components/application/admin/TeacherManagement/CreateFormTeacherManagement";
 import CustomFormTeacherManagement from "@/components/application/admin/TeacherManagement/UpdateFormTeacherManagement";
 import CustomPagination from "@/components/common/CustomPagination";
@@ -10,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { UserType } from "@/redux/StoreType";
 import UserService from "@/services/user.service";
 import { ColumnDef } from "@tanstack/react-table";
-import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
+import { Import, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const TeacherManagement = () => {
@@ -65,6 +66,8 @@ const TeacherManagement = () => {
             }
         })
     }
+    const [isOpenImport, setIsOpenImport] = useState(false)
+
 
     useEffect(() => {
         handleGetData();
@@ -153,6 +156,8 @@ const TeacherManagement = () => {
             },
         },
     ];
+    const handleCloseImport = () => setIsOpenImport(false)
+
 
     const handleClose = () => setIsOpen(false)
     const handleCloseCreation = () => setIsOpenCreation(false)
@@ -177,15 +182,11 @@ const TeacherManagement = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-3 mb-2">
-                    <Button className="h-[48px]">
-                        <FileDown />
-                        <span>Xuất danh sách</span>
-                    </Button>
                     <Button className="h-[48px]" onClick={() => setIsOpenCreation(true)}>
                         <Plus />
                         <span>Tạo mới</span>
                     </Button>
-                    <Button className="h-[48px]">
+                    <Button className="h-[48px]" onClick={() => setIsOpenImport(true)}>
                         <Import />
                         <span>Nhập dữ liệu</span>
                     </Button>
@@ -203,7 +204,7 @@ const TeacherManagement = () => {
             />
             <CreateFormTeacherManagement reload={handleGetData} close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
             <CustomPagination onChange={handleChangePage} total={teacherData.total} currentPage={query.page} pageSize={query.limit} />
-
+            {isOpenImport && <UserImportDialog reload={handleGetData} close={handleCloseImport} data={null} />}
         </div>
     );
 };

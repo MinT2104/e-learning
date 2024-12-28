@@ -163,7 +163,7 @@ export interface ExamType {
     time: number;
     dateEnd: string;
     description: string;
-    isViewPointAfterExam: boolean;
+    isViewAnswerAfterExam: boolean;
     isViewTestAfterExam: boolean;
     courseData: { // Đổi từ groupData sang courseData theo schema mới
         courseId: string;
@@ -177,6 +177,10 @@ export interface ExamType {
     studentId: string;
     userId: string;
     examData: QuestionType[];
+    totalScore?: number;
+    submittedTime?: Number;
+    examIdCore?: string;
+
 }
 
 /////////////////////////// notification

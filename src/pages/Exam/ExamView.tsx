@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { RootState } from "@/redux/store";
 import { Filter, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import CustomDropDown from "@/components/common/CustomDropDown";
 import GroupService from "@/services/group.service";
 import { ExamType, GroupType } from "@/redux/StoreType";
@@ -20,24 +20,20 @@ const ExamView = () => {
         query: {}
     })
     const [groupData, setGroupData] = useState<{ key: string, name: string }[]>()
-    const dispatch = useDispatch();
     const { authUser } = useSelector((state: RootState) => state.auth)
     const [exam, setExam] = useState<ExamType[]>([])
-    const handleLoadQuestions = async () => {
-        await dispatch(globalThis.$action.loadQuestions({
-            ...query, query: {
-                ...query.query,
-                'userId': authUser._id
-            }
-        }))
-    }
+
 
     const handleLoadGroup = async () => {
         const query = {
             page: 1,
             limit: 100,
             query: {
-                'teacherData.userId': authUser?._id
+                ...(authUser?.role === 'teacher' ? { 'teacherData.userId': authUser?._id } : {
+                    _id: {
+                        $in: authUser?.courseIds
+                    }
+                })
             }
         }
         const res: any = await groupService.loadAllWithPaging(query)
@@ -55,7 +51,6 @@ const ExamView = () => {
             setGroupData(formatData)
         }
     }
-
     const mockCategories = [
         {
             label: 'Mới nhất',
@@ -68,18 +63,18 @@ const ExamView = () => {
     ]
 
     const handleLoadExamData = async () => {
-        // const query = {
-        //     page: 1,
-        //     limit: 5,
-        //     query: {
-        //         'userId': authUser?._id
-        //     }
-        // }
+
         const res: any = await examService.loadAllWithPaging({
             ...query,
             query: {
+                ...(authUser?.role === 'teacher' ? { 'userId': authUser?._id } : {
+                    'groupData.groupId': {
+                        $in: authUser?.courseIds,
+                    },
+                    studentId: authUser?._id || ''
+                }),
                 ...query.query,
-                'userId': authUser?._id
+                ...(authUser?.role === 'student' ? { role: authUser?.role } : {})
             }
         })
         if (res?.records) {
@@ -93,7 +88,6 @@ const ExamView = () => {
     }, [])
 
     useEffect(() => {
-        handleLoadQuestions();
         handleLoadExamData()
     }, [query]);
 
@@ -103,7 +97,11 @@ const ExamView = () => {
                 ...prev,
                 query: {
                     ...prev.query,
-                    'groupData.groupId': data.key || ''
+                    ...(
+                        authUser?.role === 'teacher' ? { 'groupData.groupId': data.key } : {
+                            'groupData.groupId': data.key
+                        }
+                    )
                 }
             }
         })
@@ -163,12 +161,16 @@ const ExamView = () => {
                         </div>
                     </div> */}
                 </div>
-                <div className="flex items-center gap-3 mb-2">
-                    <Button onClick={() => navigate('/examinations/create')} className="h-[48px]">
-                        <Plus />
-                        <span>Tạo đề thi mới</span>
-                    </Button>
-                </div>
+                {
+                    authUser?.role === 'teacher' ? (
+                        <div className="flex items-center gap-3 mb-2">
+                            <Button onClick={() => navigate('/examinations/create')} className="h-[48px]">
+                                <Plus />
+                                <span>Tạo đề thi mới</span>
+                            </Button>
+                        </div>
+                    ) : null
+                }
             </div>
             <ExamList exams={exam || []} reload={handleLoadExamData} />
         </div>

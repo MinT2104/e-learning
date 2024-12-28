@@ -199,7 +199,7 @@ const CourseMember = () => {
                     <div className="flex items-center gap-2">
                         <Button className="h-[48px]">
                             <FileDown />
-                            <span>Xuất danh sách sinh viên</span>
+                            <span>Nhập danh sách sinh viên</span>
                         </Button>
                         {
                             authUser.role === 'teacher' ?

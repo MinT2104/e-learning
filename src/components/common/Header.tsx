@@ -9,8 +9,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import Cookies from "js-cookie";
 
 export const Header = () => {
 
@@ -18,11 +19,11 @@ export const Header = () => {
 
     const { authUser } = useSelector((state: RootState) => state.auth)
 
-    const dispatch = useDispatch();
-
     const handleLogout = async () => {
-        await dispatch(globalThis.$action.logOut())
-        navigate("/login")
+        Cookies.remove('_at')
+        const a = document.createElement('a')
+        a.href = '/login'
+        a.click()
     }
     const handleTranslateRole = (value: string) => {
         if (value == 'student') {

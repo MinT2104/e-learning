@@ -29,7 +29,7 @@ function SideBar() {
             label: "Lớp học phần",
             icon: faLayerGroup,
             path: "/courses", // Add path for navigation
-            allowRoles: ['admin', 'teacher', 'student']
+            allowRoles: ['teacher', 'student']
         },
         {
             id: 2, // Changed from 5 to 4 for sequential ID
@@ -64,7 +64,7 @@ function SideBar() {
             label: "Kiểm tra",
             icon: faBook,
             path: "/examinations", // Add path for navigation
-            allowRoles: ['teacher']
+            allowRoles: ['teacher', 'student']
         },
         {
             id: 7, // Changed from 5 to 4 for sequential ID

@@ -91,7 +91,7 @@ const CreateFormStudentManagement = ({
                 <div className='w-full'>
                     <form onSubmit={(handleSubmit)} className="w-full grid grid-cols-2 gap-2 gap-x-10 h-fit p-0 px-0" action="#" method="POST">
                         <div className="w-full">
-                            <span className="text-sm text-slate-600">Tên giảng viên *</span>
+                            <span className="text-sm text-slate-600">Tên sinh viên *</span>
                             <div className="mt-2 relative truncate mb-6">
                                 <Input
                                     id="userName"
@@ -102,7 +102,7 @@ const CreateFormStudentManagement = ({
                                     onChange={handleChangeteacherDetails}
                                     onFocus={() => setError((prev) => ({ ...prev, userName: false }))}
                                     className={cn('authInput', error.userName && 'redBorder')}
-                                    placeholder="Nhập tên giảng viên"
+                                    placeholder="Nhập tên sinh viên"
                                 />
                                 <CustomTooltip
                                     isHidden={!error.userName}
@@ -111,7 +111,7 @@ const CreateFormStudentManagement = ({
                                             <Info className="text-red-500" size={18} />
                                         </div>
                                     }
-                                    message="Tên giảng viên không được để trống"
+                                    message="Tên sinh viên không được để trống"
                                 />
                             </div>
                         </div>
@@ -196,7 +196,7 @@ const CreateFormStudentManagement = ({
                             </div>
                         </div>
                         <div className="w-full">
-                            <span className="text-sm text-slate-600">ID của giảng viên *</span>
+                            <span className="text-sm text-slate-600">ID của sinh viên *</span>
                             <div className="mt-2 relative truncate mb-6">
                                 <Input
                                     id="ID"
@@ -207,7 +207,7 @@ const CreateFormStudentManagement = ({
                                     onChange={handleChangeteacherDetails}
                                     onFocus={() => setError((prev) => ({ ...prev, ID: false }))}
                                     className={cn('authInput', error.ID && 'redBorder')}
-                                    placeholder="Nhập ID của giảng viên"
+                                    placeholder="Nhập ID của sinh viên"
                                 />
                                 <CustomTooltip
                                     isHidden={!error.ID}
@@ -220,24 +220,6 @@ const CreateFormStudentManagement = ({
                                 />
                             </div>
                         </div>
-
-                        {/* <div className="w-full">
-                            <span className="text-sm text-slate-600">Mô tả học phần *</span>
-                            <div className="mt-2 relative truncate mb-6">
-                                <Textarea
-                                    defaultValue={teacherDetails.email}
-                                    rows={4}
-                                    id="description"
-                                    name="description"
-                                    onFocus={() => setError((prev) => ({ ...prev, email: false }))}
-                                    autoComplete="description"
-                                    onChange={handleChangeteacherDetails}
-                                    className={cn('authInput')}
-                                    placeholder="Nhập vào mô tả học phần"
-                                />
-                            </div>
-                        </div> */}
-
                         <div className='flex justify-end col-span-2'>
                             <Button>Xác nhận</Button>
                         </div>

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { FileDown, Import, MoreHorizontal, Plus, Search } from "lucide-react";
+import { MoreHorizontal, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UpdateFormClassManagement from "@/components/application/admin/ClassManagement/UpdateFormClassManagement";
@@ -162,17 +162,9 @@ const ClassManagement = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-3 mb-2">
-                    <Button className="h-[48px]">
-                        <FileDown />
-                        <span>Xuất danh sách</span>
-                    </Button>
                     <Button onClick={() => setIsOpenCreation(true)} className="h-[48px]">
                         <Plus />
                         <span>Tạo mới</span>
-                    </Button>
-                    <Button className="h-[48px]">
-                        <Import />
-                        <span>Nhập dữ liệu</span>
                     </Button>
                 </div>
 

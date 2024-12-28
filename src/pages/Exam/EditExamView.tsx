@@ -51,8 +51,8 @@ const EditExamView = () => {
             examData: [...data]
         }
         console.log(dataRequest)
-        const res = await examService.update(dataRequest)
-        if (res) {
+        const resUpdateStudentExam = await examService.updateStudentExam(dataRequest)
+        if (resUpdateStudentExam) {
             navigate('/examinations')
         }
     }

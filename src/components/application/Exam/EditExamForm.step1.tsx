@@ -33,7 +33,7 @@ const EditExamFormStep1 = ({ onChange, data }: EditExamFormStep1Type) => {
         time: '',
         dateEnd: '',
         description: '',
-        isViewPointAfterExam: false,
+        isViewAnswerAfterExam: false,
         isViewTestAfterExam: false,
         courseData: undefined,
         groupData: undefined,
@@ -263,8 +263,8 @@ const EditExamFormStep1 = ({ onChange, data }: EditExamFormStep1Type) => {
                 className="min-w-[400px] rounded-sm px-[25px] py-[30px] h-fit flex flex-col gap-4 sticky top-[20px]">
                 <h1 className="font-medium text-xl">Bảng điều khiển</h1>
                 <div className="flex items-center space-x-2 font-light">
-                    <Switch onClick={() => handleChangeChecked('isViewPointAfterExam')} checked={auth.isViewPointAfterExam} id="viewPointAfterExam" />
-                    <Label htmlFor="viewPointAfterExam">Xem điểm sau khi thi xong</Label>
+                    <Switch onClick={() => handleChangeChecked('isViewAnswerAfterExam')} checked={auth.isViewAnswerAfterExam} id="viewAnswerAfterExam" />
+                    <Label htmlFor="viewAnswerAfterExam">Xem đáp án sau khi thi xong</Label>
                 </div>
                 <div className="flex items-center space-x-2 font-light">
                     <Switch onClick={() => handleChangeChecked('isViewTestAfterExam')} checked={auth.isViewTestAfterExam} id="ViewTestAfterExam" />
