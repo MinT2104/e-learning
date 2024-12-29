@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input';
 import { ApiClient } from '@/customFetch/ApiClient';
+import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { RootState } from '@/redux/store';
 import { Info, X, Upload, Loader2 } from 'lucide-react';
@@ -106,8 +107,18 @@ const AddFormLesson = ({
             reload()
             close()
             setchapterDetails(initValue)
+            toast({
+                title: "Thành công",
+                description: "Đã thêm bài giảng thành công",
+                variant: "default",
+            });
+        } else {
+            toast({
+                title: "Phát hiện lỗi",
+                description: "Đã có lỗi xảy ra",
+                variant: "destructive",
+            });
         }
-        console.log(chapterDetails)
     }
 
     const handleChangeChapter = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -239,7 +250,8 @@ const AddFormLesson = ({
                             <Input
                                 id="duration"
                                 name="duration"
-                                type="text"
+                                min={1}
+                                type="number"
                                 autoComplete="duration"
                                 defaultValue={chapterDetails.duration}
                                 onFocus={() => setError((prev) => ({ ...prev, duration: false }))}

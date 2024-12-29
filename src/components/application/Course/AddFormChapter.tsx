@@ -52,6 +52,15 @@ const AddFormChapter = ({
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        if (!chapterDetails.name.trim() || !chapterDetails.title.trim()) {
+            setError({
+                name: !chapterDetails.name.trim(),
+                title: !chapterDetails.title.trim()
+            });
+            return;
+        }
+
         const res = await dispatch(globalThis.$action.createChapter(chapterDetails))
         if (res.payload) {
             reload()

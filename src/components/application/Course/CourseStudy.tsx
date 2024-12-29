@@ -101,7 +101,7 @@ const CourseStudy = () => {
                                             <div className=''>
                                                 <div className='h-[85px] flex flex-col justify-center px-4 border-b border-gray-200/80'>
                                                     <h2 className="text-lg font-semibold ">{chapters?.[activeChapter]?.title}</h2>
-                                                    <p className="text-gray-500 ">{chapters[activeChapter]?.lessons && chapters[activeChapter]?.lessons.length} bài lập trình</p>
+                                                    <p className="text-gray-500 ">{chapters[activeChapter]?.lessons && chapters[activeChapter]?.lessons.length} bài giảng</p>
                                                 </div>
                                                 <ul>
                                                     {chapters[activeChapter]?.lessons && chapters[activeChapter]?.lessons?.map((lesson, idx) => (
@@ -117,7 +117,7 @@ const CourseStudy = () => {
                                                                 <span
                                                                     onClick={() => handleVideoClick(chapters[activeChapter]._id, activeChapter, idx)}
                                                                 >{lesson.title}</span>
-                                                                <span className="text-gray-500">{lesson.duration}</span>
+                                                                <span className="text-gray-500">{lesson.duration} phút</span>
                                                             </span>
                                                         </li>
                                                     ))}

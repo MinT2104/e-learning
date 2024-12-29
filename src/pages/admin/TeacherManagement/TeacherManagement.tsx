@@ -8,6 +8,8 @@ import Heading from "@/components/common/Heading";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { ApiClient } from "@/customFetch/ApiClient";
+import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { UserType } from "@/redux/StoreType";
 import UserService from "@/services/user.service";
@@ -121,6 +123,22 @@ const TeacherManagement = () => {
         handleGetData();
     }, [query]);
 
+    const handleDeleteUser = async (id: string) => {
+        try {
+            const res: any = await ApiClient.delete(`/auth/${id}`);
+            if (res.status === 200) {
+                toast({
+                    title: "Thành công",
+                    description: "Đã xóa giảng viên thành công",
+                    variant: "default",
+                });
+                handleGetData();
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const columns: ColumnDef<UserType, string>[] = [
         {
             header: 'STT',
@@ -197,6 +215,16 @@ const TeacherManagement = () => {
                                         <span>Chỉnh sửa</span>
                                     </div>
                                 </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        handleDeleteUser(row.original._id || '');
+                                    }}
+
+                                >
+                                    <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
+                                        <span>Xóa</span>
+                                    </div>
+                                </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -229,7 +257,7 @@ const TeacherManagement = () => {
                             value={search}
                             onChange={handleSearch}
                             className={cn('border-none rounded-none h-[48px]')}
-                            placeholder="Tìm kiếm sinh viên"
+                            placeholder="Tìm kiếm giảng viên"
                         />
 
                         <div className='border-l border-slate-200 aspect-square h-[56px] flex items-center justify-center text-slate-500'>

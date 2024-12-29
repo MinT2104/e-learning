@@ -14,6 +14,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Import, MoreHorizontal, Plus, Search, Filter } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import CustomDropDown from "@/components/common/CustomDropDown";
+import { ApiClient } from "@/customFetch/ApiClient";
+import { toast } from "@/hooks/use-toast";
 
 function debounce<T extends (...args: any[]) => void>(
     func: T,
@@ -78,6 +80,22 @@ const StudentManagement = () => {
                 page: prev.page + value
             }
         })
+    }
+
+    const handleDeleteUser = async (id: string) => {
+        try {
+            const res: any = await ApiClient.delete(`/auth/${id}`);
+            if (res.status === 200) {
+                toast({
+                    title: "Thành công",
+                    description: "Đã xóa sinh viên thành công",
+                    variant: "default",
+                });
+                handleGetData();
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     useEffect(() => {
@@ -158,6 +176,15 @@ const StudentManagement = () => {
                                 >
                                     <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
                                         <span>Chỉnh sửa</span>
+                                    </div>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        handleDeleteUser(row.original._id || '');
+                                    }}
+                                >
+                                    <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
+                                        <span>Xóa</span>
                                     </div>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
