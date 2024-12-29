@@ -9,9 +9,10 @@ import {
     DialogTrigger
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { ApiClient } from '@/customFetch/ApiClient';
 import { cn } from '@/lib/utils';
 import { RootState } from '@/redux/store';
-import { X } from 'lucide-react';
+import { X, Upload } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -33,6 +34,7 @@ const AddFormFile = ({
         name: '',
         url: '',
         _id: '',
+        file: null as File | null,
     };
 
     const [fileDetails, setFileDetails] = useState(initValue);
@@ -47,24 +49,46 @@ const AddFormFile = ({
         close();
     };
 
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setFileDetails(prev => ({
+            ...prev,
+            name: file.name,
+            file: file
+        }));
+    };
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        const cloneData = { ...fileDetails } as any
-        delete cloneData._id
-        const dataRequest = {
-            _id: fileDetails._id,
-            $addToSet: {
-                files: { name: fileDetails.name, url: fileDetails.url },
-            },
-        };
         e.preventDefault();
 
-        const res = await dispatch(globalThis.$action.updateAssignment(dataRequest));
-        if (res.payload) {
-            reload();
-            close();
-            setFileDetails(initValue);
-        }
+        if (!fileDetails.file) return;
 
+        const formData = new FormData();
+        formData.append('document', fileDetails.file);
+
+        try {
+            const uploadResponse = await ApiClient.post('/media/upload-document', formData);
+            console.log(uploadResponse)
+            const { url } = uploadResponse.data;
+
+            const dataRequest = {
+                _id: fileDetails._id,
+                $addToSet: {
+                    files: { name: fileDetails.name, url: url.url },
+                },
+            };
+
+            const res = await dispatch(globalThis.$action.updateAssignment(dataRequest));
+            if (res.payload) {
+                reload();
+                close();
+                setFileDetails(initValue);
+            }
+        } catch (error) {
+            console.error('Upload failed:', error);
+        }
     };
 
     const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,16 +142,20 @@ const AddFormFile = ({
                     </div>
 
                     <div className="w-full">
-                        <span className="text-sm text-slate-600">URL File *</span>
-                        <Input
-                            id="url"
-                            name="url"
-                            type="text"
-                            value={fileDetails.url}
-                            onChange={handleChangeFile}
-                            className={cn('authInput', error.url && 'redBorder')}
-                            placeholder="Nhập URL file"
-                        />
+                        <span className="text-sm text-slate-600">File PDF/Word *</span>
+                        <label className="flex items-center gap-2 p-2 border rounded-md cursor-pointer hover:bg-gray-50 h-[48px] authInput">
+                            <Upload className="w-5 h-5" />
+                            <span className="text-sm">
+                                {fileDetails.file ? fileDetails.file.name : 'Chọn file PDF hoặc Word'}
+                            </span>
+                            <input
+                                type="file"
+                                name="document"
+                                accept=".pdf,.doc,.docx"
+                                onChange={handleFileUpload}
+                                className="hidden"
+                            />
+                        </label>
                     </div>
 
                     <div className="flex justify-end">

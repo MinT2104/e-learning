@@ -25,9 +25,48 @@ function CustomPagination({ total = 0, currentPage = 1, className = '', pageSize
         setTotalPages(Math.ceil(total / pageSize))
     }, [total])
 
+    // Hàm tạo mảng số trang cần hiển thị
+    const getPageNumbers = () => {
+        const pageNumbers = []
+        const maxVisiblePages = 5 // Số trang tối đa hiển thị
+
+        if (totalPages <= maxVisiblePages) {
+            // Hiển thị tất cả các trang nếu tổng số trang ít hơn maxVisiblePages
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbers.push(i)
+            }
+        } else {
+            // Luôn hiển thị trang đầu
+            pageNumbers.push(1)
+
+            // Tính toán vị trí bắt đầu và kết thúc của dải số trang
+            let start = Math.max(currentPage - 1, 2)
+            let end = Math.min(currentPage + 1, totalPages - 1)
+
+            // Thêm dấu ... đầu tiên nếu cần
+            if (start > 2) {
+                pageNumbers.push('...')
+            }
+
+            // Thêm các số trang ở giữa
+            for (let i = start; i <= end; i++) {
+                pageNumbers.push(i)
+            }
+
+            // Thêm dấu ... cuối cùng nếu cần
+            if (end < totalPages - 1) {
+                pageNumbers.push('...')
+            }
+
+            // Luôn hiển thị trang cuối
+            pageNumbers.push(totalPages)
+        }
+
+        return pageNumbers
+    }
+
     return (
         <Pagination className={className}>
-
             <PaginationContent>
                 {/* Nút Previous */}
                 <PaginationItem>
@@ -41,19 +80,23 @@ function CustomPagination({ total = 0, currentPage = 1, className = '', pageSize
                 </PaginationItem>
 
                 {/* Hiển thị các số trang */}
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <PaginationItem key={i}>
-                        <PaginationLink
-                            isActive={currentPage === i + 1}
-                        >
-                            {i + 1}
-                        </PaginationLink>
+                {getPageNumbers().map((pageNumber, index) => (
+                    <PaginationItem key={index}>
+                        {pageNumber === '...' ? (
+                            <span className="px-4">...</span>
+                        ) : (
+                            <PaginationLink
+                                isActive={currentPage === pageNumber}
+                                onClick={() => typeof pageNumber === 'number' && onChange(pageNumber - currentPage)}
+                            >
+                                {pageNumber}
+                            </PaginationLink>
+                        )}
                     </PaginationItem>
                 ))}
 
                 {/* Nút Next */}
-                <PaginationItem
-                >
+                <PaginationItem>
                     <PaginationNext
                         onClick={currentPage < totalPages ? () => onChange(1) : undefined}
                         className={`${currentPage >= totalPages

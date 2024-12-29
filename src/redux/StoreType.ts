@@ -66,6 +66,7 @@ export type GroupType = {
         _id: string
     };
     description: string;
+    isMemberVisible?: boolean;
     createdAt: Date;
     updatedAt: Date;
     _id: string

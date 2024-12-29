@@ -5,20 +5,32 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, Plus, Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Filter, MoreHorizontal, Plus, Search } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UpdateFormClassManagement from "@/components/application/admin/ClassManagement/UpdateFormClassManagement";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CourseType } from "@/redux/StoreType";
 import CreateFormClassManagement from "@/components/application/admin/ClassManagement/CreateFormManagement";
 import CustomPagination from "@/components/common/CustomPagination";
+import CustomDropDown from "@/components/common/CustomDropDown";
+
+function debounce<T extends (...args: any[]) => void>(
+    func: T,
+    wait: number
+): (...args: Parameters<T>) => void {
+    let timeout: NodeJS.Timeout;
+    return (...args: Parameters<T>) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
 
 const ClassManagement = () => {
 
     const [search, setSearch] = useState<string>('')
     const [query, setQuery] = useState({
-        page: 1, limit: 5
+        page: 1, limit: 5, query: {}
     })
 
     const dispatch = useDispatch();
@@ -126,6 +138,29 @@ const ClassManagement = () => {
         })
     }
 
+    const debouncedSearch = useCallback(
+        debounce((searchValue: string) => {
+            setQuery(prev => ({
+                ...prev,
+                page: 1,
+                query: {
+                    ...prev.query,
+                    title: {
+                        $regex: searchValue,
+                        $options: 'i'
+                    }
+                }
+            }));
+        }, 500),
+        []
+    );
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setSearch(value);
+        debouncedSearch(value);
+    };
+
     useEffect(() => {
         if (activeId) {
             handleGetCourseDetail(activeId)
@@ -140,26 +175,68 @@ const ClassManagement = () => {
         handleLoadGroup()
     }, [activeData])
 
+    const handleClearFilter = () => {
+        const query = {
+            page: 1,
+            limit: 5,
+            query: {}
+        }
+        setQuery(query)
+    }
+
+    const handleChangeSort = (data: { key: string, name: string }) => {
+        setQuery((prev: any) => {
+
+            return {
+                ...prev,
+                query: {
+                    ...prev.query,
+                    sort: data.key === 'newest' ? JSON.stringify({ createdAt: -1 }) : JSON.stringify({ createdAt: 1 })
+                }
+            }
+        })
+    }
+
+    const mockCategories = [
+        {
+            label: 'Mới nhất',
+            key: "newest"
+        },
+        {
+            label: 'Cũ hơn',
+            key: "oldest"
+        },
+    ]
+
     return (
         <div>
             <Heading title='Quản lý lớp học phần' />
             <div className='flex h-[56px] w-full justify-between mt-10'>
-                <div className="w-1/3 border border-border rounded-lg truncate flex h-[48px] items-center">
-                    <Input
-                        id="search"
-                        name="search"
-                        type="text"
-                        disabled={isLoading}
-                        autoComplete="search"
-                        defaultValue={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className={cn('border-none rounded-none h-[48px]')}
-                        placeholder="Tìm kiếm sinh viên"
-                    />
-
-                    <div className='border-l border-slate-200 aspect-square h-[56px] flex items-center justify-center text-slate-500'>
-                        <Search size={20} />
+                <div className="flex items-center gap-3 w-2/3">
+                    <div
+                        onClick={handleClearFilter}
+                        className="relative p-2 border rounded-sm  border-red-500 cursor-pointer">
+                        <div className="absolute top-0 left-0 w-[2px] h-2/3 translate-y-2 rotate-[90deg] translate-x-5 bg-red-500 z-10" />
+                        <Filter />
                     </div>
+                    <div className="w-1/3 border border-border rounded-lg truncate flex h-[48px] items-center">
+                        <Input
+                            id="search"
+                            name="search"
+                            type="text"
+                            autoComplete="search"
+                            value={search}
+                            onChange={handleSearch}
+                            className={cn('border-none rounded-none h-[48px]')}
+                            placeholder="Tìm kiếm sinh viên"
+                        />
+
+                        <div className='border-l border-slate-200 aspect-square h-[56px] flex items-center justify-center text-slate-500'>
+                            <Search size={20} />
+                        </div>
+                    </div>
+                    <CustomDropDown isHiddenSearch onChange={handleChangeSort} className='w-fit' dropDownList={mockCategories} placeholder="Tất cả" />
+
                 </div>
                 <div className="flex items-center gap-3 mb-2">
                     <Button onClick={() => setIsOpenCreation(true)} className="h-[48px]">

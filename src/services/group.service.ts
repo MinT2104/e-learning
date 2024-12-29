@@ -20,6 +20,19 @@ class GroupService extends BaseService {
                 });
         });
     }
+
+    deleteMember(reqObj: any) {
+        const url = `/${this.name}/delete-member`;
+        return new Promise((resolve, reject) => {
+            ApiClient.post(url, reqObj).then((response: any) => {
+                const res = response.data || {};
+                resolve(res);
+            })
+                .catch((e: any) => {
+                    reject(e);
+                });
+        });
+    }
 }
 
 export default GroupService;

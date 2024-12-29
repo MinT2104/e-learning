@@ -19,6 +19,17 @@ class MediaService {
 
     }
 
+    async uploadVideo(form: any) {
+        const url = `/media/upload-video`
+        return new Promise(async (resolve, reject) => {
+            ApiClient.post(url, form).then((res) => {
+                resolve(res)
+            }).catch((err) => {
+                reject(err)
+            })
+        })
+    }
+
 }
 
 export default MediaService;

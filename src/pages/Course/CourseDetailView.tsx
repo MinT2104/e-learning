@@ -39,7 +39,11 @@ const CourseContent = () => {
             <div className='flex gap-4'>
                 <Button onClick={() => setActiveKey('course')} variant={activeKey === 'course' ? 'default' : 'outline'} className={cn('w-40 h-[48px]',)}>Bài giảng</Button>
                 <Button onClick={() => setActiveKey('material')} variant={activeKey === 'material' ? 'default' : 'outline'} className={cn('w-40 h-[48px]',)}>Tài liệu</Button>
-                <Button onClick={() => setActiveKey('member')} variant={activeKey === 'member' ? 'default' : 'outline'} className={cn('w-40 h-[48px]', authUser.role === 'teacher')}>Thành viên</Button>
+                {
+                    authUser.role === 'student' && !group?.isMemberVisible ? null
+                        :
+                        <Button onClick={() => setActiveKey('member')} variant={activeKey === 'member' ? 'default' : 'outline'} className={cn('w-40 h-[48px]', authUser.role === 'teacher')}>Thành viên</Button>
+                }
                 <Button onClick={() => setActiveKey('notification')} variant={activeKey === 'notification' ? 'default' : 'outline'} className={cn('w-40 h-[48px]', authUser.role === 'student')}>Thông báo</Button>
             </div>
 
@@ -54,18 +58,22 @@ const CourseContent = () => {
                 <CourseMaterial />
             </div>
 
-            <div className={cn('w-full',
-                activeKey !== 'member' && 'hidden'
-            )}>
-                <CourseMember />
-            </div>
+            {
+                authUser.role === 'student' && !group?.isMemberVisible ? null
+                    :
+                    <div className={cn('w-full',
+                        activeKey !== 'member' && 'hidden'
+                    )}>
+                        <CourseMember />
+                    </div>
+            }
 
             <div className={cn('w-full',
                 activeKey !== 'notification' && 'hidden'
             )}>
                 <CourseNotification />
             </div>
-        </div>
+        </div >
     );
 };
 

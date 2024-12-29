@@ -141,7 +141,7 @@ const ExamView = () => {
                         <div className="absolute top-0 left-0 w-[2px] h-2/3 translate-y-2 rotate-[90deg] translate-x-5 bg-red-500 z-10" />
                         <Filter />
                     </div>
-                    <CustomDropDown onChange={handleGroupChange} className="w-fit" width="w-80" isHiddenSearch dropDownList={groupData || []} mappedKey="key" mappedLabel="name" placeholder="Chọn nhóm học phần" />
+                    <CustomDropDown onChange={handleGroupChange} className="w-fit" width="w-80" dropDownList={groupData || []} mappedKey="key" mappedLabel="name" placeholder="Chọn nhóm học phần" />
                     <CustomDropDown isHiddenSearch onChange={handleChangeSort} className='w-fit' dropDownList={mockCategories} placeholder="Tất cả" />
 
                     {/* <div className="w-1/3 border border-border rounded-lg truncate flex h-[48px] items-center">

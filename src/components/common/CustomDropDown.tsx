@@ -86,14 +86,17 @@ const CustomDropDown = ({
                     </Button>
                 }
             </PopoverTrigger>
-            <PopoverContent align="start" className={cn('max-w-80 p-0 z-[9999]', width)}>
-                <div className={cn("p-2", isHiddenSearch && 'hidden')}>
-                    <Input
-                        className="w-full h-[48px]"
-                        onChange={handleSearch}
-                        value={searchValue}
-                    />
-                </div>
+            <PopoverContent align="start" className={cn('max-w-80 p-0 z-[9999] max-h-[262px] overflow-auto', width)}>
+                {
+                    dropDownList && dropDownList.length > 4 &&
+                    <div className={cn("p-2", isHiddenSearch && 'hidden')}>
+                        <Input
+                            className="w-full h-[48px]"
+                            onChange={handleSearch}
+                            value={searchValue}
+                        />
+                    </div>
+                }
                 <div className="min-h-[48px] max-h-[242px] h-fit p-0 overflow-auto">
                     <ul>
                         {dropdownFilterList && dropdownFilterList.length > 0 && dropdownFilterList.map((dropdownItem) => (

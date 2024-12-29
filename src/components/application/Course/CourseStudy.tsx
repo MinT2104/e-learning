@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
-import { FileVideo, Layers3, Plus, Search } from "lucide-react";
+import { FileVideo, Layers3, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,14 +16,12 @@ const CourseStudy = () => {
 
     const param = useParams();
     const dispatch = useDispatch();
-    const [search, setSearch] = useState<string>('')
-
 
     const { isLoading } = useSelector((state: RootState) => state.group);
     const [activeChapter, setActiveChapter] = useState<number | null>(0);
 
-    const handleVideoClick = (c: number, l: number) => {
-        navigate(`/course/${param.id}/watch?c=${c}&l=${l}`)
+    const handleVideoClick = (chapterId: string, c: number, l: number) => {
+        navigate(`/course/${chapterId}/watch?c=${c}&l=${l}`)
     }
 
     const handleChapterClick = (index: number) => {
@@ -58,8 +55,8 @@ const CourseStudy = () => {
     }, [])
     return (
         <div className="flex flex-col gap-4">
-            <div className='flex h-[56px] w-full justify-between'>
-                <div className="w-1/3 border border-border rounded-lg truncate flex h-[48px] items-center">
+            <div className='flex h-[56px] w-full justify-end'>
+                {/* <div className="w-1/3 border border-border rounded-lg truncate flex h-[48px] items-center">
                     <Input
                         id="search"
                         name="search"
@@ -75,7 +72,7 @@ const CourseStudy = () => {
                     <div className='border-l border-slate-200 aspect-square h-[56px] flex items-center justify-center text-slate-500'>
                         <Search size={20} />
                     </div>
-                </div>
+                </div> */}
 
                 <div className="flex items-center gap-2">
                     <Button className="h-[48px]"
@@ -133,7 +130,7 @@ const CourseStudy = () => {
                                                             <span className='flex flex-col'>
 
                                                                 <span
-                                                                    onClick={() => handleVideoClick(activeChapter, idx)}
+                                                                    onClick={() => handleVideoClick(chapters[activeChapter]._id, activeChapter, idx)}
                                                                 >{lesson.title}</span>
                                                                 <span className="text-gray-500">{lesson.duration}</span>
                                                             </span>
