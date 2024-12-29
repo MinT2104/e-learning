@@ -15,8 +15,9 @@ import { UserType } from "@/redux/StoreType";
 import UserService from "@/services/user.service";
 import { ColumnDef } from "@tanstack/react-table";
 import { debounce } from "lodash";
-import { Filter, Import, MoreHorizontal, Plus, Search } from "lucide-react";
+import { Filter, Import, MoreHorizontal, Plus, Search, Trash2 } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const TeacherManagement = () => {
     const userService = new UserService('user')
@@ -139,7 +140,88 @@ const TeacherManagement = () => {
         }
     }
 
+    const [selectedTeachers, setSelectedTeachers] = useState<string[]>([]);
+
+    const handleSelectUser = (userId: string) => {
+        setSelectedTeachers(prev => {
+            if (prev.includes(userId)) {
+                return prev.filter(id => id !== userId);
+            } else {
+                return [...prev, userId];
+            }
+        });
+    };
+
+    const handleSelectAll = (checked: boolean) => {
+        if (checked) {
+            const allTeacherIds = teacherData.teachers.map(teacher => teacher._id).filter((id): id is string => id !== undefined);
+            setSelectedTeachers(allTeacherIds);
+        } else {
+            setSelectedTeachers([]);
+        }
+    };
+
+    const handleDeleteMultiple = async () => {
+        if (selectedTeachers.length === 0) {
+            toast({
+                title: "Lỗi",
+                description: "Vui lòng chọn ít nhất một giảng viên để xóa",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        try {
+            const response = await ApiClient.post(`/user/delete-many`, {
+                userIds: selectedTeachers
+            });
+            if (response) {
+                toast({
+                    title: "Thành công",
+                    description: "Đã xóa giảng viên thành công",
+                    variant: "default",
+                });
+                setSelectedTeachers([]);
+                handleGetData();
+            }
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: "Lỗi",
+                description: "Có lỗi xảy ra khi xóa giảng viên",
+                variant: "destructive",
+            });
+        }
+    };
+
     const columns: ColumnDef<UserType, string>[] = [
+        {
+            id: "select",
+            header: ({ table }: any) => (
+                <Checkbox
+                    checked={table.getIsAllPageRowsSelected()}
+                    onCheckedChange={(value) => {
+                        table.toggleAllPageRowsSelected(!!value);
+                        handleSelectAll(!!value);
+                    }}
+                    aria-label="Select all"
+                    className="translate-y-[2px]"
+                />
+            ),
+            cell: ({ row }: any) => (
+                <Checkbox
+                    checked={selectedTeachers.includes(row.original._id)}
+                    onCheckedChange={(value) => {
+                        row.toggleSelected(!!value);
+                        handleSelectUser(row.original._id);
+                    }}
+                    aria-label="Select row"
+                    className="translate-y-[2px]"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
         {
             header: 'STT',
             accessorKey: 'stt',
@@ -242,6 +324,14 @@ const TeacherManagement = () => {
             <Heading title="Quản lý Giảng viên" />
             <div className="flex h-[56px] w-full justify-between mt-10">
                 <div className="flex items-center gap-3 w-2/3">
+                    {selectedTeachers.length > 0 && (
+                        <Button
+                            onClick={handleDeleteMultiple}
+                            variant="outline"
+                            className="h-[48px]">
+                            <Trash2 />
+                        </Button>
+                    )}
                     <div
                         onClick={handleClearFilter}
                         className="relative p-2 border rounded-sm  border-red-500 cursor-pointer">

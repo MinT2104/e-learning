@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { Filter, MoreHorizontal, Plus, Search } from "lucide-react";
+import { Filter, Import, MoreHorizontal, Plus, Search, Trash2 } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UpdateFormClassManagement from "@/components/application/admin/ClassManagement/UpdateFormClassManagement";
@@ -14,6 +14,10 @@ import { CourseType } from "@/redux/StoreType";
 import CreateFormClassManagement from "@/components/application/admin/ClassManagement/CreateFormManagement";
 import CustomPagination from "@/components/common/CustomPagination";
 import CustomDropDown from "@/components/common/CustomDropDown";
+import { ApiClient } from "@/customFetch/ApiClient";
+import { toast } from "@/hooks/use-toast";
+import ClassImportDialog from "@/components/application/admin/ClassManagement/ClassImportDialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 function debounce<T extends (...args: any[]) => void>(
     func: T,
@@ -34,13 +38,13 @@ const ClassManagement = () => {
     })
 
     const dispatch = useDispatch();
-
+    const [isOpenImport, setIsOpenImport] = useState(false)
     const { courses, isLoading, total } = useSelector((state: RootState) => state.course);
 
     const handleGetData: any = async () => {
         dispatch(globalThis.$action.loadCourses(query));
     };
-
+    const [selectedCourse, setSelectedCourse] = useState<string[]>([])
     const [activeData, setActiveData] = useState<CourseType>()
 
     const [isOpen, setIsOpen] = useState(false)
@@ -59,7 +63,109 @@ const ClassManagement = () => {
         await dispatch(globalThis.$action.loadGroups(query))
     }
 
+    const handleDeleteCourse = async (id: string) => {
+        try {
+            const res: any = await ApiClient.delete(`/course/${id}`);
+            if (res.status === 200) {
+                toast({
+                    title: "Thành công",
+                    description: "Đã xóa lớp học phần thành công",
+                    variant: "default",
+                });
+                handleGetData();
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleSelectUser = (userId: string) => {
+        setSelectedCourse(prev => {
+            if (prev.includes(userId)) {
+                return prev.filter(id => id !== userId);
+            } else {
+                return [...prev, userId];
+            }
+        });
+    };
+
+    const handleSelectAll = (checked: boolean) => {
+        if (checked) {
+            const allCourseIds = courses.map(course => course._id).filter((id): id is string => id !== undefined);
+            setSelectedCourse(allCourseIds);
+        } else {
+            setSelectedCourse([]);
+        }
+    };
+
+
+    const handleDeleteMultiple = async () => {
+        if (selectedCourse.length === 0) {
+            toast({
+                title: "Lỗi",
+                description: "Vui lòng chọn ít nhất một sinh viên để xóa",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        try {
+            const response = await ApiClient.post(`/course/delete-many`, {
+                courseIds: selectedCourse
+            });
+            if (response) {
+                toast({
+                    title: "Thành công",
+                    description: "Đã xóa lớp học phần thành công",
+                    variant: "default",
+                });
+                setSelectedCourse([]);
+                handleGetData()
+            } else {
+                toast({
+                    title: "Lỗi",
+                    description: "Có lỗi xảy ra khi xóa lớp học phần",
+                    variant: "destructive",
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const columns: ColumnDef<typeof courses[0]>[] = [
+        {
+            id: "select",
+            header: ({ table }: any) => (
+                <Checkbox
+                    checked={table.getIsAllPageRowsSelected()}
+                    onCheckedChange={(value) => {
+                        if (value) {
+                            table.toggleAllPageRowsSelected(true)
+                            handleSelectAll(true)
+                        } else {
+                            table.toggleAllPageRowsSelected(false)
+                            handleSelectAll(false)
+                        }
+                    }}
+                    aria-label="Select all"
+                    className="translate-y-[2px]"
+                />
+            ),
+            cell: ({ row }: any) => (
+                <Checkbox
+                    checked={selectedCourse.includes(row.original._id)}
+                    onCheckedChange={(value) => {
+                        row.toggleSelected(!!value)
+                        handleSelectUser(row.original._id)
+                    }}
+                    aria-label="Select row"
+                    className="translate-y-[2px]"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
         {
             header: 'STT',
             accessorKey: 'stt',
@@ -107,6 +213,15 @@ const ClassManagement = () => {
                                 >
                                     <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
                                         <span>Chỉnh sửa</span>
+                                    </div>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        handleDeleteCourse(id);
+                                    }}
+                                >
+                                    <div className="w-full h-[48px] cursor-pointer hover:bg-secondary flex items-center justify-center">
+                                        <span>Xóa</span>
                                     </div>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -197,6 +312,10 @@ const ClassManagement = () => {
         })
     }
 
+    const handleCloseImport = () => {
+        setIsOpenImport(false)
+    }
+
     const mockCategories = [
         {
             label: 'Mới nhất',
@@ -213,6 +332,15 @@ const ClassManagement = () => {
             <Heading title='Quản lý lớp học phần' />
             <div className='flex h-[56px] w-full justify-between mt-10'>
                 <div className="flex items-center gap-3 w-2/3">
+                    {
+                        selectedCourse.length > 0 ?
+                            <Button
+                                onClick={handleDeleteMultiple}
+                                variant="outline"
+                                className="h-[48px]">
+                                <Trash2 />
+                            </Button> : null
+                    }
                     <div
                         onClick={handleClearFilter}
                         className="relative p-2 border rounded-sm  border-red-500 cursor-pointer">
@@ -243,6 +371,10 @@ const ClassManagement = () => {
                         <Plus />
                         <span>Tạo mới</span>
                     </Button>
+                    <Button className="h-[48px]" onClick={() => setIsOpenImport(true)}>
+                        <Import />
+                        <span>Nhập dữ liệu</span>
+                    </Button>
                 </div>
 
 
@@ -251,7 +383,7 @@ const ClassManagement = () => {
             <CustomPagination onChange={handleChangePage} total={total} currentPage={query.page} pageSize={query.limit} />
             <UpdateFormClassManagement reload={handleReload} close={handleClose} isOpen={isOpen} activeData={activeData} className="w-full" triggerElement={<></>} />
             <CreateFormClassManagement close={handleCloseCreation} isOpen={isOpenCreation} className="w-full" triggerElement={<></>} />
-
+            {isOpenImport && <ClassImportDialog reload={handleGetData} close={handleCloseImport} />}
         </div>
     )
 };

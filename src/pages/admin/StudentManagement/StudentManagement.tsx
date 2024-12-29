@@ -11,11 +11,12 @@ import { cn } from "@/lib/utils";
 import { UserType } from "@/redux/StoreType";
 import UserService from "@/services/user.service";
 import { ColumnDef } from "@tanstack/react-table";
-import { Import, MoreHorizontal, Plus, Search, Filter } from "lucide-react";
+import { Import, MoreHorizontal, Plus, Search, Filter, Trash2 } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import CustomDropDown from "@/components/common/CustomDropDown";
 import { ApiClient } from "@/customFetch/ApiClient";
 import { toast } from "@/hooks/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
 
 function debounce<T extends (...args: any[]) => void>(
     func: T,
@@ -55,6 +56,7 @@ const StudentManagement = () => {
     })
 
     const [isOpenImport, setIsOpenImport] = useState(false)
+    const [selectedStudents, setSelectedStudents] = useState<string[]>([])
 
     const handleGetData = async () => {
         setIsLoading(true)
@@ -102,7 +104,86 @@ const StudentManagement = () => {
         handleGetData();
     }, [query]);
 
+    const handleSelectUser = (userId: string) => {
+        setSelectedStudents(prev => {
+            if (prev.includes(userId)) {
+                return prev.filter(id => id !== userId);
+            } else {
+                return [...prev, userId];
+            }
+        });
+    };
+
+    const handleSelectAll = (checked: boolean) => {
+        if (checked) {
+            const allStudentIds = studentData.students.map(student => student._id).filter((id): id is string => id !== undefined);
+            setSelectedStudents(allStudentIds);
+        } else {
+            setSelectedStudents([]);
+        }
+    };
+
+    const handleDeleteMultiple = async () => {
+        if (selectedStudents.length === 0) {
+            toast({
+                title: "Lỗi",
+                description: "Vui lòng chọn ít nhất một sinh viên để xóa",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        try {
+            const response = await ApiClient.post(`/user/delete-many`, {
+                userIds: selectedStudents
+            });
+            if (response) {
+                toast({
+                    title: "Thành công",
+                    description: "Đã xóa sinh viên thành công",
+                    variant: "default",
+                });
+                setSelectedStudents([]);
+                handleGetData();
+            }
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: "Lỗi",
+                description: "Có lỗi xảy ra khi xóa sinh viên",
+                variant: "destructive",
+            });
+        }
+    };
+
     const columns: ColumnDef<UserType, string>[] = [
+        {
+            id: "select",
+            header: ({ table }: any) => (
+                <Checkbox
+                    checked={table.getIsAllPageRowsSelected()}
+                    onCheckedChange={(value) => {
+                        table.toggleAllPageRowsSelected(!!value);
+                        handleSelectAll(!!value);
+                    }}
+                    aria-label="Select all"
+                    className="translate-y-[2px]"
+                />
+            ),
+            cell: ({ row }: any) => (
+                <Checkbox
+                    checked={selectedStudents.includes(row.original._id)}
+                    onCheckedChange={(value) => {
+                        row.toggleSelected(!!value);
+                        handleSelectUser(row.original._id);
+                    }}
+                    aria-label="Select row"
+                    className="translate-y-[2px]"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
         {
             header: 'STT',
             accessorKey: 'stt',
@@ -252,6 +333,14 @@ const StudentManagement = () => {
             <Heading title="Quản lý sinh viên" />
             <div className="flex h-[56px] w-full justify-between mt-10">
                 <div className="flex items-center gap-3 w-2/3">
+                    {selectedStudents.length > 0 && (
+                        <Button
+                            onClick={handleDeleteMultiple}
+                            variant="outline"
+                            className="h-[48px]">
+                            <Trash2 />
+                        </Button>
+                    )}
                     <div
                         onClick={handleClearFilter}
                         className="relative p-2 border rounded-sm border-red-500 cursor-pointer">
