@@ -101,9 +101,9 @@ const CourseMember = () => {
     const handleCloseAddStudentForm = () => setIsAddStudentFormOpen(false)
 
     const columns: ColumnDef<UserType, string>[] = [
-        {
+        ...(authUser.role === 'teacher' ? [{
             id: "select",
-            header: ({ table }) => (
+            header: ({ table }: any) => (
                 <Checkbox
                     checked={table.getIsAllPageRowsSelected()}
                     onCheckedChange={(value) => {
@@ -132,7 +132,7 @@ const CourseMember = () => {
             ),
             enableSorting: false,
             enableHiding: false,
-        },
+        }] : []),
         {
             header: 'STT',
             accessorKey: 'stt',

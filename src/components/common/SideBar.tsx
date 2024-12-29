@@ -76,7 +76,7 @@ function SideBar() {
     ];
 
     return (
-        <div className="flex h-screen fixed top-0 left-0 border-r border-slate-500/10 z-[999]">
+        <div className="flex h-screen fixed top-0 left-0 border-r border-slate-500/10 z-[999] select-none">
             <div className="md:hidden p-4">
                 <Button
                     className="text-gray-800 focus:outline-none"
