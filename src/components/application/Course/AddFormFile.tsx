@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { ApiClient } from '@/customFetch/ApiClient';
 import { cn } from '@/lib/utils';
 import { RootState } from '@/redux/store';
-import { X, Upload } from 'lucide-react';
+import { X, Upload, Loader2 } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -42,6 +42,7 @@ const AddFormFile = ({
         name: false,
         url: false,
     });
+    const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -65,10 +66,11 @@ const AddFormFile = ({
 
         if (!fileDetails.file) return;
 
-        const formData = new FormData();
-        formData.append('document', fileDetails.file);
-
+        setIsLoading(true);
         try {
+            const formData = new FormData();
+            formData.append('document', fileDetails.file);
+
             const uploadResponse = await ApiClient.post('/media/upload-document', formData);
             console.log(uploadResponse)
             const { url } = uploadResponse.data;
@@ -88,6 +90,8 @@ const AddFormFile = ({
             }
         } catch (error) {
             console.error('Upload failed:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -159,7 +163,16 @@ const AddFormFile = ({
                     </div>
 
                     <div className="flex justify-end">
-                        <Button >Xác nhận</Button>
+                        <Button disabled={isLoading}>
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                    Đang tải...
+                                </>
+                            ) : (
+                                'Xác nhận'
+                            )}
+                        </Button>
                     </div>
                 </form>
             </DialogContent>

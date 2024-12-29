@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import AddFormFile from "./AddFormFile";
 import { saveAs } from 'file-saver';
+import AddFormMaterial from "./AddFormMaterial";
 
 const getFileIcon = (fileName: string) => {
     const extension = fileName.split('.').pop()?.toLowerCase();
@@ -34,7 +35,8 @@ const CourseMaterial = () => {
     const { assignments, isLoading } = useSelector((state: RootState) => state.assignment);
     const [isAddFormFile, setIsAddFormFile] = useState(false)
     const handleCloseAddFile = () => setIsAddFormFile(false)
-
+    const { authUser } = useSelector((state: RootState) => state.auth);
+    const [isAddFormMaterial, setIsAddFormMaterial] = useState(false)
 
     const handleGetData = async () => {
         await dispatch(globalThis.$action.loadAssignments({
@@ -58,25 +60,43 @@ const CourseMaterial = () => {
         }
     };
 
+    const handleCloseAddMaterial = () => setIsAddFormMaterial(false)
+
+    const handleAddChapter = () => {
+        setIsAddFormMaterial(true)
+    }
+
     useEffect(() => {
         handleGetData();
     }, []);
 
     return (
         <div className="flex gap-4 flex-col w-full">
-            <div className="h-fit w-full rounded-[12px] bg-white shadow-sm flex items-center justify-end gap-4">
-                <Button className="h-[48px] w-fit"
-                    onClick={handleOpenFormFile}>
-                    <Plus />
-                    <span>Thêm tài liệu</span>
-                </Button>
-            </div>
+            {
+                authUser?.role === 'teacher' ? (
+                    <div className="h-fit w-full bg-white flex items-center justify-end gap-4">
+                        <div className="flex items-center gap-2">
+                            <Button
+                                onClick={handleAddChapter}
+                                className="h-[48px] w-fit">
+                                <Plus />
+                                <span>Thêm chương</span>
+                            </Button>
+                        </div>
+                        <Button className="h-[48px] w-fit"
+                            onClick={handleOpenFormFile}>
+                            <Plus />
+                            <span>Thêm tài liệu</span>
+                        </Button>
+                    </div>
+                ) : null
+            }
             {isLoading ? (
                 <div className="w-full h-[500px] bg-slate-200 animate-pulse rounded-sm" />
             ) : assignments && assignments.length > 0 && assignments.map((item) => (
                 <div key={item._id} className="mb-4 space-y-4 flex-1">
                     <Accordion type="single" collapsible className="">
-                        {item.files && item.files.length > 0 ? (
+                        {item.files ? (
                             <AccordionItem
                                 className="border border-slate-500/20 p-2 rounded-[8px]"
                                 value={item._id}
@@ -84,10 +104,11 @@ const CourseMaterial = () => {
                                 <AccordionTrigger className="font-medium text-lg hover:no-underline">
                                     <span className="uppercase font-semibold">{item.title}</span>
                                 </AccordionTrigger>
-                                {item.files.map((file: FileType, index) => (
-                                    <AccordionContent key={index}>
-                                        <Separator />
-                                        <div className="p-4 flex flex-col gap-4 items-start">
+
+                                <AccordionContent>
+                                    <Separator />
+                                    {item.files.length > 0 ? item.files.map((file: FileType, index) => (
+                                        <div key={index} className="p-4 flex flex-col gap-4 items-start">
                                             <div className="flex items-center justify-start gap-4 pt-4 text-slate-500 px-4">
                                                 {getFileIcon(file.name)}
                                                 <button
@@ -98,17 +119,28 @@ const CourseMaterial = () => {
                                                 </button>
                                             </div>
                                         </div>
-                                    </AccordionContent>
-                                ))}
+                                    )) : <div className=" h-20">
+                                        <div className="flex items-center justify-center h-full">
+                                            <p className="text-gray-500">Không có tài liệu</p>
+                                        </div>
+                                    </div>}
+                                </AccordionContent>
                             </AccordionItem>
-                        ) : (
-                            <p className="text-gray-500">Không có tài liệu</p>
-                        )}
+                        ) : null}
                     </Accordion>
                 </div>
             )
             )}
 
+            {
+                isAddFormMaterial ?
+                    <AddFormMaterial
+                        reload={handleGetData}
+                        close={handleCloseAddMaterial}
+                        isOpen={isAddFormMaterial}
+                        triggerElement={<></>}
+                    /> : null
+            }
 
             {
                 isAddFormFile ?
