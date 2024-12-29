@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Checkbox } from "@/components/ui/checkbox";
 import GroupService from "@/services/group.service";
 import { toast } from "@/hooks/use-toast";
+import GroupStudentImportDialog from "./GroupStudentImportDialog";
 
 const CourseMember = () => {
     const userService = new UserService('user')
@@ -37,7 +38,7 @@ const CourseMember = () => {
     })
 
     const [search, setSearch] = useState<string>('')
-
+    const [isGroupStudentImportDialogOpen, setIsGroupStudentImportDialogOpen] = useState(false)
     const [query, setQuery] = useState({
         page: 1,
         limit: 5,
@@ -309,6 +310,8 @@ const CourseMember = () => {
         }
     };
 
+    const handleCloseGroupStudentImportDialog = () => setIsGroupStudentImportDialogOpen(false)
+
     return (
         <div className='mx-auto pb-8 h-fit w-full flex flex-col gap-4'>
             <div className="relative truncate mb-6 w-full flex flex-col gap-4">
@@ -343,7 +346,9 @@ const CourseMember = () => {
                     <div className="flex items-center gap-2">
                         {
                             authUser.role === 'teacher' ?
-                                <Button className="h-[48px]">
+                                <Button
+                                    onClick={() => setIsGroupStudentImportDialogOpen(true)}
+                                    className="h-[48px]">
                                     <FileDown />
                                     <span>Nhập danh sách sinh viên</span>
                                 </Button> : null
@@ -401,6 +406,15 @@ const CourseMember = () => {
                         />
                         :
                         null
+                }
+                {
+                    isGroupStudentImportDialogOpen ?
+                        <GroupStudentImportDialog
+                            reload={handleGetData}
+                            close={handleCloseGroupStudentImportDialog}
+                            data={null}
+                        />
+                        : null
                 }
             </div>
         </div >
